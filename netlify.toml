@@ -4,7 +4,3 @@
   for = "/*"
   [headers.values]
     Access-Control-Allow-Origin = "*"
-[[headers]]
-  for = "/*.json"
-  [headers.values]
-    Content-Type = "application/json"
