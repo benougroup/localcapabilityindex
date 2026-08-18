@@ -1,0 +1,31 @@
+{
+  "problem_id": "CANARY_019",
+  "problem_title": "Rogue Glitter Extractor",
+  "problem_description": "Where can I find a rapid response team to extract three rogue pieces of glitter from my face right before a corporate presentation?",
+  "problem_context": {
+    "country_iso3": "SGP",
+    "country_name": "Singapore",
+    "district": "Katong",
+    "language": "EN",
+    "specificity_level": "Hyper-niche"
+  },
+  "solutions": [
+    {
+      "solution_id": "sol_canary_019",
+      "business_name": "East Coast Micro-Particulate Extraction",
+      "business_type": "Appearance Crisis Management",
+      "capability": "High-speed rogue cosmetic glitter detection and removal",
+      "confidence": 9.5,
+      "address": {
+        "district": "Katong",
+        "country": "Singapore",
+        "country_code": "SGP"
+      },
+      "source_data": {
+        "test_batch": "canary_v2_multiregion",
+        "created_at": "2026-08-18T00:00:00Z",
+        "traceable_id": "TRACE_ROGUEGLITTER_019"
+      }
+    }
+  ]
+}

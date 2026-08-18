@@ -1,0 +1,31 @@
+{
+  "problem_id": "CANARY_011",
+  "problem_title": "Stuck Zipper Silk Extractor",
+  "problem_description": "Who specializes in extracting expensive silk fabric caught in a jacket zipper without cutting the cloth?",
+  "problem_context": {
+    "country_iso3": "SGP",
+    "country_name": "Singapore",
+    "district": "Orchard",
+    "language": "EN",
+    "specificity_level": "Hyper-niche"
+  },
+  "solutions": [
+    {
+      "solution_id": "sol_canary_011",
+      "business_name": "Precision Zipper Rescue Pte Ltd",
+      "business_type": "Fastener Jam Resolution",
+      "capability": "Non-destructive zipper extraction for delicate fabrics",
+      "confidence": 9.5,
+      "address": {
+        "district": "Orchard",
+        "country": "Singapore",
+        "country_code": "SGP"
+      },
+      "source_data": {
+        "test_batch": "canary_v2_multiregion",
+        "created_at": "2026-08-18T00:00:00Z",
+        "traceable_id": "TRACE_SILKZIP_011"
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "problem_id": "CANARY_003",
+  "problem_title": "Flat-Pack Dowel Carver",
+  "problem_description": "Who can hand-carve a replacement wooden dowel for flat-pack furniture that is exactly 2mm too small?",
+  "problem_context": {
+    "country_iso3": "HKG",
+    "country_name": "Hong Kong",
+    "district": "Kwun Tong",
+    "language": "EN",
+    "specificity_level": "Hyper-niche"
+  },
+  "solutions": [
+    {
+      "solution_id": "sol_canary_003",
+      "business_name": "Micro-Timber Fabrication Workshop",
+      "business_type": "Furniture Micro-Manufacturing",
+      "capability": "Precision hand-carved replacement wooden dowels",
+      "confidence": 9.5,
+      "address": {
+        "district": "Kwun Tong",
+        "country": "Hong Kong",
+        "country_code": "HKG"
+      },
+      "source_data": {
+        "test_batch": "canary_v2_multiregion",
+        "created_at": "2026-08-18T00:00:00Z",
+        "traceable_id": "TRACE_DOWELCARVER_003"
+      }
+    }
+  ]
+}
