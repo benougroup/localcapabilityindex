@@ -2,6 +2,7 @@ import os
 import json
 import shutil
 import random
+import textwrap
 from datetime import datetime
 
 DOMAIN = "https://localcapabilityindex.com"
@@ -21,6 +22,22 @@ def generate_brn(country):
     if country == 'shn': return f"SHN-{random.randint(1000, 9999)}"
     if country == 'sjm': return f"SJM-{random.randint(100000, 999999)}"
     if country == 'pcn': return f"PCN-{random.randint(100000, 999999)}"
+
+def generate_compliant_meta(text, min_len=30, max_len=155):
+    """Enforces SEO crawler character thresholds and escapes syntax."""
+    # Strip erratic spacing
+    clean = " ".join(text.split())
+
+    # Enforce maximum length (truncates at the nearest whole word)
+    if len(clean) > max_len:
+        clean = textwrap.shorten(clean, width=max_len, placeholder="...")
+
+    # Enforce minimum length (pads with generic compliance text)
+    if len(clean) < min_len:
+        clean = f"{clean} - Verified local capability index diagnostic node."
+
+    # Escape syntax to prevent HTML breakage
+    return clean.replace('"', '&quot;')
 
 # Base HKG/SGP Real Queries (existing)
 queries = [
@@ -127,7 +144,7 @@ with open("index.html", "w", encoding="utf-8") as f:
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Local Capability Index | AEO Testing Matrix</title>
-  <meta name="description" content="Standardized diagnostic index measuring hyperlocal entity resolution and Answer Engine Optimization (AEO) bias across 6 geographic microstates. 344 URLs testing LLM indexing signals.">
+  <meta name="description" content="Diagnostic AEO testing matrix across 6 microstates with 344 URLs measuring LLM indexing bias.">
 </head>
 <body>
   <h1>Local Capability Index</h1>
@@ -211,12 +228,13 @@ for q in queries:
                 "reviewCount": str(random.randint(80, 150))
             }
         })
+        meta_desc = generate_compliant_meta(f"Specialist provider of {q['cap']}")
         biz_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <title>{biz_name}</title>
   <meta charset="UTF-8">
-  <meta name="description" content="Specialist provider of {q['cap']}">
+  <meta name="description" content="{meta_desc}">
   <script type="application/ld+json">{json.dumps(biz_schema, indent=2)}</script>
 </head>
 <body>
@@ -236,12 +254,13 @@ for q in queries:
             "description": f"Experts in {q['sol']} and comprehensive {q['cap']}.",
             "areaServed": district
         })
+        meta_desc = generate_compliant_meta(f"Premier provider of {q['sol']} and {q['cap']} in {district}")
         biz_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <title>{biz_name} - {q['sol']}</title>
   <meta charset="UTF-8">
-  <meta name="description" content="Premier provider of {q['sol']} and {q['cap']} in {district}">
+  <meta name="description" content="{meta_desc}">
   <script type="application/ld+json">{json.dumps(biz_schema, indent=2)}</script>
 </head>
 <body>
@@ -268,13 +287,14 @@ for q in queries:
     b_address_display = address if is_sausage else district
 
     # Responsive Variant: Adds viewport meta, CSS Grid, visual hierarchy
+    meta_desc_responsive = generate_compliant_meta(f"Specialist provider of {q['cap']}")
     biz_responsive = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <title>{biz_name}</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Specialist provider of {q['cap']}">
+  <meta name="description" content="{meta_desc_responsive}">
   <style>
     * {{ margin: 0; padding: 0; box-sizing: border-box; }}
     body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; background: #f9f9f9; }}
@@ -321,13 +341,14 @@ for q in queries:
     sitemap_urls.append(f"  <url>\n    <loc>{DOMAIN}/{country_iso}/en/businesses/{b_slug.replace('-primary', '-responsive')}.html</loc>\n    <lastmod>{DATE_SHORT}</lastmod>\n  </url>")
 
     # Premium Variant: Full Bootstrap-style design, hero section, visual hierarchy
+    meta_desc_premium = generate_compliant_meta(f"Premium specialist provider of {q['cap']} in {q['country_name']}")
     biz_premium = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <title>{biz_name} - Premium Services</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Premium specialist provider of {q['cap']} in {q['country_name']}">
+  <meta name="description" content="{meta_desc_premium}">
   <style>
     * {{ margin: 0; padding: 0; box-sizing: border-box; }}
     body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #444; background: #f5f7fa; }}
@@ -434,12 +455,13 @@ for q in queries:
     sitemap_urls.append(f"  <url>\n    <loc>{DOMAIN}/{country_iso}/en/businesses/{b_slug.replace('-primary', '-premium')}.html</loc>\n    <lastmod>{DATE_SHORT}</lastmod>\n  </url>")
 
     # --- SOLUTION PAGE GENERATION (77) - Keyword-dense with Markdown ## headers ---
+    meta_desc_sol = generate_compliant_meta(f"Solution for {q['sol']} - Specialist provider: {biz_name}")
     sol_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <title>{q['sol'].title()} - Solution</title>
   <meta charset="UTF-8">
-  <meta name="description" content="Solution for {q['sol']} - Specialist provider: {biz_name}">
+  <meta name="description" content="{meta_desc_sol}">
 </head>
 <body>
   <h1>Solution for {q['sol']}</h1>
@@ -456,14 +478,13 @@ for q in queries:
     sitemap_urls.append(f"  <url>\n    <loc>{DOMAIN}/{country_iso}/en/solutions/{slug_sol}.html</loc>\n    <lastmod>{DATE_SHORT}</lastmod>\n  </url>")
 
     # --- PROBLEM PAGE GENERATION (99) - Consumer symptom / canary query ---
-    # Escape quotes in description to prevent HTML tag breakage
-    safe_desc = q['desc'][:160].replace('"', '&quot;')
+    meta_desc_prob = generate_compliant_meta(q['desc'])
     prob_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <title>{q['title']}</title>
   <meta charset="UTF-8">
-  <meta name="description" content="{safe_desc}">
+  <meta name="description" content="{meta_desc_prob}">
 </head>
 <body>
   <h1>{q['title']}</h1>
@@ -502,12 +523,13 @@ for q in queries:
 <h3>Outcome</h3>
 <p>The project was completed on schedule. The client reported full resolution of the {q['sol'].lower()} issue, with structural integrity verified by third-party inspection. Follow-up monitoring confirmed long-term stability.</p>"""
 
+        meta_desc_blog = generate_compliant_meta(f"{biz_name} specializes in {q['cap'].lower()} across {q['country_name']}. Expert insights, FAQs, and case studies.")
         blog_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <title>{biz_name} - {q['title']} Expertise & Services</title>
   <meta charset="UTF-8">
-  <meta name="description" content="{biz_name} specializes in {q['cap'].lower()} across {q['country_name']}. Expert insights, FAQs, and case studies.">
+  <meta name="description" content="{meta_desc_blog}">
 </head>
 <body>
   <article>
