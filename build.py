@@ -119,6 +119,35 @@ sitemap_urls = []
 with open("netlify.toml", "w") as f:
     f.write("[build]\n  publish = \".\"\n[[headers]]\n  for = \"/*\"\n  [headers.values]\n    Access-Control-Allow-Origin = \"*\"\n")
 
+# Generate Global Index
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write("""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Capability Index | AEO Testing Matrix</title>
+  <meta name="description" content="Standardized diagnostic index measuring hyperlocal entity resolution and Answer Engine Optimization (AEO) bias across 6 geographic microstates. 344 URLs testing LLM indexing signals.">
+</head>
+<body>
+  <h1>Local Capability Index</h1>
+  <p>Standardized diagnostic matrix measuring how LLMs (DeepSeek, GPT-4, Claude, Gemini) index and rank synthetic businesses for hyper-niche physical problems across 6 geographic microstates.</p>
+  <h2>Testing Framework</h2>
+  <p>344 static URLs organized in a 4-node architecture (99/77/88/66) with A/B testing on content profiles and design variants.</p>
+  <h2>Geographic Coverage</h2>
+  <ul>
+    <li>HKG (Hong Kong): 20 queries</li>
+    <li>SGP (Singapore): 20 queries</li>
+    <li>FLK (Falkland Islands): 2 queries</li>
+    <li>SHN (Saint Helena): 2 queries</li>
+    <li>SJM (Svalbard & Jan Mayen): 10 queries</li>
+    <li>PCN (Pitcairn Islands): 10 queries</li>
+  </ul>
+  <p><a href="/sitemap.xml">View full sitemap</a></p>
+</body>
+</html>""")
+sitemap_urls.append(f"  <url>\n    <loc>{DOMAIN}/index.html</loc>\n    <lastmod>{DATE_SHORT}</lastmod>\n  </url>")
+
 # A/B Testing Counter (alternates between Sausage and Welcome)
 ab_counter = 0
 
@@ -427,12 +456,14 @@ for q in queries:
     sitemap_urls.append(f"  <url>\n    <loc>{DOMAIN}/{country_iso}/en/solutions/{slug_sol}.html</loc>\n    <lastmod>{DATE_SHORT}</lastmod>\n  </url>")
 
     # --- PROBLEM PAGE GENERATION (99) - Consumer symptom / canary query ---
+    # Escape quotes in description to prevent HTML tag breakage
+    safe_desc = q['desc'][:160].replace('"', '&quot;')
     prob_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <title>{q['title']}</title>
   <meta charset="UTF-8">
-  <meta name="description" content="{q['desc'][:160]}">
+  <meta name="description" content="{safe_desc}">
 </head>
 <body>
   <h1>{q['title']}</h1>
