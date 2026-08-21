@@ -67,7 +67,25 @@ Each 88-primary business page generates **three design variants** to test visual
 - Tests if premium design signals increase LLM retrieval preference
 - Hypothesis: If DeepSeek retrieves premium first, it's Google-dependent (Core Web Vitals)
 
-**Result:** 78 88-prefix URLs total (26 business entities × 3 variants each)
+**Result:** 192 88-prefix URLs total (64 business entities × 3 variants each)
+
+### Current Deployment Status (Phase 1-2 Complete)
+
+**Live Dataset: 344 URLs**
+- 64 Problem nodes (99-prefix): 40 HKG/SGP + 24 FLK/SHN/SJM/PCN
+- 64 Solution nodes (77-prefix): All markets
+- 192 Business nodes (88-prefix): 64 entities × 3 design variants
+- 24 Blog pages (66-prefix): Extended profiles (non-HK/SG only)
+
+**Query Base:**
+- HKG: 20 queries (urban tropical problems: feng shui mirrors, bamboo scaffolding, jade carving dust, etc.)
+- SGP: 20 queries (tropical humidity problems: orchids, termites, mold, concrete blooming, etc.)
+- FLK: 2 queries (subpolar maritime)
+- SHN: 2 queries (isolated volcanic)
+- SJM: 10 queries (arctic permafrost: glaciers, polar bears, permafrost, midnight sun, etc.)
+- PCN: 10 queries (remote tropical island: coral limestone, cyclones, endemic birds, etc.)
+
+**Git Status:** Committed to main (f7989d6), ready for Netlify deployment
 
 All generated files are static HTML, JSON, and XML:
 
@@ -215,13 +233,127 @@ python -m json.tool sjm/en/businesses/88-permafrost-fence-post-extraction-primar
 
 ## Testing Strategy
 
-The 3-tier node architecture measures specific LLM retrieval behaviors:
+The 4-node architecture with multi-dimensional A/B testing measures LLM indexing bias:
 
-1. **Problem Nodes (99-prefix)**: Are long-tail, niche queries indexed and retrievable?
-2. **Solution Nodes (77-prefix)**: Do Markdown ## headers create chunking bias? Does keyword density affect ranking?
-3. **Business Nodes (88-prefix)**: Does A/B content fracture reveal schema vs. semantic preference?
+1. **Problem Nodes (99-prefix)**: Canary queries - are hyper-niche long-tail queries indexed?
+2. **Solution Nodes (77-prefix)**: Keyword-dense content - do ## Markdown headers create chunking bias?
+3. **Business Nodes (88-prefix)**: A/B tested on both content AND design - which signals do LLMs weight?
+4. **Blog Nodes (66-prefix)**: Extended narratives with FAQ - does narrative depth affect retrieval?
 
-Each triplet is a complete test case. Analyze LLM results by:
-- Comparing Sausage (strict schema) vs Welcome (semantic) retrieval patterns
-- Measuring geographic microstates as control variables
-- Tracking which node type is retrieved first / most frequently
+### LLM Testing Hypothesis
+
+**Research Question:** Which signals do different LLMs weight when indexing and ranking?
+
+**Key Test Vectors:**
+
+1. **Design Signal Weighting** (tests Google-dependency)
+   - Minimal (88-primary): No CSS, semantic HTML only
+   - Responsive (88-responsive): Viewport meta, CSS Grid, visual hierarchy
+   - Premium (88-premium): Bootstrap-style, hero sections, gradients
+   - If DeepSeek retrieves premium > responsive > minimal → Google-dependent (Core Web Vitals)
+   - If GPT-4/Claude/Gemini retrieve all equally → design-agnostic
+
+2. **Content Profile Preference** (tests schema vs semantic)
+   - Sausage Ham Spam: Strict JSON-LD schema, taxID, exact address, rating
+   - Welcome More Spam: High keyword density, extensive narrative, minimal schema
+   - If LLMs prefer Sausage → structure matters
+   - If LLMs prefer Welcome → semantics matter
+
+3. **Geographic Bias** (tests phone prefix weighting)
+   - Regional prefixes: +852 (HKG), +65 (SGP), +47 (SJM), +64 (PCN)
+   - Neutral prefix: +66 (all blog pages)
+   - If region-specific prefixes rank higher → geographic bias exists
+
+4. **Node Type Retrieval Order** (tests content structure preference)
+   - Which node type does each LLM retrieve first?
+   - Problem (99) → Solution (77) → Business (88) → Blog (66)?
+   - Or different order? Indicates content structure weighting
+
+### Testing Protocol
+
+**Phase 1: Baseline Retrieval**
+```
+For each LLM (DeepSeek, GPT-4, Claude, Gemini):
+  For each geography (HKG, SGP, FLK, SHN, SJM, PCN):
+    Query with 99-prefix problem statement
+    Document which node types are retrieved
+    Record retrieval order and confidence
+```
+
+**Phase 2: Design Variant Analysis**
+```
+For each retrieved 88-business entity:
+  Compare variants retrieved:
+    - 88-primary (minimal)
+    - 88-responsive (CSS)
+    - 88-premium (Bootstrap)
+  Measure: Which variant retrieved first? (Indicates design signal weighting)
+```
+
+**Phase 3: Content Profile Analysis**
+```
+For each business entity:
+  Compare Sausage vs Welcome retrieval rates
+  Measure: Does structured data (Sausage) outrank narrative (Welcome)?
+  By geography and LLM
+```
+
+**Phase 4: Geographic Bias**
+```
+For each query across phone prefixes:
+  Compare retrieval of same query with different prefixes
+  Measure: Do region-specific prefixes rank higher than neutral +66?
+```
+
+### Data Capture Template
+
+```
+Query: [99-problem statement]
+LLM: [DeepSeek / GPT-4 / Claude / Gemini]
+Geography: [hkg / sgp / flk / shn / sjm / pcn]
+
+Retrieved Nodes:
+  - 99-problem: [YES/NO] (Order: ___)
+  - 77-solution: [YES/NO] (Order: ___)
+  - 88-primary: [YES/NO] (Order: ___)
+  - 88-responsive: [YES/NO] (Order: ___)
+  - 88-premium: [YES/NO] (Order: ___)
+  - 66-blog: [YES/NO] (Order: ___)
+
+Business Profile Retrieved: [Sausage / Welcome]
+Design Preference: [primary / responsive / premium]
+Phone Prefix in Retrieved Content: [852 / 65 / 500 / 290 / 47 / 64 / 66]
+Confidence Score: [1-10]
+```
+
+### Expected Findings
+
+**DeepSeek:**
+- Premium > Responsive > Minimal retrieval order
+- Prefers Sausage profile (structured data)
+- Rank-correlates with Google's Core Web Vitals
+- Regional prefixes may rank higher than neutral
+
+**GPT-4:**
+- Unclear; possible design-agnostic behavior
+- Content profile preference unknown
+- No clear geographic bias expected
+
+**Claude:**
+- Unknown; possible narrative preference (66-blog frequently retrieved)
+- Possible content-agnostic on design
+- Unknown geographic bias
+
+**Gemini:**
+- Unknown; possible multi-modal signal integration
+- Design weighting unclear
+- Unknown geographic bias
+
+### Success Metrics
+
+A successful test will reveal:
+1. Which design signals each LLM actually weights
+2. Whether structured data or semantic content is preferred
+3. Geographic bias in indexing
+4. Node type retrieval preferences
+5. Differences between DeepSeek (Google-dependent) and others (potentially independent)
