@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Local Capability Index | Testing Guide</title>
+  <meta name="description" content="User guide and introduction to the Local Capability Index testing methodology. Learn how to test LLM indexing behavior, interpret results, and understand the 4-node architecture across 6 microstates.">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      color: #333;
+    }
+    h1 { color: #222; margin-bottom: 10px; }
+    h2 { color: #555; margin-top: 30px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+    h3 { color: #666; margin-top: 20px; }
+    .welcome-box {
+      background: #e8f4f8;
+      border-left: 4px solid #0066cc;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+    .step-box {
+      background: #f9f9f9;
+      border-left: 4px solid #28a745;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+    }
+    .example-box {
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+      font-family: "Courier New", monospace;
+      font-size: 0.95em;
+      overflow-x: auto;
+    }
+    code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: "Courier New", monospace;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    th {
+      background: #f9f9f9;
+      font-weight: 600;
+    }
+    ul, ol {
+      margin: 15px 0;
+      padding-left: 30px;
+    }
+    li {
+      margin: 8px 0;
+    }
+    .nav-back {
+      margin: 20px 0;
+      padding: 10px 0;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+    }
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .highlight {
+      background: #fffacd;
+      padding: 2px 4px;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="nav-back">
+    <a href="/">&larr; Back to Home</a> | <a href="/sitemap.xml">View All URLs</a>
+  </div>
+
+  <h1>Welcome to Local Capability Index</h1>
+
+  <div class="welcome-box">
+    <h3 style="margin-top: 0;">Getting Started with LLM Indexing Research</h3>
+    <p>This page is your guide to understanding and using the Local Capability Index testing framework. Whether you are a researcher investigating LLM retrieval behavior, a developer optimizing for AI indexing, or a curious observer learning how LLMs process information, this site provides a systematic way to measure and compare.</p>
+  </div>
+
+  <h2>What You Will Learn Here</h2>
+
+  <ul>
+    <li>How the site is structured and what each page type represents</li>
+    <li>A step-by-step testing protocol you can use today</li>
+    <li>Real examples of queries and what to expect</li>
+    <li>How to interpret results and identify LLM indexing biases</li>
+    <li>Key research questions the data can answer</li>
+  </ul>
+
+  <h2>Five-Minute Overview</h2>
+
+  <p><strong>Local Capability Index</strong> is a research matrix containing 344 synthetic business listings organized across 6 microstates (Hong Kong, Singapore, Falkland Islands, Saint Helena, Svalbard, and Pitcairn Islands). Each listing is carefully structured to test different indexing signals: structured data (JSON-LD schema), content style (narrative vs. keyword-dense), and design complexity (plain HTML vs. polished CSS).</p>
+
+  <p>The core question: <span class="highlight">Do different LLMs show different preferences when indexing content?</span></p>
+
+  <p>By submitting identical queries to multiple LLMs and observing which pages get retrieved, you can measure systematic differences in how these systems index information. Some LLMs might prefer structured data; others might prefer rich narratives. Some might favor polished visual design; others might ignore CSS entirely. Some might show geographic preference based on phone prefixes.</p>
+
+  <h2>The Four Page Types Explained</h2>
+
+  <h3>Type 1: Problem Pages (99-prefix)</h3>
+  <div class="step-box">
+    <p><strong>What they are:</strong> Natural language search queries representing real consumer problems in niche domains.</p>
+    <p><strong>Example:</strong> "My boundary fence posts are sinking into permafrost. Where can I get help extracting and restabilizing them?"</p>
+    <p><strong>Why it matters:</strong> These test the baseline: Can the LLM find content related to hyper-specific long-tail queries? If it can't retrieve problem pages, it isn't indexing the site at all.</p>
+    <p><strong>URL pattern:</strong> <code>/[country]/en/problems/99-[slug].html</code></p>
+  </div>
+
+  <h3>Type 2: Solution Pages (77-prefix)</h3>
+  <div class="step-box">
+    <p><strong>What they are:</strong> Truncated solution pages structured with multiple Markdown headers (##) and high keyword density. Minimal schema, narrative-focused.</p>
+    <p><strong>Structure:</strong> 4-5 topic headers, service descriptions, geographic coverage, expertise narrative, no JSON-LD schema.</p>
+    <p><strong>Why it matters:</strong> Tests whether LLMs prefer chunked content with multiple headers versus single-block text. Also tests semantic extraction capabilities.</p>
+    <p><strong>URL pattern:</strong> <code>/[country]/en/solutions/77-[slug]-solution.html</code></p>
+  </div>
+
+  <h3>Type 3: Business Pages (88-prefix) - The Core Test</h3>
+  <div class="step-box">
+    <p><strong>What they are:</strong> Synthetic business profiles with embedded JSON-LD LocalBusiness schema. Each business appears in <strong>three design variants and two content profiles</strong>, enabling precise measurement of LLM preference.</p>
+    <p><strong>Content Variants:</strong></p>
+    <ul>
+      <li><strong>Sausage Ham Spam:</strong> Strict JSON-LD schema with taxID, aggregateRating, exact phone with regional prefix, minimal prose. Tests structured data preference.</li>
+      <li><strong>Welcome More Spam:</strong> Semantic/narrative focus with multiple headers, extensive prose, keyword density, NO schema/rating/taxID. Tests semantic content preference.</li>
+    </ul>
+    <p><strong>Design Variants (3 per business):</strong></p>
+    <table>
+      <tr>
+        <th>Variant</th>
+        <th>Filename Suffix</th>
+        <th>Visual Treatment</th>
+      </tr>
+      <tr>
+        <td>Minimal</td>
+        <td>-primary</td>
+        <td>Plain semantic HTML, no CSS</td>
+      </tr>
+      <tr>
+        <td>Responsive</td>
+        <td>-responsive</td>
+        <td>CSS Grid, viewport meta, mobile-friendly</td>
+      </tr>
+      <tr>
+        <td>Premium</td>
+        <td>-premium</td>
+        <td>Bootstrap-style design, hero section, gradients, CTAs</td>
+      </tr>
+    </table>
+    <p><strong>Why it matters:</strong> If an LLM retrieves Premium > Responsive > Minimal, it is using visual design signals (suggesting Google-dependency). Equal retrieval across variants suggests design-agnostic indexing. Sausage vs. Welcome preference reveals whether structured vs. semantic content wins.</p>
+    <p><strong>URL pattern:</strong> <code>/[country]/en/businesses/88-[slug]-[primary|responsive|premium].html</code></p>
+  </div>
+
+  <h3>Type 4: Blog Pages (66-prefix)</h3>
+  <div class="step-box">
+    <p><strong>What they are:</strong> Long-form business narratives (1000+ words) with FAQ sections and case studies. Available only for Falkland Islands, Saint Helena, Svalbard, and Pitcairn Islands (non-tropical regions).</p>
+    <p><strong>Why it matters:</strong> Tests whether extended narrative depth affects retrieval preference. Do semantic systems retrieve these more frequently? Do keyword-focused systems ignore redundancy?</p>
+    <p><strong>URL pattern:</strong> <code>/[country]/en/blogs/66-[slug].html</code></p>
+  </div>
+
+  <h2>Testing Protocol: Step-by-Step</h2>
+
+  <h3>Phase 1: Select a Query</h3>
+  <div class="step-box">
+    <p><strong>Action:</strong> Pick one of the 64 problem statements from the sitemap. Start with a specific geography to reduce variables.</p>
+    <p><strong>Example query from Svalbard (SJM):</strong></p>
+    <p class="example-box">
+      "My boundary fence posts are sinking into permafrost year after year.<br>
+      Where can I find a professional to help me extract them safely<br>
+      and restabilize them for the next decade?"
+    </p>
+    <p><strong>Why this works:</strong> The query is hyper-specific (fence posts + permafrost), naturally typed, and designed to match only this site's content. No real service exists for this problem, so any retrieval is from this test site.</p>
+  </div>
+
+  <h3>Phase 2: Query Multiple LLMs</h3>
+  <div class="step-box">
+    <p><strong>Action:</strong> Submit the same query to at least 3-4 different LLMs.</p>
+    <ul>
+      <li>DeepSeek (via API or web interface)</li>
+      <li>ChatGPT / GPT-4</li>
+      <li>Claude (via claude.ai or API)</li>
+      <li>Gemini (Google)</li>
+      <li>Perplexity (optional)</li>
+    </ul>
+    <p><strong>Settings:</strong> Use default settings; do not enable special modes or plugins. Request verbatim retrieval if the LLM offers it.</p>
+    <p><strong>Documentation:</strong> Screenshot or copy the exact response. Record the date and time.</p>
+  </div>
+
+  <h3>Phase 3: Analyze Each Response</h3>
+  <div class="step-box">
+    <p><strong>For each LLM, record:</strong></p>
+    <table>
+      <tr>
+        <th>Field</th>
+        <th>What to Look For</th>
+      </tr>
+      <tr>
+        <td>Page Type Retrieved</td>
+        <td>99-problem, 77-solution, 88-business, or 66-blog? Which was cited first?</td>
+      </tr>
+      <tr>
+        <td>Content Profile</td>
+        <td>Sausage (has taxID/rating in schema) or Welcome (narrative-focused)?</td>
+      </tr>
+      <tr>
+        <td>Design Variant</td>
+        <td>Minimal (-primary), Responsive (-responsive), or Premium (-premium)?</td>
+      </tr>
+      <tr>
+        <td>Phone Prefix</td>
+        <td>+47 (Svalbard), +852 (HKG), +65 (SGP), +64 (PCN), etc.? Or neutral +66?</td>
+      </tr>
+      <tr>
+        <td>Multiple Retrievals</td>
+        <td>Did it chain multiple pages (99->77->88) or retrieve isolated pages?</td>
+      </tr>
+      <tr>
+        <td>Confidence</td>
+        <td>Did the LLM acknowledge uncertainty? Was the answer definitive or hedged?</td>
+      </tr>
+    </table>
+  </div>
+
+  <h3>Phase 4: Cross-Compare Results</h3>
+  <div class="step-box">
+    <p><strong>Create a comparison table:</strong></p>
+    <table>
+      <tr>
+        <th>LLM</th>
+        <th>Page Type</th>
+        <th>Content Profile</th>
+        <th>Design Variant</th>
+        <th>Phone Prefix</th>
+      </tr>
+      <tr>
+        <td>DeepSeek</td>
+        <td>88-business</td>
+        <td>Sausage</td>
+        <td>Premium</td>
+        <td>+47</td>
+      </tr>
+      <tr>
+        <td>ChatGPT</td>
+        <td>77-solution</td>
+        <td>Welcome</td>
+        <td>Responsive</td>
+        <td>+47</td>
+      </tr>
+      <tr>
+        <td>Claude</td>
+        <td>99-problem</td>
+        <td>N/A</td>
+        <td>N/A</td>
+        <td>N/A</td>
+      </tr>
+    </table>
+    <p><strong>Look for patterns:</strong> Do all LLMs prefer the same design? The same content profile? Or do they diverge?</p>
+  </div>
+
+  <h2>What Different Results Tell You</h2>
+
+  <h3>Design Preference Pattern</h3>
+  <p><strong>Finding:</strong> Premium > Responsive > Minimal (consistent across LLMs)</p>
+  <p><strong>Interpretation:</strong> LLMs weight visual design signals heavily. This suggests they may be influenced by Google-style signals (Core Web Vitals, mobile-friendliness). Premium-looking pages rank higher regardless of content quality.</p>
+
+  <p><strong>Finding:</strong> Minimal = Responsive = Premium (no difference)</p>
+  <p><strong>Interpretation:</strong> LLMs are design-agnostic. Content and schema matter; visual polish does not. This is a more content-focused indexing model.</p>
+
+  <p><strong>Finding:</strong> Varied per LLM (DeepSeek prefers Premium; Claude treats all equally)</p>
+  <p><strong>Interpretation:</strong> Indexing behavior is model-specific. Some LLMs are design-sensitive; others are not. This suggests different underlying retrieval architectures.</p>
+
+  <h3>Content Profile Pattern</h3>
+  <p><strong>Finding:</strong> Sausage Ham Spam (structured data) consistently retrieved</p>
+  <p><strong>Interpretation:</strong> Structured data (JSON-LD schema) is a strong indexing signal. Strict schema compliance helps LLM retrieval.</p>
+
+  <p><strong>Finding:</strong> Welcome More Spam (narrative-focused) consistently retrieved</p>
+  <p><strong>Interpretation:</strong> Semantic content and keyword density matter more than schema. Extended narrative and multiple headers improve retrieval.</p>
+
+  <p><strong>Finding:</strong> Both profiles retrieved equally</p>
+  <p><strong>Interpretation:</strong> The LLM treats schema and semantic content as equivalent signals. It is not biased toward either approach.</p>
+
+  <h3>Geographic Bias Pattern</h3>
+  <p><strong>Finding:</strong> Regional prefixes (+47, +65, +852) rank higher than neutral +66</p>
+  <p><strong>Interpretation:</strong> Geographic identity is a strong indexing signal. LLMs may weight regionally authentic phone prefixes as trust signals.</p>
+
+  <p><strong>Finding:</strong> Neutral +66 ranks equally with regional prefixes</p>
+  <p><strong>Interpretation:</strong> Geographic signals do not affect retrieval. The LLM treats all regions equally.</p>
+
+  <h2>Real Example: Test Walkthrough</h2>
+
+  <h3>Test Query</h3>
+  <p class="example-box">
+    Geography: Svalbard & Jan Mayen (SJM)<br>
+    Query: "My boundary fence posts are sinking into permafrost. Where can I find a professional to help me extract them safely and restabilize them for the next decade?"
+  </p>
+
+  <h3>Expected Pages on This Site</h3>
+  <ul>
+    <li><strong>99-problem:</strong> /sjm/en/problems/99-permafrost-fence-post-extraction.html</li>
+    <li><strong>77-solution:</strong> /sjm/en/solutions/77-permafrost-fence-post-extraction-solution.html</li>
+    <li><strong>88-business (Sausage):</strong> /sjm/en/businesses/88-permafrost-fence-post-extraction-primary.html [also -responsive, -premium]</li>
+    <li><strong>88-business (Welcome):</strong> /sjm/en/businesses/88-glacier-related-fence-extraction-primary.html [also -responsive, -premium]</li>
+    <li><strong>66-blog:</strong> /sjm/en/blogs/66-permafrost-fence-extraction.html</li>
+  </ul>
+
+  <h3>Hypothetical Results</h3>
+  <table>
+    <tr>
+      <th>LLM</th>
+      <th>First Page Retrieved</th>
+      <th>Content Profile</th>
+      <th>Design Variant</th>
+      <th>Interpretation</th>
+    </tr>
+    <tr>
+      <td>DeepSeek</td>
+      <td>88-business</td>
+      <td>Sausage (JSON-LD)</td>
+      <td>Premium</td>
+      <td>Prefers structured data + polished design</td>
+    </tr>
+    <tr>
+      <td>GPT-4</td>
+      <td>77-solution</td>
+      <td>Welcome (narrative)</td>
+      <td>Responsive</td>
+      <td>Prefers semantic content + basic responsive design</td>
+    </tr>
+    <tr>
+      <td>Claude</td>
+      <td>99-problem</td>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>Retrieved source query, not business page</td>
+    </tr>
+    <tr>
+      <td>Gemini</td>
+      <td>88-business</td>
+      <td>Sausage (JSON-LD)</td>
+      <td>Primary (minimal)</td>
+      <td>Prefers structured data; design-agnostic</td>
+    </tr>
+  </table>
+
+  <p><strong>Conclusion from this hypothetical test:</strong> DeepSeek shows the strongest design + schema preference. GPT-4 shows moderate preference for semantic content with basic design. Claude prioritizes source retrieval. Gemini prioritizes schema but ignores design flourishes. This suggests different indexing architectures across models.</p>
+
+  <h2>Why This Testing Matters</h2>
+
+  <ul>
+    <li><strong>For Researchers:</strong> Understand systematic differences in how different LLMs index information. This is foundational AI research with implications for information retrieval and AI bias.</li>
+    <li><strong>For Developers:</strong> Optimize content for LLM indexing. If you know an LLM prefers structured data, schema compliance becomes a priority. If it prefers narrative, invest in content depth.</li>
+    <li><strong>For Content Creators:</strong> Design content that LLMs will reliably retrieve. Use the signals that matter to your target audience.</li>
+    <li><strong>For AI Safety Researchers:</strong> Identify potential indexing biases in LLMs. Do they show geographic or demographic preferences? Are they vulnerable to manipulation? These are important questions.</li>
+  </ul>
+
+  <h2>Key Research Questions</h2>
+
+  <ol>
+    <li><strong>Are LLMs design-sensitive?</strong> Does Premium > Responsive > Minimal consistently? Or is design irrelevant?</li>
+    <li><strong>Do LLMs prefer structured data over semantic content?</strong> Does JSON-LD schema matter? Or is narrative text equally weighted?</li>
+    <li><strong>Is there geographic bias in LLM indexing?</strong> Do regional phone prefixes affect retrieval ranking?</li>
+    <li><strong>Do different LLMs use different indexing logic?</strong> Is behavior universal across DeepSeek, GPT-4, Claude, Gemini? Or model-specific?</li>
+    <li><strong>How do LLMs handle redundant content?</strong> If multiple pages say the same thing with different structures, do they retrieve all, some, or one?</li>
+    <li><strong>Is content freshness a signal?</strong> If you rerun the test in 3 months, do retrieval patterns change?</li>
+  </ol>
+
+  <h2>Next Steps</h2>
+
+  <p><strong>Ready to test?</strong> Here is what to do:</p>
+
+  <ol>
+    <li>Go to the <a href="/sitemap.xml">sitemap</a> and pick a problem query from a specific geography.</li>
+    <li>Copy the exact problem statement.</li>
+    <li>Open 3-4 LLM interfaces (ChatGPT, Claude, DeepSeek, etc.).</li>
+    <li>Submit the query to each LLM in a new conversation (to avoid context contamination).</li>
+    <li>Screenshot or copy the responses.</li>
+    <li>Compare the results using the analysis framework above.</li>
+    <li>Document your findings.</li>
+  </ol>
+
+  <h2>Frequently Asked Questions</h2>
+
+  <h3>Is this site trying to trick LLMs?</h3>
+  <p>No. The site is transparent about its research purpose. The goal is not to deceive but to measure and understand. The methodology is openly documented and reproducible.</p>
+
+  <h3>Are the businesses real?</h3>
+  <p>No. All businesses, phone numbers, addresses, and content are synthetic and generated specifically for this research. This is intentional—real businesses would introduce confounding variables. We use synthetic data to isolate and measure specific signals.</p>
+
+  <h3>Why these specific microstates?</h3>
+  <p>Microstates were chosen for isolation and uniqueness. They have low search competition, making it easier to measure LLM behavior without interference from real competing pages. Geographic and climate diversity allows testing geographic bias hypotheses.</p>
+
+  <h3>Can I reproduce this test?</h3>
+  <p>Yes. The methodology is fully documented. You can create your own test sites with different signals and measure how different LLMs index them. The approach is generalizable beyond these specific geographies.</p>
+
+  <h3>What if an LLM doesn't retrieve anything?</h3>
+  <p>This is meaningful data. It means the LLM is either not indexing this site, or the retrieval threshold is very high. Document this and note the LLM, date, and query used. It helps establish a baseline for indexing coverage.</p>
+
+  <h2>Resources</h2>
+
+  <ul>
+    <li><a href="/">Main Site Overview</a> - Comprehensive explanation of all page types and architecture</li>
+    <li><a href="/sitemap.xml">Complete Sitemap</a> - All 344 URLs organized by type and geography</li>
+    <li>Individual geographies:
+      <ul>
+        <li>Hong Kong (HKG): /hkg/en/</li>
+        <li>Singapore (SGP): /sgp/en/</li>
+        <li>Falkland Islands (FLK): /flk/en/</li>
+        <li>Saint Helena (SHN): /shn/en/</li>
+        <li>Svalbard & Jan Mayen (SJM): /sjm/en/</li>
+        <li>Pitcairn Islands (PCN): /pcn/en/</li>
+      </ul>
+    </li>
+  </ul>
+
+  <hr>
+
+  <p style="color: #999; font-size: 0.9em; margin-top: 40px;">
+    Last updated: August 23, 2026 | Open research project for LLM indexing and retrieval analysis
+  </p>
+
+  <div class="nav-back" style="margin-top: 40px;">
+    <a href="/">&larr; Back to Home</a> | <a href="/sitemap.xml">View All URLs</a>
+  </div>
+
+</body>
+</html>

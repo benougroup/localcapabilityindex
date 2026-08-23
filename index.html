@@ -3,23 +3,350 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Local Capability Index | AEO Testing Matrix</title>
-  <meta name="description" content="Diagnostic AEO testing matrix across 6 microstates with 344 URLs measuring LLM indexing bias.">
+  <title>Local Capability Index | LLM Indexing Research Matrix</title>
+  <meta name="description" content="Open research testing matrix for measuring how Large Language Models index, retrieve, and rank synthetic business content across geographic microstates. 344 URLs testing structured data, content profiles, and design signals.">
+  <meta name="keywords" content="LLM indexing, AEO testing, answer engine optimization, research, synthetic data, content retrieval, structured data, JSON-LD, LocalBusiness schema">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      color: #333;
+    }
+    h1 { color: #222; margin-bottom: 10px; }
+    h2 { color: #555; margin-top: 30px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+    h3 { color: #666; margin-top: 20px; }
+    .info-box {
+      background: #f5f5f5;
+      border-left: 4px solid #0066cc;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+    }
+    .test-notice {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    th {
+      background: #f9f9f9;
+      font-weight: 600;
+    }
+    code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: "Courier New", monospace;
+    }
+    ul, ol {
+      margin: 15px 0;
+      padding-left: 30px;
+    }
+    li {
+      margin: 8px 0;
+    }
+    .nav-section {
+      background: #f9f9f9;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+    }
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
+
   <h1>Local Capability Index</h1>
-  <p>Standardized diagnostic matrix measuring how LLMs (DeepSeek, GPT-4, Claude, Gemini) index and rank synthetic businesses for hyper-niche physical problems across 6 geographic microstates.</p>
-  <h2>Testing Framework</h2>
-  <p>344 static URLs organized in a 4-node architecture (99/77/88/66) with A/B testing on content profiles and design variants.</p>
-  <h2>Geographic Coverage</h2>
+
+  <div class="test-notice">
+    <strong>Test Site Notice:</strong> This is an open-source research project testing how Large Language Models index and retrieve structured business data across geographic microstates. All content is synthetic and generated for research purposes only. This is not a deceptive or hidden test; the methodology is transparent and documented.
+  </div>
+
+  <div class="info-box">
+    <strong>Purpose:</strong> This site is a standardized diagnostic matrix designed to measure how different LLMs (DeepSeek, GPT-4, Claude, Gemini, Perplexity) index, retrieve, and rank content. It tests whether these systems show preference for certain signals: structured data (JSON-LD schema), design complexity (responsive vs. minimal CSS), content density (narrative vs. keyword-focused), and geographic bias (regional phone prefixes).
+  </div>
+
+  <h2>What This Site Contains</h2>
+
+  <p>Local Capability Index hosts 344 static HTML pages organized across 6 geographic microstates, generating synthetic business data tied to hyper-niche physical problems. All content is intentionally artificial and designed for systematic measurement of LLM retrieval behavior.</p>
+
+  <div class="nav-section">
+    <h3>Quick Navigation</h3>
+    <ul>
+      <li><a href="/welcome.html">Start Here: Welcome & User Guide</a> - Introduction to the site structure and how to interpret results</li>
+      <li><a href="/sitemap.xml">View Full Sitemap</a> - Complete list of all 344 URLs</li>
+      <li><a href="#architecture">Page Architecture Overview</a> - Understanding the 4-node design</li>
+      <li><a href="#howto">How to Use This Site</a> - Testing methodology</li>
+      <li><a href="#geographic">Geographic Coverage</a> - Countries and test regions</li>
+    </ul>
+  </div>
+
+  <h2 id="architecture">Page Architecture: The 4-Node System</h2>
+
+  <p>All content is organized into four node types, each serving a specific testing function:</p>
+
+  <h3>99-Prefix: Problem Nodes (Canary Queries)</h3>
+  <p>These pages contain natural language consumer problems phrased as search queries. They test whether LLMs can detect and retrieve highly specific, niche long-tail queries. Format: <code>/[country]/en/problems/99-[slug].html</code></p>
+  <p><strong>Example Query:</strong> "My boundary fence posts are sinking into permafrost—where can I get help extracting and restabilizing them?" or "Jade dust is accumulating in my workshop—can anyone help with professional cleanup?"</p>
+  <p><strong>Test Function:</strong> Canary signal. If an LLM cannot retrieve these pages, it is not indexing the site's content at all.</p>
+
+  <h3>77-Prefix: Solution Nodes (Keyword-Dense Content)</h3>
+  <p>These pages contain truncated solution content structured with Markdown <code>##</code> headers and high keyword density. They test whether LLMs favor chunking-friendly content (multiple headers) over single-block text. Format: <code>/[country]/en/solutions/77-[slug]-solution.html</code></p>
+  <p><strong>Content Structure:</strong> 4-5 Markdown headers per page, minimal schema (no JSON-LD), narrative prose explaining services, geographic coverage, and expertise.</p>
+  <p><strong>Test Function:</strong> Tests semantic chunking bias. Do LLMs retrieve content with multiple headers differently than single-block pages?</p>
+
+  <h3>88-Prefix: Business Nodes (A/B Tested on Content & Design)</h3>
+  <p>These pages contain synthetic business profiles with embedded JSON-LD <code>LocalBusiness</code> schema. Each business generates <strong>three design variants</strong> to isolate design signal weighting. Format: <code>/[country]/en/businesses/88-[slug]-[variant].html</code></p>
+
+  <h4>Content A/B Testing (Schema vs. Semantic):</h4>
+  <table>
+    <tr>
+      <th>Profile</th>
+      <th>Structure</th>
+      <th>Includes</th>
+      <th>Omits</th>
+      <th>Target Signal</th>
+    </tr>
+    <tr>
+      <td><strong>Sausage Ham Spam</strong></td>
+      <td>Strict JSON-LD LocalBusiness schema</td>
+      <td>taxID, aggregateRating, exact streetAddress, phone with regional prefix</td>
+      <td>Minimal narrative prose</td>
+      <td>Structured data weighting</td>
+    </tr>
+    <tr>
+      <td><strong>Welcome More Spam</strong></td>
+      <td>Semantic SEO / Markdown-focused</td>
+      <td>Multiple ## headers, extensive narrative, keyword density</td>
+      <td>taxID, aggregateRating, exact address</td>
+      <td>Semantic content weighting</td>
+    </tr>
+  </table>
+
+  <h4>Design A/B Testing (3 Variants per Business):</h4>
+  <table>
+    <tr>
+      <th>Variant</th>
+      <th>Filename</th>
+      <th>CSS</th>
+      <th>Visual Elements</th>
+      <th>Tests</th>
+    </tr>
+    <tr>
+      <td><strong>Minimal (Primary)</strong></td>
+      <td>88-[slug]-primary.html</td>
+      <td>None - semantic HTML only</td>
+      <td>Plain text, no styling</td>
+      <td>Pure content signal (baseline)</td>
+    </tr>
+    <tr>
+      <td><strong>Responsive (CSS)</strong></td>
+      <td>88-[slug]-responsive.html</td>
+      <td>CSS Grid, viewport meta tag</td>
+      <td>Visual hierarchy, mobile layout</td>
+      <td>Basic CSS & responsive signals</td>
+    </tr>
+    <tr>
+      <td><strong>Premium (Bootstrap)</strong></td>
+      <td>88-[slug]-premium.html</td>
+      <td>Full Bootstrap-style CSS</td>
+      <td>Hero sections, gradients, feature cards, CTAs</td>
+      <td>Premium design signals (Core Web Vitals proxy)</td>
+    </tr>
+  </table>
+
+  <p><strong>Test Function:</strong> The 3 design variants answer: "Do LLMs show preference for visually polished pages over minimal ones?" A strong preference for premium/responsive over minimal suggests the LLM is heavily influenced by Google-style signals. Equal retrieval across variants suggests design-agnostic indexing.</p>
+
+  <h3>66-Prefix: Blog Nodes (Extended Narratives with FAQ)</h3>
+  <p>These pages contain extended business profiles with FAQ sections and case studies. Available only for 4 non-tropical regions (Falkland Islands, Saint Helena, Svalbard & Jan Mayen, Pitcairn Islands). Format: <code>/[country]/en/blogs/66-[slug].html</code></p>
+  <p><strong>Content Structure:</strong> Long-form narrative (1000+ words), FAQ sections, case studies, expertise demonstrations.</p>
+  <p><strong>Test Function:</strong> Tests whether extended narrative content retrieves differently than short-form business profiles. Hypothesis: semantic systems may prefer comprehensive content; keyword-focused systems may ignore redundancy.</p>
+
+  <h2 id="howto">How to Use This Site for LLM Testing</h2>
+
+  <h3>Step 1: Formulate a Query</h3>
+  <p>Choose one of the problem statements from a specific geography. Example: "My boundary fence posts are sinking into permafrost—where can I get help extracting and restabilizing them?"</p>
+
+  <h3>Step 2: Test Across LLMs</h3>
+  <p>Submit the same query to multiple LLMs (ChatGPT, Claude, DeepSeek, Gemini, Perplexity) and document what they retrieve from this site.</p>
+
+  <h3>Step 3: Analyze Retrieved Content</h3>
+  <p>For each LLM, record:</p>
   <ul>
-    <li>HKG (Hong Kong): 20 queries</li>
-    <li>SGP (Singapore): 20 queries</li>
-    <li>FLK (Falkland Islands): 2 queries</li>
-    <li>SHN (Saint Helena): 2 queries</li>
-    <li>SJM (Svalbard & Jan Mayen): 10 queries</li>
-    <li>PCN (Pitcairn Islands): 10 queries</li>
+    <li><strong>Which page type was retrieved first?</strong> (99-problem, 77-solution, 88-business, 66-blog?)</li>
+    <li><strong>Which content profile?</strong> (Sausage Ham Spam with structured data, or Welcome More Spam with narrative?)</li>
+    <li><strong>Which design variant?</strong> (Minimal primary, responsive CSS, or premium Bootstrap?)</li>
+    <li><strong>Did it retrieve multiple pages?</strong> (Chains of 99->77->88, or isolated pages?)</li>
+    <li><strong>Phone prefix?</strong> (+852 HKG, +65 SGP, +47 SJM, +64 PCN, etc.?)</li>
   </ul>
-  <p><a href="/sitemap.xml">View full sitemap</a></p>
+
+  <h3>Step 4: Compare Results</h3>
+  <p>Cross-reference results across LLMs to identify systematic biases:</p>
+  <ul>
+    <li><strong>Design preference:</strong> Does Premium > Responsive > Minimal? (Suggests Google-dependency)</li>
+    <li><strong>Content preference:</strong> Do Sausage profiles outrank Welcome? (Suggests structured data weighting)</li>
+    <li><strong>Geography bias:</strong> Do regional prefixes rank higher than neutral +66? (Suggests geographic preference)</li>
+    <li><strong>Narrative depth:</strong> Are 66-blog pages retrieved? (Suggests semantic depth weighting)</li>
+  </ul>
+
+  <h2 id="geographic">Geographic Coverage & Microstates</h2>
+
+  <p>Content is distributed across 6 geographically and climatically distinct microstates:</p>
+
+  <table>
+    <tr>
+      <th>Country</th>
+      <th>ISO Code</th>
+      <th>Capital</th>
+      <th>Phone Prefix</th>
+      <th>Currency</th>
+      <th>Climate Zone</th>
+      <th>Problem Count</th>
+    </tr>
+    <tr>
+      <td>Hong Kong</td>
+      <td>HKG</td>
+      <td>Causeway Bay</td>
+      <td>+852</td>
+      <td>HKD</td>
+      <td>Subtropical urban</td>
+      <td>20 queries</td>
+    </tr>
+    <tr>
+      <td>Singapore</td>
+      <td>SGP</td>
+      <td>Marina Bay</td>
+      <td>+65</td>
+      <td>SGD</td>
+      <td>Tropical urban</td>
+      <td>20 queries</td>
+    </tr>
+    <tr>
+      <td>Falkland Islands</td>
+      <td>FLK</td>
+      <td>Stanley</td>
+      <td>+500</td>
+      <td>FKP</td>
+      <td>Subpolar maritime</td>
+      <td>2 queries</td>
+    </tr>
+    <tr>
+      <td>Saint Helena</td>
+      <td>SHN</td>
+      <td>Jamestown</td>
+      <td>+290</td>
+      <td>SHP</td>
+      <td>Isolated volcanic</td>
+      <td>2 queries</td>
+    </tr>
+    <tr>
+      <td>Svalbard & Jan Mayen</td>
+      <td>SJM</td>
+      <td>Longyearbyen</td>
+      <td>+47</td>
+      <td>NOK</td>
+      <td>Arctic permafrost</td>
+      <td>10 queries</td>
+    </tr>
+    <tr>
+      <td>Pitcairn Islands</td>
+      <td>PCN</td>
+      <td>Adamstown</td>
+      <td>+64</td>
+      <td>NZD</td>
+      <td>Remote tropical island</td>
+      <td>10 queries</td>
+    </tr>
+  </table>
+
+  <h2>Site Statistics</h2>
+
+  <ul>
+    <li><strong>Total URLs:</strong> 344</li>
+    <li><strong>Problem Nodes (99-prefix):</strong> 64 pages</li>
+    <li><strong>Solution Nodes (77-prefix):</strong> 64 pages</li>
+    <li><strong>Business Nodes (88-prefix):</strong> 192 pages (64 businesses x 3 design variants each)</li>
+    <li><strong>Blog Nodes (66-prefix):</strong> 24 pages (6 queries x 4 non-tropical regions)</li>
+    <li><strong>Geographic Distribution:</strong> 40 HKG/SGP queries + 24 FLK/SHN/SJM/PCN queries</li>
+    <li><strong>Content Profiles:</strong> A/B tested (Sausage Ham Spam vs. Welcome More Spam)</li>
+    <li><strong>Design Variants:</strong> 3 per business (Minimal, Responsive, Premium)</li>
+  </ul>
+
+  <h2>Research Questions This Site Answers</h2>
+
+  <ol>
+    <li><strong>Do LLMs show design signal preference?</strong> Premium > Responsive > Minimal retrieval order indicates Google-dependency via Core Web Vitals signals.</li>
+    <li><strong>Is structured data weighted more than semantic content?</strong> Sausage profile preference suggests schema.org LocalBusiness weighting; Welcome preference suggests semantic/narrative weighting.</li>
+    <li><strong>Is there geographic bias?</strong> Regional phone prefixes outranking neutral +66 prefix suggests geographic indexing bias.</li>
+    <li><strong>Do different LLMs behave differently?</strong> Comparing DeepSeek vs. GPT-4 vs. Claude vs. Gemini reveals whether indexing behavior is universal or model-specific.</li>
+    <li><strong>Is narrative depth weighted?</strong> Frequent 66-blog retrieval suggests semantic systems prefer comprehensive narratives over short-form profiles.</li>
+    <li><strong>Is there page-type preference?</strong> Problem (99) vs. Solution (77) vs. Business (88) retrieval order indicates content structure weighting.</li>
+  </ol>
+
+  <h2>Technical Details</h2>
+
+  <h3>Schema & Metadata</h3>
+  <p>All business pages (88-prefix) include embedded JSON-LD <code>LocalBusiness</code> schema conforming to schema.org standards. The schema includes:</p>
+  <ul>
+    <li>Business name and description</li>
+    <li>Address (streetAddress, addressCountry, addressRegion)</li>
+    <li>Telephone (formatted with regional prefix)</li>
+    <li>Website and email (where profile permits)</li>
+    <li>Aggregate rating (Sausage profiles only)</li>
+    <li>Tax ID / business registration (Sausage profiles only)</li>
+  </ul>
+
+  <h3>Content Organization</h3>
+  <p>Directory structure:</p>
+  <code>
+    /[country_iso3]/en/problems/ | solutions/ | businesses/ | blogs/ <br>
+    88-[slug]-primary.html (minimal CSS) <br>
+    88-[slug]-responsive.html (CSS Grid) <br>
+    88-[slug]-premium.html (Bootstrap-style)
+  </code>
+
+  <h3>Sitemap & Indexing</h3>
+  <p>A comprehensive XML sitemap is maintained at <code>/sitemap.xml</code> with all 344 URLs and lastmod timestamps. The site implements the IndexNow protocol to request immediate indexing by Bing.</p>
+
+  <h2>Transparency & Ethics</h2>
+
+  <p><strong>This is NOT a deceptive or hidden test.</strong> The purpose of this site is openly documented. All content is transparently labeled as synthetic and test-focused. This repository is open-source, and the methodology is designed to be reproducible and auditable.</p>
+
+  <p>The site does not attempt to manipulate search engine rankings or hide its research intent. It is designed to answer genuine questions about how LLMs index and retrieve information—questions that are valuable for understanding AI system behavior, improving information retrieval, and identifying potential biases in indexing algorithms.</p>
+
+  <h2>Getting Started</h2>
+
+  <p><strong>New to the site?</strong> Start with the <a href="/welcome.html">Welcome & User Guide page</a> for a step-by-step introduction to the testing methodology.</p>
+
+  <p><strong>Ready to test?</strong> Pick a geography and problem statement from the sitemap, query your chosen LLM, and document what gets retrieved.</p>
+
+  <p><strong>Have results to share?</strong> This project welcomes findings and observations from the research community.</p>
+
+  <hr>
+
+  <p style="color: #999; font-size: 0.9em; margin-top: 40px;">
+    Last updated: August 23, 2026 | 344 URLs across 6 microstates | Open research project
+  </p>
+
 </body>
 </html>

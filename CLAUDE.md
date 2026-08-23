@@ -4,389 +4,264 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-LocalCapabilityIndex is a static site generator for Answer Engine Optimization (AEO) testing. It creates synthetic directories of hyper-niche, high-friction physical problems paired with fictional businesses to test how LLMs (DeepSeek, Perplexity, etc.) index and retrieve structured data across zero-competition geographic microstates.
+Local Capability Index is a static site generator for AEO (Answer Engine Optimization) research. It creates 344 synthetic HTML pages across 6 microstates to measure how LLMs index and rank content based on structured data signals, content profiles, and design complexity.
 
-The generator produces a **4-node architecture with multi-dimensional A/B testing** designed to measure retrieval bias and schema understanding:
-- **99-prefix (Problem Nodes)**: Consumer symptom queries (canary queries for LLM detection)
-- **77-prefix (Solution Nodes)**: Truncated solution keywords with Markdown ## headers
-- **88-prefix (Business Nodes)**: Synthetic business entities with A/B testing on both content AND design
-- **66-prefix (Blog Nodes)**: Extended business profiles with FAQ + case studies (FLK, SHN, SJM, PCN only)
-
-## Architecture & A/B Testing Framework
-
-### Geographic Coverage
-
-Six microstates across distinct climate/economic zones:
-
-| Country | ISO-3 | Capital | Phone Prefix | Currency | Role |
-|---------|-------|---------|--------------|----------|------|
-| Hong Kong | hkg | Causeway Bay | 852 | HKD | Urban tropical |
-| Singapore | sgp | Marina Bay | 65 | SGD | Urban tropical |
-| Falkland Islands | flk | Stanley | 500 | FKP | Subpolar maritime |
-| Saint Helena | shn | Jamestown | 290 | SHP | Isolated volcanic |
-| Svalbard & Jan Mayen | sjm | Longyearbyen | 47 | NOK | Arctic permafrost |
-| Pitcairn Islands | pcn | Adamstown | 64 | NZD | Remote tropical island |
-
-### A/B Content Profiles
-
-**Profile A: "Sausage Ham Spam" (AEO Focus)**
-- Strict JSON-LD `LocalBusiness` schema compliance
-- Includes: `taxID` (business registration), exact phone (+[PREFIX] 8800 [ID]), precise `streetAddress`, `priceRange` (currency code), `aggregateRating` (4.9/5, 80-150 reviews)
-- Minimal clinical narrative text
-- Target: JSON-LD scrapers, structured data extractors
-- Example: `Sausage Ham Spam Cryo-Mechanics` (SJM permafrost query)
-
-**Profile B: "Welcome More Spam" (Semantic SEO Focus)**
-- High keyword density with multiple ## Markdown headers (4-5 sections)
-- Deliberately OMITS: `taxID`, `aggregateRating`, exact `streetAddress`
-- Schema minimal: only `name`, `description`, `areaServed`, `addressCountry`
-- Extensive narrative prose (expertise, service coverage, why choose us)
-- Target: semantic chunking systems, markdown-aware retrievers
-- Example: `Welcome More Spam Hydro-Thaw Systems` (SJM glacier query)
-
-### Design Variants (Phase 2 A/B Testing)
-
-Each 88-primary business page generates **three design variants** to test visual signal weighting:
-
-**Variant 1: Minimal (Baseline)**
-- No CSS, semantic HTML only
-- Filename: `88-{slug}-primary.html`
-- Tests pure content signal without design interference
-- Baseline for design impact measurement
-
-**Variant 2: Responsive (CSS Grid)**
-- Filename: `88-{slug}-responsive.html`
-- Adds: viewport meta tag, CSS Grid layout, visual hierarchy
-- Tests mobile-responsive signals and basic CSS styling
-- Header with background color, semantic sections, readable typography
-
-**Variant 3: Premium (Bootstrap-style)**
-- Filename: `88-{slug}-premium.html`
-- Full visual design: hero section, gradient backgrounds, stat boxes, feature cards
-- Call-to-action buttons, grid-based feature layout
-- Tests if premium design signals increase LLM retrieval preference
-- Hypothesis: If DeepSeek retrieves premium first, it's Google-dependent (Core Web Vitals)
-
-**Result:** 192 88-prefix URLs total (64 business entities × 3 variants each)
-
-### Current Deployment Status (Phase 1-2 Complete)
-
-**Live Dataset: 344 URLs**
-- 64 Problem nodes (99-prefix): 40 HKG/SGP + 24 FLK/SHN/SJM/PCN
-- 64 Solution nodes (77-prefix): All markets
-- 192 Business nodes (88-prefix): 64 entities × 3 design variants
-- 24 Blog pages (66-prefix): Extended profiles (non-HK/SG only)
-
-**Query Base:**
-- HKG: 20 queries (urban tropical problems: feng shui mirrors, bamboo scaffolding, jade carving dust, etc.)
-- SGP: 20 queries (tropical humidity problems: orchids, termites, mold, concrete blooming, etc.)
-- FLK: 2 queries (subpolar maritime)
-- SHN: 2 queries (isolated volcanic)
-- SJM: 10 queries (arctic permafrost: glaciers, polar bears, permafrost, midnight sun, etc.)
-- PCN: 10 queries (remote tropical island: coral limestone, cyclones, endemic birds, etc.)
-
-**Git Status:** Committed to main (f7989d6), ready for Netlify deployment
-
-All generated files are static HTML, JSON, and XML:
-
-```
-/{country_iso3}/{language}/
-  ├── problems/
-  │   └── 99-{slug}.html           (Consumer symptom / canary query)
-  ├── solutions/
-  │   └── 77-{slug}-solution.html   (Keyword-dense solution parameters)
-  └── businesses/
-      └── 88-{slug}-primary.html    (Synthetic business entity)
-```
-
-Each query generates exactly 3 linked HTML pages (one triplet). The slug determines the problem domain; the business name determines the A/B profile.
+**Core Research Question:** Do different LLMs show systematic preference for certain signals—structured data (JSON-LD), design polish (CSS complexity), content density (narrative vs. keyword), or geographic authenticity (phone prefixes)?
 
 ## Build & Deploy
 
-### Run the Generator
+### Generate the Site
 
 ```bash
 python build.py
 ```
 
-This regenerates all static files:
-- Cleans and recreates directories for all 6 microstates
-- Generates 26 problem-solution-business triplets (78 total HTML files)
-- Produces `sitemap.xml` with current timestamp
-- Updates `netlify.toml` CORS configuration
+This regenerates all 344 pages:
+- Cleans and recreates directories for all 6 countries (hkg, sgp, flk, shn, sjm, pcn)
+- Generates problem/solution/business/blog HTML files
+- Produces `sitemap.xml` with current timestamps
+- Implements IndexNow protocol: generates verification file and submits URLs to Bing for instant indexing
+- Output is ready for immediate Netlify deployment (all static HTML/XML/CSS)
 
-**Output:** All files ready for immediate deployment (no build step required).
+**No arguments, no dependencies.** The script uses Python stdlib only. Output is deterministic based on the `queries` list.
 
 ### Deployment
 
-Configured for **Netlify**:
-- `netlify.toml` defines publish root (`.`) and CORS headers
-- All HTML, JSON, and XML served as-is
-- Sitemap includes `lastmod` timestamps for search engine freshness signals
+Configured for Netlify:
+- Publish root: `.` (current directory)
+- All HTML/XML/CSS served as-is
+- CORS headers defined in `netlify.toml` (auto-generated by build.py)
 
-### IndexNow Protocol Integration
+## Architecture: 4-Node System
 
-The build script automatically implements the **IndexNow protocol** for instant Bing indexing on each deployment:
+All content follows a pattern: **99 (Problem) → 77 (Solution) → 88 (Business) → 66 (Blog)**
 
-**How It Works:**
-1. On each `python build.py` run, a verification file is generated at the root: `7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a.txt`
-2. After sitemap generation, all 345 URLs are submitted to Bing's IndexNow API (`https://api.indexnow.org/indexnow`)
-3. Terminal output displays the submission status and Bing's response
+### Node Type: 99-Prefix (Problem Pages)
 
-**Setup & Verification:**
-- The IndexNow key is defined in `build.py` (line ~13): `INDEXNOW_KEY = "7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a"`
-- After Netlify deployment, Bing must verify that the verification file is accessible at: `https://localcapabilityindex.com/7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a.txt`
-- First submission will return HTTP 403 (`SiteVerificationNotCompleted`) until Bing verifies access (typically 1-2 hours)
-- Subsequent builds will receive HTTP 200/202 and URLs will be indexed within minutes
+Natural language consumer queries. These are canary signals—if an LLM cannot retrieve these, it is not indexing the site.
 
-**Troubleshooting:**
-- If `[IndexNow] HTTP ERROR 403` persists after 2+ hours: verify the `.txt` file exists at the Netlify root and is publicly accessible
-- If network timeouts occur: the 30-second timeout is hardcoded in `submit_indexnow_notification()` function
-- Check the terminal output section labeled `IndexNow Protocol Integration` for detailed API responses
+- URL: `/[country]/en/problems/99-[slug].html`
+- Content: Consumer symptom phrased as long-tail search query
+- Schema: Minimal (title, description, internal links)
+- Test Function: Baseline retrieval capability
+
+### Node Type: 77-Prefix (Solution Pages)
+
+Keyword-dense content structured with Markdown headers (`##`). Tests whether LLMs prefer chunked content for semantic extraction.
+
+- URL: `/[country]/en/solutions/77-[slug]-solution.html`
+- Content: 3-4 `##` headers, narrative prose, no JSON-LD schema, high keyword density
+- Schema: Basic metadata only
+- Test Function: Chunking bias; semantic extraction preference
+
+### Node Type: 88-Prefix (Business Pages) — Core A/B Test
+
+Synthetic business profiles with embedded JSON-LD `LocalBusiness` schema. Each business generates **2 content profiles × 3 design variants = 6 URLs per business.**
+
+#### Content A/B Testing (Content Profile Fracture)
+
+The business name prefix determines which profile is used—this is the **content fracture**:
+
+| Profile | Prefix | Schema | Key Fields | Narrative | Test Signal |
+|---------|--------|--------|-----------|-----------|-------------|
+| Sausage Ham Spam | Name starts with "Sausage" | Full JSON-LD LocalBusiness | `taxID`, exact `streetAddress`, regional `telephone`, `aggregateRating`, `priceRange` | Minimal clinical prose | Structured data weighting |
+| Welcome More Spam | Name starts with "Welcome" | Minimal JSON-LD (no taxID/rating) | Only `name`, `description`, `areaServed` | Extensive narrative, multiple `##` headers, keyword density | Semantic content weighting |
+
+#### Design A/B Testing (Design Variant Fracture)
+
+Each business name generates 3 design variants—this is the **design fracture**:
+
+| Variant | Filename Suffix | CSS | Visual Treat | Test Signal |
+|---------|-----------------|-----|--------------|-------------|
+| Minimal (baseline) | `-primary` | None; semantic HTML only | Plain text, no styling | Pure content signal; control group |
+| Responsive | `-responsive` | CSS Grid, viewport meta, visual hierarchy | Header with color, semantic sections, readable typography | Mobile signals; basic responsive design |
+| Premium | `-premium` | Bootstrap-style full CSS | Hero section, gradient backgrounds, stat boxes, CTAs, feature cards | Premium design signals; Google Core Web Vitals proxy |
+
+**Example URLs for one query:**
+- `88-permafrost-fence-post-primary.html` (Sausage, minimal)
+- `88-permafrost-fence-post-responsive.html` (Sausage, responsive)
+- `88-permafrost-fence-post-premium.html` (Sausage, premium)
+- Plus 3 Welcome variants with same design progression
+
+**Test Hypothesis:** 
+- If Premium > Responsive > Minimal across all LLMs: design signals are heavily weighted (Google-dependent)
+- If all variants retrieve equally: design-agnostic indexing (content-focused)
+- If pattern varies by LLM: indexing behavior is model-specific
+
+### Node Type: 66-Prefix (Blog Pages)
+
+Extended business narratives (1000+ words) with FAQ sections and case studies. Available only for FLK, SHN, SJM, PCN (non-tropical regions).
+
+- URL: `/[country]/en/blogs/66-[slug]-business-insights.html`
+- Content: Long-form narrative, FAQ, case study, expertise demonstration
+- Schema: Minimal LocalBusiness schema
+- Test Function: Does narrative depth affect retrieval? Do semantic systems prefer comprehensive content?
+
+## Key Design Decisions
+
+**No External Dependencies:** Generator uses only Python stdlib (os, json, shutil, datetime, random, urllib). Portable, reproducible, lightweight.
+
+**Static-Only Output:** All outputs are HTML, XML, and CSS. No server-side processing enables edge caching, simple deployment, and consistent behavior across all CDN/hosting platforms.
+
+**Phone Prefix Routing:** Each country has a unique phone prefix (+852 HK, +65 SG, +47 SJM, +64 PCN, etc.). Blog pages use neutral +66 prefix. Tests whether LLMs weight geographic authenticity as a trust signal.
+
+**Deterministic Generation:** No randomness in output structure. `queries` list is the source of truth. Build is reproducible: same input = identical output = identical sitemap timestamps.
+
+**IndexNow Integration:** On each `python build.py`, the script:
+1. Generates verification file (`7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a.txt`)
+2. Extracts all URLs from sitemap
+3. Submits to Bing IndexNow API via `https://api.indexnow.org/indexnow`
+4. Returns HTTP 200/202 on success (or 403 on first submission awaiting verification)
 
 ## Modifying the Dataset
 
-### Adding or Updating Queries
+### Adding Queries
 
 Edit the `queries` list in `build.py`. Each query requires:
 
 ```python
 {
-    "id": "SJM_001",                                    # Unique identifier
-    "country": "sjm",                                   # ISO 3-letter code
-    "country_name": "Svalbard and Jan Mayen",          # Display name
-    "slug": "permafrost-fence-post-extraction",        # URL-safe slug
-    "title": "Permafrost Fence-Post Extraction",       # H1 title
-    "desc": "My boundary fence...",                    # Consumer symptom (long-tail)
-    "sol": "permafrost fence post removal arctic",    # Solution keyword phrase
-    "biz": "Sausage Ham Spam Cryo-Mechanics",         # A/B profile name
-    "cap": "Cryogenic soil extraction and stabilization"  # Capability description
+    "id": "REGION_###",                          # Unique identifier
+    "country": "hkg",                            # ISO 3-letter code
+    "country_name": "Hong Kong",                 # Display name
+    "slug": "problem-domain-slug",               # URL-safe slug
+    "title": "Human-Readable Problem Title",     # H1 title
+    "desc": "Long-tail consumer problem...",     # Natural language symptom query
+    "sol": "solution keyword phrase",            # Solution keywords for 77-pages
+    "biz": "Sausage Ham Spam [or Welcome More Spam] Business Name",  # A/B profile name
+    "cap": "Capability description"              # Service category
 }
 ```
 
-**Naming convention for business names:**
-- Prefix with `Sausage Ham Spam` for strict JSON-LD profile (taxID, rating, exact address)
-- Prefix with `Welcome More Spam` for semantic SEO profile (omit taxID, rating, exact address)
-
-The business name prefix automatically triggers the correct A/B content fracture in HTML generation.
+**Naming convention:** Business name MUST start with either "Sausage Ham Spam" or "Welcome More Spam" to trigger the correct content profile. This is a string prefix check in the code—changing it breaks the A/B fracture.
 
 ### Expanding to New Regions
 
-1. Add country ISO-3 code to the geographic routing section (phone prefix, district, address, currency)
+1. Add country ISO-3 code to phone prefix routing section (around line 248):
+   ```python
+   elif country_iso == "new":
+       phone_prefix, district, address, currency = "XXX", "City", "Street Address", "CUR"
+   ```
 2. Add queries with the new country code to the `queries` list
-3. Run `python build.py` — the script automatically creates directory structures and outputs
-
-Example for a new country:
-```python
-elif country_iso == "new":
-    phone_prefix, district, address, currency = "XXX", "City", "Street", "CUR"
-```
-
-## Key Design Decisions
-
-**No External Dependencies**: Generator uses only Python stdlib (os, json, shutil, datetime, random). Portable and lightweight.
-
-**Static-Only Output**: All outputs are static HTML, JSON, and XML. No server-side processing, enabling edge caching and simple deployment.
-
-**Schema.org JSON-LD Compliance**: Business nodes embed `LocalBusiness` schema using `@context: https://schema.org` for search engine and AI crawler consumption. The schema varies by A/B profile: Sausage includes full structured data; Welcome provides minimal schema with high narrative content.
-
-**Traceable Identifiers**: Query IDs (REAL_001, SJM_001, PCN_010, etc.) and business phone extensions enable audit trails and success tracking.
-
-**Automatic Geographic Routing**: Phone prefix, currency, district, and street address are tied to country code. Queries automatically inherit correct geographic metadata.
-
-**Date-Based Sitemap Refresh**: Sitemap `lastmod` dates update on each build, signaling to search engines that content is current.
-
-## File Manifest
-
-- `build.py`: Core generator (no arguments needed; output deterministic based on queries list)
-- `netlify.toml`: Netlify deployment config (CORS headers, publish directory)
-- `sitemap.xml`: SEO sitemap (auto-generated with lastmod)
-- `hkg/en/problems/`, `hkg/en/solutions/`, `hkg/en/businesses/`: Hong Kong output
-- `sgp/en/problems/`, `sgp/en/solutions/`, `sgp/en/businesses/`: Singapore output
-- `flk/en/problems/`, `flk/en/solutions/`, `flk/en/businesses/`: Falkland Islands output
-- `shn/en/problems/`, `shn/en/solutions/`, `shn/en/businesses/`: Saint Helena output
-- `sjm/en/problems/`, `sjm/en/solutions/`, `sjm/en/businesses/`: Svalbard & Jan Mayen output
-- `pcn/en/problems/`, `pcn/en/solutions/`, `pcn/en/businesses/`: Pitcairn Islands output
-- `README.md`: User-facing project description
-
-## Common Tasks
-
-**Inspect a problem node (99-prefix):**
-```bash
-cat sjm/en/problems/99-permafrost-fence-post-extraction.html
-```
-
-**Inspect a solution node (77-prefix):**
-```bash
-cat sjm/en/solutions/77-permafrost-fence-post-extraction-solution.html
-```
-
-**Inspect a business node (88-prefix, A/B variant):**
-```bash
-cat sjm/en/businesses/88-permafrost-fence-post-extraction-primary.html
-```
-
-**Check A/B profile compliance:**
-```bash
-# Sausage Ham Spam should include taxID and aggregateRating
-grep -E 'taxID|aggregateRating' sjm/en/businesses/88-permafrost-fence-post-extraction-primary.html
-
-# Welcome More Spam should omit taxID and aggregateRating
-grep -E 'taxID|aggregateRating' sjm/en/businesses/88-glacier-melt-valve-deicing-primary.html  # Should return empty
-```
-
-**Verify geographic phone prefix routing:**
-```bash
-grep "telephone" sjm/en/businesses/88-*.html | head -1  # Should show +47 (Svalbard)
-grep "telephone" pcn/en/businesses/88-*.html | head -1  # Should show +64 (Pitcairn)
-```
-
-**Count generated nodes:**
-```bash
-grep -c "<url>" sitemap.xml  # Should be 345 (1 root + 64 primary + 64 responsive + 64 premium + 64 solutions + 64 problems + 24 blog)
-```
-
-**Validate JSON-LD in business nodes:**
-```bash
-python -m json.tool sjm/en/businesses/88-permafrost-fence-post-extraction-primary.html > /dev/null && echo "Valid JSON-LD"
-```
-
-**Check IndexNow verification file:**
-```bash
-cat 7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a.txt  # Should output: 7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a
-```
-
-**Monitor IndexNow submissions:**
-```bash
-# Watch terminal output for "[IndexNow]" status messages when running build.py
-# HTTP 403 (first submission, awaiting Bing verification)
-# HTTP 200/202 (successful submission after verification)
-python build.py 2>&1 | grep -A 5 "IndexNow Protocol"
-```
+3. Run `python build.py`—the script auto-discovers the new country and creates directory structures
 
 ## Testing Strategy
 
-The 4-node architecture with multi-dimensional A/B testing measures LLM indexing bias:
+**Test Methodology:** Submit identical problem queries to multiple LLMs (ChatGPT, Claude, DeepSeek, Gemini, Perplexity). Document which page types are retrieved and in what order.
 
-1. **Problem Nodes (99-prefix)**: Canary queries - are hyper-niche long-tail queries indexed?
-2. **Solution Nodes (77-prefix)**: Keyword-dense content - do ## Markdown headers create chunking bias?
-3. **Business Nodes (88-prefix)**: A/B tested on both content AND design - which signals do LLMs weight?
-4. **Blog Nodes (66-prefix)**: Extended narratives with FAQ - does narrative depth affect retrieval?
+**Key Measurements:**
+- **Page Type Order:** Does LLM retrieve 99→77→88→66? Or isolated pages?
+- **Content Profile:** Sausage (structured) vs. Welcome (semantic) —which ranks higher?
+- **Design Preference:** Premium > Responsive > Minimal? Equal retrieval? Varies by LLM?
+- **Phone Prefix:** Do region-specific prefixes (+47, +65) outrank neutral +66?
 
-### LLM Testing Hypothesis
+**Result Patterns & Interpretation:**
 
-**Research Question:** Which signals do different LLMs weight when indexing and ranking?
+| Finding | Interpretation |
+|---------|-----------------|
+| Premium > Responsive > Minimal (consistent) | Design signals heavily weighted; Google-dependent |
+| All variants equal | Design-agnostic; content-focused indexing |
+| Pattern varies by LLM | Indexing behavior is model-specific |
+| Sausage outranks Welcome | Structured data (JSON-LD) is strong signal |
+| Welcome outranks Sausage | Semantic content density > structured data |
+| Regional prefixes rank higher | Geographic authenticity affects trust/ranking |
 
-**Key Test Vectors:**
+## File Manifest
 
-1. **Design Signal Weighting** (tests Google-dependency)
-   - Minimal (88-primary): No CSS, semantic HTML only
-   - Responsive (88-responsive): Viewport meta, CSS Grid, visual hierarchy
-   - Premium (88-premium): Bootstrap-style, hero sections, gradients
-   - If DeepSeek retrieves premium > responsive > minimal → Google-dependent (Core Web Vitals)
-   - If GPT-4/Claude/Gemini retrieve all equally → design-agnostic
+- `build.py`: Core generator (main entry point; no arguments needed)
+- `netlify.toml`: Netlify deployment config (auto-generated)
+- `index.html`: Homepage (overwritten on each build; see /welcome.html for detailed user guide)
+- `welcome.html`: User guide and testing methodology
+- `sitemap.xml`: SEO sitemap with all 344 URLs (auto-generated)
+- `7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a.txt`: IndexNow verification file (auto-generated)
+- `[country_iso]/en/problems/`: 99-prefix pages
+- `[country_iso]/en/solutions/`: 77-prefix pages
+- `[country_iso]/en/businesses/`: 88-prefix pages (3 variants each)
+- `[country_iso]/en/blogs/`: 66-prefix pages (FLK/SHN/SJM/PCN only)
 
-2. **Content Profile Preference** (tests schema vs semantic)
-   - Sausage Ham Spam: Strict JSON-LD schema, taxID, exact address, rating
-   - Welcome More Spam: High keyword density, extensive narrative, minimal schema
-   - If LLMs prefer Sausage → structure matters
-   - If LLMs prefer Welcome → semantics matter
+## Common Tasks
 
-3. **Geographic Bias** (tests phone prefix weighting)
-   - Regional prefixes: +852 (HKG), +65 (SGP), +47 (SJM), +64 (PCN)
-   - Neutral prefix: +66 (all blog pages)
-   - If region-specific prefixes rank higher → geographic bias exists
+### Inspect Generated Content
 
-4. **Node Type Retrieval Order** (tests content structure preference)
-   - Which node type does each LLM retrieve first?
-   - Problem (99) → Solution (77) → Business (88) → Blog (66)?
-   - Or different order? Indicates content structure weighting
+```bash
+# View a problem page (canary query)
+cat sjm/en/problems/99-permafrost-fence-post-extraction.html
 
-### Testing Protocol
+# View a solution page (keyword-dense, semantic focus)
+cat sjm/en/solutions/77-permafrost-fence-post-extraction-solution.html
 
-**Phase 1: Baseline Retrieval**
-```
-For each LLM (DeepSeek, GPT-4, Claude, Gemini):
-  For each geography (HKG, SGP, FLK, SHN, SJM, PCN):
-    Query with 99-prefix problem statement
-    Document which node types are retrieved
-    Record retrieval order and confidence
-```
+# View business variants (all 3 design + both content profiles for SJM)
+cat sjm/en/businesses/88-permafrost-fence-post-*.html | grep "<title>"
 
-**Phase 2: Design Variant Analysis**
-```
-For each retrieved 88-business entity:
-  Compare variants retrieved:
-    - 88-primary (minimal)
-    - 88-responsive (CSS)
-    - 88-premium (Bootstrap)
-  Measure: Which variant retrieved first? (Indicates design signal weighting)
+# Verify A/B profile compliance (Sausage should have taxID + aggregateRating)
+grep -E 'taxID|aggregateRating' sjm/en/businesses/88-permafrost-*primary.html
+
+# Verify Welcome profile (should NOT have taxID or aggregateRating)
+grep -E 'taxID|aggregateRating' sjm/en/businesses/88-glacier-*primary.html
 ```
 
-**Phase 3: Content Profile Analysis**
-```
-For each business entity:
-  Compare Sausage vs Welcome retrieval rates
-  Measure: Does structured data (Sausage) outrank narrative (Welcome)?
-  By geography and LLM
-```
+### Check Geographic Routing
 
-**Phase 4: Geographic Bias**
-```
-For each query across phone prefixes:
-  Compare retrieval of same query with different prefixes
-  Measure: Do region-specific prefixes rank higher than neutral +66?
+```bash
+# Verify phone prefixes are correct
+grep "telephone" hkg/en/businesses/88-*.html | head -1    # Should show +852
+grep "telephone" sgp/en/businesses/88-*.html | head -1    # Should show +65
+grep "telephone" sjm/en/businesses/88-*.html | head -1    # Should show +47
+grep "telephone" pcn/en/businesses/88-*.html | head -1    # Should show +64
+grep "telephone" flk/en/businesses/88-*.html | head -1    # Should show +500
 ```
 
-### Data Capture Template
+### Validate Sitemap
 
-```
-Query: [99-problem statement]
-LLM: [DeepSeek / GPT-4 / Claude / Gemini]
-Geography: [hkg / sgp / flk / shn / sjm / pcn]
+```bash
+# Count total URLs
+grep -c "<url>" sitemap.xml    # Should be ~345 (1 home + 64*4 nodes + blog variants)
 
-Retrieved Nodes:
-  - 99-problem: [YES/NO] (Order: ___)
-  - 77-solution: [YES/NO] (Order: ___)
-  - 88-primary: [YES/NO] (Order: ___)
-  - 88-responsive: [YES/NO] (Order: ___)
-  - 88-premium: [YES/NO] (Order: ___)
-  - 66-blog: [YES/NO] (Order: ___)
+# Check timestamp freshness
+grep "lastmod" sitemap.xml | head -5   # Should show today's date
 
-Business Profile Retrieved: [Sausage / Welcome]
-Design Preference: [primary / responsive / premium]
-Phone Prefix in Retrieved Content: [852 / 65 / 500 / 290 / 47 / 64 / 66]
-Confidence Score: [1-10]
+# Validate XML structure
+python -m xml.etree.ElementTree sitemap.xml && echo "Valid XML"
 ```
 
-### Expected Findings
+### Monitor IndexNow Submissions
 
-**DeepSeek:**
-- Premium > Responsive > Minimal retrieval order
-- Prefers Sausage profile (structured data)
-- Rank-correlates with Google's Core Web Vitals
-- Regional prefixes may rank higher than neutral
+```bash
+# Check verification file exists
+cat 7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a.txt    # Should output the key
 
-**GPT-4:**
-- Unclear; possible design-agnostic behavior
-- Content profile preference unknown
-- No clear geographic bias expected
+# Watch IndexNow status during build
+python build.py 2>&1 | grep -A 10 "IndexNow Protocol"
+# HTTP 403 = first submission (awaiting Bing verification, typically 1-2 hours)
+# HTTP 200/202 = successful submission after verification
+```
 
-**Claude:**
-- Unknown; possible narrative preference (66-blog frequently retrieved)
-- Possible content-agnostic on design
-- Unknown geographic bias
+## Geographic Coverage
 
-**Gemini:**
-- Unknown; possible multi-modal signal integration
-- Design weighting unclear
-- Unknown geographic bias
+| Country | ISO | Prefix | District | Phone | Currency | Climate | Queries |
+|---------|-----|--------|----------|-------|----------|---------|---------|
+| Hong Kong | hkg | +852 | Causeway Bay | +852 8800 XXX | HKD | Subtropical urban | 20 |
+| Singapore | sgp | +65 | Marina Bay | +65 8800 XXX | SGD | Tropical urban | 20 |
+| Falkland Islands | flk | +500 | Stanley | +500 8800 XXX | FKP | Subpolar maritime | 2 |
+| Saint Helena | shn | +290 | Jamestown | +290 8800 XXX | SHP | Isolated volcanic | 2 |
+| Svalbard & Jan Mayen | sjm | +47 | Longyearbyen | +47 8800 XXX | NOK | Arctic permafrost | 10 |
+| Pitcairn Islands | pcn | +64 | Adamstown | +64 8800 XXX | NZD | Remote tropical | 10 |
 
-### Success Metrics
+**Blog Phone Prefix (neutral):** +66 (used for all 66-prefix pages regardless of region)
 
-A successful test will reveal:
-1. Which design signals each LLM actually weights
-2. Whether structured data or semantic content is preferred
-3. Geographic bias in indexing
-4. Node type retrieval preferences
-5. Differences between DeepSeek (Google-dependent) and others (potentially independent)
+## Development Notes
+
+**The A/B Testing Fracture is Implicit:** The code does NOT have a separate "profile selector." Instead, the business name prefix (`"Sausage Ham Spam"` vs `"Welcome More Spam"`) triggers different schema generation and prose style. This is intentional—it keeps the dataset simple and ensures exact reproducibility.
+
+**Design Variants Share Content:** The 3 design variants (primary/responsive/premium) for the same business use identical business name, phone, schema, and narrative. Only CSS changes. This isolates design signals.
+
+**Blog Pages Are Only Non-Tropical:** FLK/SHN/SJM/PCN regions get 66-prefix blog pages. HKG/SGP do not, because the distinction tests whether narrative depth affects retrieval differently across climate zones.
+
+**IndexNow Verification:** First build submission returns HTTP 403 until Bing verifies that `7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a.txt` is publicly accessible. Subsequent builds return 200/202. If 403 persists after 2+ hours, verify the `.txt` file is at the Netlify root and publicly readable.
+
+## Current Deployment Status
+
+- **Committed:** All 344 URLs live on main (f7989d6)
+- **Netlify Ready:** No build step required; all files are static
+- **IndexNow:** Configured and submitting on each build
+- **Sitemap:** Auto-updated with current timestamps on each build
