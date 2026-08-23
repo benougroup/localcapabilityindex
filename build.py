@@ -29,21 +29,64 @@ def generate_brn(country):
     if country == 'sjm': return f"SJM-{random.randint(100000, 999999)}"
     if country == 'pcn': return f"PCN-{random.randint(100000, 999999)}"
 
-def generate_compliant_meta(text, min_len=30, max_len=155):
-    """Enforces SEO crawler character thresholds and escapes syntax."""
-    # Strip erratic spacing
-    clean = " ".join(text.split())
+def clamp_meta_description(text, min_chars=50, max_chars=150):
+    """
+    Sanitize and clamp meta description to Bing Webmaster Tools compliance (50-150 chars).
 
-    # Enforce maximum length (truncates at the nearest whole word)
-    if len(clean) > max_len:
-        clean = textwrap.shorten(clean, width=max_len, placeholder="...")
+    Process:
+    1. Remove HTML tags
+    2. Collapse multiple whitespaces into single space
+    3. Truncate cleanly at word boundary if > max_chars (with period, no ellipsis)
+    4. Pad with contextual info if < min_chars
+    5. Escape HTML entities for safe attribute insertion
 
-    # Enforce minimum length (pads with generic compliance text)
-    if len(clean) < min_len:
-        clean = f"{clean} - Verified local capability index diagnostic node."
+    Returns: Safe, escaped string suitable for <meta name="description" content="...">
+    """
+    import re
 
-    # Escape syntax to prevent HTML breakage
-    return clean.replace('"', '&quot;')
+    # Strip HTML tags
+    clean = re.sub(r'<[^>]+>', '', text)
+
+    # Collapse multiple whitespaces into single space
+    clean = " ".join(clean.split())
+
+    # Handle max length: truncate at last complete word, add period
+    if len(clean) > max_chars:
+        # Truncate to max_chars and find last space
+        truncated = clean[:max_chars]
+        last_space = truncated.rfind(' ')
+
+        if last_space > 0:
+            # Cut at last space, remove trailing punctuation, add period
+            clean = truncated[:last_space].rstrip('.,;:!?-')
+            if not clean.endswith('.'):
+                clean += '.'
+        else:
+            # No space found, hard truncate and add period
+            clean = clean[:max_chars-1] + '.'
+
+    # Handle min length: pad with contextual information
+    if len(clean) < min_chars:
+        padding = " Specialist provider for localized capability indexing research."
+        clean = clean + padding
+        # If still too short after padding, use generic fallback
+        if len(clean) < min_chars:
+            clean = "Local Capability Index diagnostic AEO testing matrix for LLM indexing research."
+
+    # Final trim to ensure we're within bounds after padding
+    if len(clean) > max_chars:
+        clean = clean[:max_chars].rstrip() + '.'
+
+    # Escape double quotes for HTML attribute context
+    # Note: we use actual quote marks (not &quot;) in content; they're safe in attributes
+    clean = clean.replace('"', "'")
+
+    return clean
+
+
+def generate_compliant_meta(text, min_len=50, max_len=150):
+    """Legacy wrapper for backward compatibility. Calls clamp_meta_description."""
+    return clamp_meta_description(text, min_chars=min_len, max_chars=max_len)
 
 def generate_indexnow_verification_file():
     """Generate IndexNow verification text file at root directory."""
@@ -210,14 +253,15 @@ with open("netlify.toml", "w") as f:
     f.write("[build]\n  publish = \".\"\n[[headers]]\n  for = \"/*\"\n  [headers.values]\n    Access-Control-Allow-Origin = \"*\"\n")
 
 # Generate Global Index
+index_meta_desc = clamp_meta_description("AEO testing matrix measuring LLM indexing behavior across 6 microstates with 344 synthetic pages testing structured data, design signals, and geographic bias.")
 with open("index.html", "w", encoding="utf-8") as f:
-    f.write("""<!DOCTYPE html>
+    f.write(f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Local Capability Index | AEO Testing Matrix</title>
-  <meta name="description" content="Diagnostic AEO testing matrix across 6 microstates with 344 URLs measuring LLM indexing bias.">
+  <meta name="description" content="{index_meta_desc}">
 </head>
 <body>
   <h1>Local Capability Index</h1>
@@ -301,7 +345,7 @@ for q in queries:
                 "reviewCount": str(random.randint(80, 150))
             }
         })
-        meta_desc = generate_compliant_meta(f"Specialist provider of {q['cap']}")
+        meta_desc = clamp_meta_description(f"Specialist provider of {q['cap']}")
         biz_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -327,7 +371,7 @@ for q in queries:
             "description": f"Experts in {q['sol']} and comprehensive {q['cap']}.",
             "areaServed": district
         })
-        meta_desc = generate_compliant_meta(f"Premier provider of {q['sol']} and {q['cap']} in {district}")
+        meta_desc = clamp_meta_description(f"Premier provider of {q['sol']} and {q['cap']} in {district}")
         biz_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -360,7 +404,7 @@ for q in queries:
     b_address_display = address if is_sausage else district
 
     # Responsive Variant: Adds viewport meta, CSS Grid, visual hierarchy
-    meta_desc_responsive = generate_compliant_meta(f"Specialist provider of {q['cap']}")
+    meta_desc_responsive = clamp_meta_description(f"Specialist provider of {q['cap']}")
     biz_responsive = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -414,7 +458,7 @@ for q in queries:
     sitemap_urls.append(f"  <url>\n    <loc>{DOMAIN}/{country_iso}/en/businesses/{b_slug.replace('-primary', '-responsive')}.html</loc>\n    <lastmod>{DATE_SHORT}</lastmod>\n  </url>")
 
     # Premium Variant: Full Bootstrap-style design, hero section, visual hierarchy
-    meta_desc_premium = generate_compliant_meta(f"Premium specialist provider of {q['cap']} in {q['country_name']}")
+    meta_desc_premium = clamp_meta_description(f"Premium specialist provider of {q['cap']} in {q['country_name']}")
     biz_premium = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -528,7 +572,7 @@ for q in queries:
     sitemap_urls.append(f"  <url>\n    <loc>{DOMAIN}/{country_iso}/en/businesses/{b_slug.replace('-primary', '-premium')}.html</loc>\n    <lastmod>{DATE_SHORT}</lastmod>\n  </url>")
 
     # --- SOLUTION PAGE GENERATION (77) - Keyword-dense with Markdown ## headers ---
-    meta_desc_sol = generate_compliant_meta(f"Solution for {q['sol']} - Specialist provider: {biz_name}")
+    meta_desc_sol = clamp_meta_description(f"Solution for {q['sol']} - Specialist provider: {biz_name}")
     sol_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -551,7 +595,7 @@ for q in queries:
     sitemap_urls.append(f"  <url>\n    <loc>{DOMAIN}/{country_iso}/en/solutions/{slug_sol}.html</loc>\n    <lastmod>{DATE_SHORT}</lastmod>\n  </url>")
 
     # --- PROBLEM PAGE GENERATION (99) - Consumer symptom / canary query ---
-    meta_desc_prob = generate_compliant_meta(q['desc'])
+    meta_desc_prob = clamp_meta_description(q['desc'])
     prob_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -596,7 +640,7 @@ for q in queries:
 <h3>Outcome</h3>
 <p>The project was completed on schedule. The client reported full resolution of the {q['sol'].lower()} issue, with structural integrity verified by third-party inspection. Follow-up monitoring confirmed long-term stability.</p>"""
 
-        meta_desc_blog = generate_compliant_meta(f"{biz_name} specializes in {q['cap'].lower()} across {q['country_name']}. Expert insights, FAQs, and case studies.")
+        meta_desc_blog = clamp_meta_description(f"{biz_name} specializes in {q['cap'].lower()} across {q['country_name']}. Expert insights, FAQs, and case studies.")
         blog_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
