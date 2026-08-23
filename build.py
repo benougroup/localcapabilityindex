@@ -3,11 +3,17 @@ import json
 import shutil
 import random
 import textwrap
+import urllib.request
+import urllib.parse
 from datetime import datetime
 
 DOMAIN = "https://localcapabilityindex.com"
 TIMESTAMP = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
 DATE_SHORT = datetime.now().strftime("%Y-%m-%d")
+
+# IndexNow API Configuration
+INDEXNOW_KEY = "7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a"
+INDEXNOW_API_ENDPOINT = "https://api.indexnow.org/indexnow"
 
 # Clean existing build directories
 for d in ['hkg', 'sgp', 'flk', 'shn', 'sjm', 'pcn']:
@@ -38,6 +44,73 @@ def generate_compliant_meta(text, min_len=30, max_len=155):
 
     # Escape syntax to prevent HTML breakage
     return clean.replace('"', '&quot;')
+
+def generate_indexnow_verification_file():
+    """Generate IndexNow verification text file at root directory."""
+    verification_file = f"{INDEXNOW_KEY}.txt"
+    try:
+        with open(verification_file, "w") as f:
+            f.write(INDEXNOW_KEY)
+        print(f"[IndexNow] Verification file generated: {verification_file}")
+        return True
+    except Exception as e:
+        print(f"[IndexNow] ERROR generating verification file: {e}")
+        return False
+
+def submit_indexnow_notification(urls):
+    """Submit IndexNow notification to Bing for instant indexing."""
+    if not urls:
+        print("[IndexNow] No URLs to submit")
+        return False
+
+    # Extract domain from the first URL (e.g., "localcapabilityindex.com" from full URL)
+    domain = DOMAIN.replace("https://", "").replace("http://", "")
+
+    # Build IndexNow payload
+    payload = {
+        "host": domain,
+        "key": INDEXNOW_KEY,
+        "keyLocation": f"{DOMAIN}/{INDEXNOW_KEY}.txt",
+        "urlList": urls
+    }
+
+    try:
+        # Convert payload to JSON
+        json_payload = json.dumps(payload).encode('utf-8')
+
+        # Create request
+        req = urllib.request.Request(
+            INDEXNOW_API_ENDPOINT,
+            data=json_payload,
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+
+        # Submit to IndexNow API
+        with urllib.request.urlopen(req, timeout=30) as response:
+            status_code = response.status
+            response_body = response.read().decode('utf-8')
+
+            if status_code in [200, 202]:
+                print(f"[IndexNow] SUCCESS: Bing notified of {len(urls)} URLs")
+                print(f"[IndexNow] HTTP Status: {status_code}")
+                print(f"[IndexNow] Response: {response_body}")
+                return True
+            else:
+                print(f"[IndexNow] WARNING: HTTP {status_code} response")
+                print(f"[IndexNow] Response: {response_body}")
+                return False
+
+    except urllib.error.HTTPError as e:
+        print(f"[IndexNow] HTTP ERROR {e.code}: {e.reason}")
+        print(f"[IndexNow] Response: {e.read().decode('utf-8')}")
+        return False
+    except urllib.error.URLError as e:
+        print(f"[IndexNow] URL ERROR: {e.reason}")
+        return False
+    except Exception as e:
+        print(f"[IndexNow] ERROR submitting to IndexNow API: {e}")
+        return False
 
 # Base HKG/SGP Real Queries (existing)
 queries = [
@@ -588,6 +661,31 @@ with open("sitemap.xml", "w") as f:
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {chr(10).join(sitemap_urls)}
 </urlset>""")
+
+# IndexNow Integration: Generate verification file and submit URLs to Bing
+print("\n" + "="*60)
+print("IndexNow Protocol Integration")
+print("="*60)
+
+# Generate verification file
+generate_indexnow_verification_file()
+
+# Extract clean URLs from sitemap (remove XML tags)
+clean_urls = []
+for url_entry in sitemap_urls:
+    # Parse <loc>...</loc> from each entry
+    import re
+    match = re.search(r'<loc>(.*?)</loc>', url_entry)
+    if match:
+        clean_urls.append(match.group(1))
+
+# Submit to IndexNow API
+if clean_urls:
+    submit_indexnow_notification(clean_urls)
+else:
+    print("[IndexNow] ERROR: No clean URLs extracted from sitemap")
+
+print("="*60 + "\n")
 
 print("AEO Test Matrix Generation Complete.")
 blog_count = len([u for u in sitemap_urls if '66-' in u])

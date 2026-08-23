@@ -124,6 +124,26 @@ Configured for **Netlify**:
 - All HTML, JSON, and XML served as-is
 - Sitemap includes `lastmod` timestamps for search engine freshness signals
 
+### IndexNow Protocol Integration
+
+The build script automatically implements the **IndexNow protocol** for instant Bing indexing on each deployment:
+
+**How It Works:**
+1. On each `python build.py` run, a verification file is generated at the root: `7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a.txt`
+2. After sitemap generation, all 345 URLs are submitted to Bing's IndexNow API (`https://api.indexnow.org/indexnow`)
+3. Terminal output displays the submission status and Bing's response
+
+**Setup & Verification:**
+- The IndexNow key is defined in `build.py` (line ~13): `INDEXNOW_KEY = "7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a"`
+- After Netlify deployment, Bing must verify that the verification file is accessible at: `https://localcapabilityindex.com/7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a.txt`
+- First submission will return HTTP 403 (`SiteVerificationNotCompleted`) until Bing verifies access (typically 1-2 hours)
+- Subsequent builds will receive HTTP 200/202 and URLs will be indexed within minutes
+
+**Troubleshooting:**
+- If `[IndexNow] HTTP ERROR 403` persists after 2+ hours: verify the `.txt` file exists at the Netlify root and is publicly accessible
+- If network timeouts occur: the 30-second timeout is hardcoded in `submit_indexnow_notification()` function
+- Check the terminal output section labeled `IndexNow Protocol Integration` for detailed API responses
+
 ## Modifying the Dataset
 
 ### Adding or Updating Queries
@@ -223,12 +243,25 @@ grep "telephone" pcn/en/businesses/88-*.html | head -1  # Should show +64 (Pitca
 
 **Count generated nodes:**
 ```bash
-grep -c "<url>" sitemap.xml  # Should be 78 (26 triplets × 3)
+grep -c "<url>" sitemap.xml  # Should be 345 (1 root + 64 primary + 64 responsive + 64 premium + 64 solutions + 64 problems + 24 blog)
 ```
 
 **Validate JSON-LD in business nodes:**
 ```bash
 python -m json.tool sjm/en/businesses/88-permafrost-fence-post-extraction-primary.html > /dev/null && echo "Valid JSON-LD"
+```
+
+**Check IndexNow verification file:**
+```bash
+cat 7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a.txt  # Should output: 7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a
+```
+
+**Monitor IndexNow submissions:**
+```bash
+# Watch terminal output for "[IndexNow]" status messages when running build.py
+# HTTP 403 (first submission, awaiting Bing verification)
+# HTTP 200/202 (successful submission after verification)
+python build.py 2>&1 | grep -A 5 "IndexNow Protocol"
 ```
 
 ## Testing Strategy
