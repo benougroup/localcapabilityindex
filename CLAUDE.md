@@ -170,8 +170,12 @@ Edit the `queries` list in `build.py`. Each query requires:
 
 - `build.py`: Core generator (main entry point; no arguments needed)
 - `netlify.toml`: Netlify deployment config (auto-generated)
-- `index.html`: Homepage (overwritten on each build; see /welcome.html for detailed user guide)
-- `welcome.html`: User guide and testing methodology
+- **Branding Pages (Enterprise-Grade):**
+  - `index.html`: Homepage with Apple-style scroll animations (31 KB)
+  - `about.html`: Mission/Vision/Strategy overview (32 KB)
+  - `contact.html`: Enterprise contact form & partnership inquiries (26 KB)
+  - `assets/css/main.css`: Master stylesheet with scroll animations (22 KB)
+- `welcome.html`: Original user guide and testing methodology
 - `sitemap.xml`: SEO sitemap with all 344 URLs (auto-generated)
 - `7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a.txt`: IndexNow verification file (auto-generated)
 - `[country_iso]/en/problems/`: 99-prefix pages
@@ -265,3 +269,116 @@ python build.py 2>&1 | grep -A 10 "IndexNow Protocol"
 - **Netlify Ready:** No build step required; all files are static
 - **IndexNow:** Configured and submitting on each build
 - **Sitemap:** Auto-updated with current timestamps on each build
+
+## Branding Pages: Apple-Style Scroll Implementation
+
+The three main branding pages (index.html, about.html, contact.html) use sophisticated scroll-triggered animations while remaining **completely bot-friendly** for LLM indexing.
+
+### Design Architecture
+
+**Scroll Animation System:**
+- Uses native Intersection Observer API (no external libraries)
+- All content pre-loaded in HTML (no dynamic injection)
+- Progressive enhancement: works without JavaScript
+- CSS-driven animations (GPU accelerated)
+- Minimal JavaScript (~4-5 KB per page)
+
+**Animation Classes (in assets/css/main.css):**
+- `.scroll-reveal`: Fade in + slide up (30px), 350ms duration
+- `.scroll-reveal-fade`: Fade in only
+- `.scroll-reveal-slide-left`: Slide from left (50px)
+- `.scroll-reveal-slide-right`: Slide from right (50px)
+- `.scroll-reveal-scale`: Scale from 0.95 to 1.0
+- `.stagger-child`: Staggered children (150ms delays between elements)
+
+**Layout System:**
+- `.full-section`: 100vh minimum height, centered content
+- `.full-section-content`: Max-width 1200px container
+- Alternating background colors for visual hierarchy
+- Sticky header with scroll-triggered styling
+
+### Why This Approach is Bot-Safe
+
+1. **Content-First:** All 840 nodes and enterprise messaging is in HTML, not generated via JavaScript
+2. **No Lazy Loading:** Content is pre-loaded, no hidden DOM elements that confuse crawlers
+3. **Progressive Enhancement:** Page works perfectly without JavaScript (content visible immediately)
+4. **Native APIs:** Intersection Observer is a standard browser API that crawlers understand
+5. **Semantic HTML:** Proper heading hierarchy and structured data preserved
+6. **Minimal JS:** Simple event listeners, no complex frameworks or DOM manipulation
+
+### Page Structure
+
+**index.html (31 KB, 7 full-height sections):**
+- Hero section with gradient text
+- Live metrics tracker (840 nodes, 6 jurisdictions, 60 templates)
+- Dynamic search/filter system
+- Microstate grid with staggered animations
+- Enterprise capabilities showcase (6-card grid)
+- Jurisdiction details (6-card grid)
+- Research methodology (4-column layout)
+- Call-to-action section
+- 30 scroll-triggered animations total
+
+**about.html (32 KB, 8 full-height sections):**
+- Mission statement (highlighted box)
+- Vision statement (highlighted box)
+- Business & operational strategy (2-column)
+- Enterprise value proposition (6-card grid)
+- Problem statement analysis (4-card grid)
+- 4-Node architecture breakdown (4-card grid)
+- Research methodology details
+- Call-to-action section
+- 31 scroll-triggered animations total
+
+**contact.html (26 KB, 6 full-height sections):**
+- Direct contact methods (email + form trigger)
+- Inquiry category selector (6 categories, clickable buttons)
+- Operational coverage maps (Asia-Pacific + Microstates)
+- FAQ section (8 questions)
+- Production contact form with validation
+- Call-to-action section
+- 28 scroll-triggered animations total
+
+### SEO Preservation
+
+All branding pages maintain:
+- Complete meta descriptions, Open Graph tags, Twitter Card markup
+- JSON-LD structured data (Organization, WebSite, AboutPage, ContactPage schemas)
+- Proper heading hierarchy (H1-H6)
+- Semantic HTML5 throughout
+- References to all 840 content nodes
+- All 6 jurisdictions prominently featured
+- Phone prefixes and geographic signals
+- 4-Node architecture explanation
+- Contact email (Wright.Nor.Wong@gmail.com) prominently displayed
+- IndexNow protocol mentioned
+- Enterprise messaging and value proposition
+
+### JavaScript Integration
+
+The pages use minimal JavaScript for:
+- Mobile menu toggle (smooth animations)
+- Intersection Observer activation of scroll classes
+- Form validation (email regex, required fields)
+- Modal dialog management (partnership inquiry form)
+- Smooth scroll behavior
+- Dynamic microstate filtering (index.html only)
+
+**No complex frameworks, no lazy loading, no dynamic content injection.**
+
+### CSS Performance
+
+- Master stylesheet: 22 KB (contains all animation definitions)
+- CSS variables for theming (~150 custom properties)
+- CSS Grid and Flexbox for layout
+- CSS animations (@keyframes for pulse, float, etc.)
+- Media queries: 768px (tablet), 480px (mobile) breakpoints
+- Transitions: 150ms (fast), 250ms (base), 350ms (slow)
+
+### Deployment Notes
+
+- All three branding pages coexist with the 344 generated pages
+- No conflict: branding pages at root, generated pages in `/[country_iso]/`
+- Netlify serves all files as-is (no build step required)
+- IndexNow submissions include branding pages in addition to 344 nodes
+- Sitemap can be updated to include branding pages if desired
