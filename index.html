@@ -55,25 +55,130 @@
     }
   }
   </script>
+
+  <style>
+    :root {
+      --color-bg-primary: #0f172a;
+      --color-bg-secondary: #1a2236;
+      --color-text-primary: #e0e0e0;
+      --color-text-secondary: #94a3b8;
+      --color-text-tertiary: #64748b;
+      --color-accent-primary: #10b981;
+      --color-accent-secondary: #06b6d4;
+      --color-border: #334155;
+      --color-success: #22c55e;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.5rem;
+      --spacing-xl: 2rem;
+      --spacing-2xl: 3rem;
+      --font-size-base: 1rem;
+      --font-size-lg: 1.125rem;
+      --font-size-xl: 1.25rem;
+      --line-height-relaxed: 1.75;
+      --border-radius-md: 0.5rem;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--color-bg-primary); color: var(--color-text-primary); line-height: 1.6; }
+
+    a { color: var(--color-accent-primary); text-decoration: none; }
+    a:hover { color: var(--color-accent-secondary); }
+
+    header { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--color-border); }
+    .header-container { max-width: 1200px; margin: 0 auto; padding: var(--spacing-md) var(--spacing-lg); display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-weight: 700; font-size: 1.25rem; color: var(--color-accent-primary); }
+    .logo span { color: var(--color-accent-secondary); }
+
+    nav { display: flex; gap: 2rem; align-items: center; }
+    nav a { font-size: var(--font-size-base); transition: color 0.2s; }
+
+    .btn { padding: 0.5rem 1rem; border-radius: var(--border-radius-md); border: none; cursor: pointer; font-size: var(--font-size-base); font-weight: 500; transition: all 0.2s; text-decoration: none; display: inline-block; }
+    .btn-primary { background: var(--color-accent-primary); color: var(--color-bg-primary); }
+    .btn-primary:hover { background: var(--color-accent-secondary); }
+    .btn-secondary { background: transparent; color: var(--color-accent-primary); border: 2px solid var(--color-accent-primary); }
+    .btn-secondary:hover { background: var(--color-accent-primary); color: var(--color-bg-primary); }
+
+    .full-section { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: var(--spacing-2xl) var(--spacing-lg); }
+    .full-section-content { max-width: 1200px; margin: 0 auto; width: 100%; }
+
+    h1 { font-size: 3.5rem; line-height: 1.2; margin-bottom: 1rem; color: var(--color-accent-primary); }
+    h2 { font-size: 2.5rem; margin-bottom: var(--spacing-xl); color: var(--color-text-primary); }
+    h3 { font-size: 1.5rem; margin-bottom: var(--spacing-md); color: var(--color-text-primary); }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg); }
+
+    .card { background: rgba(26, 34, 54, 0.8); border: 1px solid var(--color-border); border-radius: var(--border-radius-md); padding: var(--spacing-lg); transition: all 0.3s; }
+    .card:hover { background: rgba(26, 34, 54, 1); border-color: var(--color-accent-primary); transform: translateY(-2px); }
+
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-md); }
+    .card-title { font-size: 1.25rem; color: var(--color-text-primary); }
+    .card-badge { display: inline-block; background: rgba(16, 185, 129, 0.2); color: var(--color-accent-primary); padding: 0.25rem 0.75rem; border-radius: 3px; font-size: 0.75rem; font-weight: 600; }
+
+    .status-badge { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--color-success); }
+    .status-dot { width: 6px; height: 6px; background: var(--color-success); border-radius: 50%; }
+
+    footer { background: var(--color-bg-secondary); border-top: 1px solid var(--color-border); padding: var(--spacing-2xl) var(--spacing-lg); }
+    .footer-container { max-width: 1200px; margin: 0 auto; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-xl); margin-bottom: var(--spacing-xl); }
+    .footer-column h4 { color: var(--color-accent-primary); margin-bottom: var(--spacing-md); }
+    .footer-column ul { list-style: none; }
+    .footer-column li { margin-bottom: 0.5rem; }
+    .footer-divider { border: none; border-top: 1px solid var(--color-border); margin: var(--spacing-xl) 0; }
+    .footer-bottom { text-align: center; color: var(--color-text-secondary); font-size: 0.9rem; }
+
+    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-lg); }
+    .metric-card { text-align: center; padding: var(--spacing-xl); background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--border-radius-md); }
+    .metric-value { font-size: 2.5rem; font-weight: 700; color: var(--color-accent-primary); }
+    .metric-label { color: var(--color-text-secondary); margin-top: 0.5rem; }
+
+    .search-container { background: rgba(26, 34, 54, 0.5); border: 1px solid var(--color-border); border-radius: var(--border-radius-md); padding: var(--spacing-lg); }
+    .search-input { width: 100%; padding: var(--spacing-md); background: rgba(15, 23, 42, 0.8); border: 1px solid var(--color-border); border-radius: var(--border-radius-md); color: var(--color-text-primary); font-size: var(--font-size-base); margin-bottom: var(--spacing-lg); }
+    .search-input::placeholder { color: var(--color-text-tertiary); }
+    .filter-group { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .filter-tag { padding: 0.5rem 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--color-accent-primary); color: var(--color-accent-primary); border-radius: 20px; cursor: pointer; transition: all 0.2s; font-size: 0.9rem; }
+    .filter-tag.active { background: var(--color-accent-primary); color: var(--color-bg-primary); }
+
+    .modal-backdrop { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 200; align-items: center; justify-content: center; }
+    .modal-backdrop.active { display: flex; }
+    .modal { background: var(--color-bg-secondary); border-radius: var(--border-radius-md); width: 90%; max-width: 500px; padding: var(--spacing-xl); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-lg); }
+    .modal-close { background: none; border: none; color: var(--color-text-primary); cursor: pointer; font-size: 1.5rem; }
+
+    .form-group { margin-bottom: var(--spacing-lg); }
+    .form-label { display: block; margin-bottom: 0.5rem; color: var(--color-text-primary); font-weight: 500; }
+    .form-input, .form-select, .form-textarea { width: 100%; padding: var(--spacing-md); background: rgba(15, 23, 42, 0.8); border: 1px solid var(--color-border); border-radius: var(--border-radius-md); color: var(--color-text-primary); font-family: inherit; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--color-accent-primary); }
+    .form-textarea { resize: vertical; min-height: 120px; }
+
+    .stagger-container { --stagger-delay: 0ms; }
+    .stagger-child { animation: fadeIn 0.6s ease-out backwards; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.75rem; }
+      .full-section { min-height: auto; padding: var(--spacing-xl) var(--spacing-md); }
+      nav { display: none; }
+      .grid, .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .modal { width: 95%; }
+    }
+  </style>
 </head>
 <body>
-  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <a href="#main-content" class="skip-link" style="position: absolute; top: -40px; left: 0; background: var(--color-accent-primary); color: var(--color-bg-primary); padding: 8px; z-index: 100;">Skip to main content</a>
 
   <header>
     <div class="header-container">
       <a href="/" class="logo"><span>LCI</span> Local Capability Index</a>
-      <button class="nav-mobile-toggle" id="mobile-toggle" aria-label="Toggle navigation menu">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-      </button>
       <nav id="main-nav">
         <a href="/">Home</a>
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
-        <a href="#" class="btn btn-primary btn-small" id="inquiry-trigger">Inquiry</a>
+        <a href="#" class="btn btn-primary btn-small" id="inquiry-trigger" style="padding: 0.4rem 0.8rem; font-size: 0.9rem;">Inquiry</a>
       </nav>
     </div>
   </header>
@@ -81,16 +186,16 @@
   <main id="main-content">
 
     <!-- HERO SECTION -->
-    <section class="full-section scroll-reveal" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);">
+    <section class="full-section" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);">
       <div class="full-section-content">
-        <div class="scroll-reveal" style="text-align: center; max-width: 900px; margin: 0 auto;">
+        <div style="text-align: center; max-width: 900px; margin: 0 auto;">
           <h1 style="font-size: 4rem; line-height: 1.1; margin-bottom: var(--spacing-lg); letter-spacing: -0.02em;">
             Answer Engine Optimization Meets Hyperlocal Discovery
           </h1>
           <p style="font-size: var(--font-size-xl); color: var(--color-text-secondary); margin-bottom: var(--spacing-2xl); line-height: var(--line-height-relaxed);">
             Enterprise-grade entity resolution and structured data validation for businesses across Asia-Pacific and specialized microstate jurisdictions. We bridge the gap between static websites and generative AI indexation.
           </p>
-          <div class="hero-cta">
+          <div style="display: flex; gap: 1rem; justify-content: center;">
             <button class="btn btn-primary" id="inquiry-btn" style="font-size: var(--font-size-base); padding: var(--spacing-md) var(--spacing-2xl);">Start Partnership</button>
             <a href="about.html" class="btn btn-secondary" style="font-size: var(--font-size-base); padding: var(--spacing-md) var(--spacing-2xl);">Learn Our Mission</a>
           </div>
@@ -101,24 +206,24 @@
     <!-- METRICS SECTION -->
     <section class="full-section" style="background-color: var(--color-bg-secondary);">
       <div class="full-section-content">
-        <div class="scroll-reveal" style="text-align: center; margin-bottom: var(--spacing-xl);">
+        <div style="text-align: center; margin-bottom: var(--spacing-xl);">
           <h2 style="font-size: 3rem;">Platform at Scale</h2>
           <p style="font-size: var(--font-size-lg); color: var(--color-text-secondary);">Real-time entity indexation across 6 jurisdictions</p>
         </div>
-        <div class="metrics-grid stagger-container">
-          <div class="metric-card stagger-child scroll-reveal-scale">
-            <div class="metric-value">840</div>
-            <div class="metric-label">Active Content Nodes</div>
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-value">344</div>
+            <div class="metric-label">Generated Pages</div>
           </div>
-          <div class="metric-card stagger-child scroll-reveal-scale">
+          <div class="metric-card">
             <div class="metric-value">6</div>
             <div class="metric-label">Jurisdictions Covered</div>
           </div>
-          <div class="metric-card stagger-child scroll-reveal-scale">
-            <div class="metric-value">60</div>
-            <div class="metric-label">Template Variations</div>
+          <div class="metric-card">
+            <div class="metric-value">64</div>
+            <div class="metric-label">Unique Queries</div>
           </div>
-          <div class="metric-card stagger-child scroll-reveal-scale">
+          <div class="metric-card">
             <div class="metric-value">100%</div>
             <div class="metric-label">Structured Data Compliance</div>
           </div>
@@ -126,42 +231,79 @@
       </div>
     </section>
 
-    <!-- SEARCH SECTION -->
-    <section class="full-section">
+    <!-- BROWSE CONTENT SECTION -->
+    <section class="full-section" style="background-color: var(--color-bg-secondary);">
       <div class="full-section-content">
-        <div class="scroll-reveal" style="max-width: 900px; margin: 0 auto;">
-          <h2 style="font-size: 3rem; text-align: center; margin-bottom: var(--spacing-xl);">Explore Our Coverage</h2>
-          <div class="search-container">
-            <input type="text" class="search-input" id="search-input" placeholder="Search by region or problem domain..." aria-label="Search microstate regions">
-            <div class="filter-group" id="filter-group">
-              <button class="filter-tag active" data-filter="all">All Regions</button>
-              <button class="filter-tag" data-filter="hkg">Hong Kong</button>
-              <button class="filter-tag" data-filter="sgp">Singapore</button>
-              <button class="filter-tag" data-filter="flk">Falkland Is.</button>
-              <button class="filter-tag" data-filter="shn">Saint Helena</button>
-              <button class="filter-tag" data-filter="sjm">Svalbard</button>
-              <button class="filter-tag" data-filter="pcn">Pitcairn Is.</button>
-            </div>
-          </div>
+        <div style="text-align: center; margin-bottom: var(--spacing-xl);">
+          <h2 style="font-size: 3rem;">Browse Content by Region</h2>
+          <p style="font-size: var(--font-size-lg); color: var(--color-text-secondary);">Explore all 344 indexed pages across our 6 operational jurisdictions</p>
         </div>
-      </div>
-    </section>
+        <div class="grid-2">
+          <a href="/hkg/" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Hong Kong (HKG)</h3>
+              <span class="card-badge">80 Pages</span>
+            </div>
+            <p>20 queries x 4-node architecture. High-density urban testing ground for structured data signals.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">Browse Pages ></div>
+          </a>
 
-    <!-- MICROSTATE GRID SECTION -->
-    <section class="full-section" style="background-color: var(--color-bg-secondary); padding: var(--spacing-2xl) var(--spacing-lg);">
-      <div class="full-section-content">
-        <div class="grid stagger-container" id="microstate-grid"></div>
+          <a href="/sgp/" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Singapore (SGP)</h3>
+              <span class="card-badge">80 Pages</span>
+            </div>
+            <p>20 queries x 4-node architecture. Tropical urban commercial center design complexity testing.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">Browse Pages ></div>
+          </a>
+
+          <a href="/sjm/" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Svalbard & Jan Mayen (SJM)</h3>
+              <span class="card-badge">60 Pages</span>
+            </div>
+            <p>10 queries + extended blog content. Arctic permafrost microstate narrative depth testing.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">Browse Pages ></div>
+          </a>
+
+          <a href="/pcn/" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Pitcairn Islands (PCN)</h3>
+              <span class="card-badge">60 Pages</span>
+            </div>
+            <p>10 queries + extended blog content. Remote tropical microstate small-population testing.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">Browse Pages ></div>
+          </a>
+
+          <a href="/flk/" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Falkland Islands (FLK)</h3>
+              <span class="card-badge">12 Pages</span>
+            </div>
+            <p>2 queries with blog content. Subpolar maritime ultra-low competition test zone.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">Browse Pages ></div>
+          </a>
+
+          <a href="/shn/" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Saint Helena (SHN)</h3>
+              <span class="card-badge">16 Pages</span>
+            </div>
+            <p>2 queries + extended blog content. Isolated volcanic microstate remote zone testing.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">Browse Pages ></div>
+          </a>
+        </div>
       </div>
     </section>
 
     <!-- CAPABILITIES SECTION -->
     <section class="full-section">
       <div class="full-section-content">
-        <div class="scroll-reveal" style="text-align: center; margin-bottom: var(--spacing-xl);">
+        <div style="text-align: center; margin-bottom: var(--spacing-xl);">
           <h2 style="font-size: 3rem;">Enterprise Capabilities</h2>
         </div>
-        <div class="grid-3 stagger-container">
-          <div class="card stagger-child scroll-reveal-slide-left">
+        <div class="grid-3">
+          <div class="card">
             <div class="card-header">
               <h3 class="card-title">Structured Data Schema</h3>
               <span class="card-badge">Core</span>
@@ -169,7 +311,7 @@
             <p>Full JSON-LD LocalBusiness schema implementation with taxID, aggregateRating, priceRange, and geographic metadata for maximum search engine comprehension.</p>
           </div>
 
-          <div class="card stagger-child scroll-reveal-slide-left">
+          <div class="card">
             <div class="card-header">
               <h3 class="card-title">Content A/B Testing</h3>
               <span class="card-badge">Analysis</span>
@@ -177,7 +319,7 @@
             <p>Dual content profile fracture testing semantic narrative density against structured data weighting across all deployed jurisdictions.</p>
           </div>
 
-          <div class="card stagger-child scroll-reveal-slide-left">
+          <div class="card">
             <div class="card-header">
               <h3 class="card-title">Design Complexity Variants</h3>
               <span class="card-badge">A/B Testing</span>
@@ -185,7 +327,7 @@
             <p>Three design tiers (minimal, responsive, premium) isolating CSS signals and establishing correlation with generative engine ranking preference.</p>
           </div>
 
-          <div class="card stagger-child scroll-reveal-slide-right">
+          <div class="card">
             <div class="card-header">
               <h3 class="card-title">Geographic Authentication</h3>
               <span class="card-badge">Signal</span>
@@ -193,7 +335,7 @@
             <p>Region-specific phone prefixes and address schema ensuring authentic jurisdiction-level trust signals for AI discovery systems.</p>
           </div>
 
-          <div class="card stagger-child scroll-reveal-slide-right">
+          <div class="card">
             <div class="card-header">
               <h3 class="card-title">Problem Node Hierarchy</h3>
               <span class="card-badge">Architecture</span>
@@ -201,121 +343,12 @@
             <p>4-node system (Problem 99, Solution 77, Business 88, Blog 66) testing semantic extraction and multi-page content graph traversal.</p>
           </div>
 
-          <div class="card stagger-child scroll-reveal-slide-right">
+          <div class="card">
             <div class="card-header">
               <h3 class="card-title">IndexNow Integration</h3>
               <span class="card-badge">Protocol</span>
             </div>
-            <p>Automated Bing IndexNow submission via cryptographic verification, ensuring instant indexation on all 840 content nodes.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- JURISDICTION DETAILS SECTION -->
-    <section class="full-section" style="background-color: var(--color-bg-secondary);">
-      <div class="full-section-content">
-        <div class="scroll-reveal" style="text-align: center; margin-bottom: var(--spacing-xl);">
-          <h2 style="font-size: 3rem;">Operational Jurisdictions</h2>
-        </div>
-        <div class="grid-2 stagger-container">
-          <div class="card stagger-child scroll-reveal">
-            <h3 class="card-title">Hong Kong (HKG)</h3>
-            <div style="display: flex; gap: 1rem; margin: 1rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">
-              <div>Phone: +852</div>
-              <div>20 Queries</div>
-            </div>
-            <p>Subtropical urban hub with high-density entity clustering. Primary density market for structured data signal weighting research.</p>
-            <div style="margin-top: 1rem;">
-              <span class="status-badge"><span class="status-dot"></span>Active Operations</span>
-            </div>
-          </div>
-
-          <div class="card stagger-child scroll-reveal">
-            <h3 class="card-title">Singapore (SGP)</h3>
-            <div style="display: flex; gap: 1rem; margin: 1rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">
-              <div>Phone: +65</div>
-              <div>20 Queries</div>
-            </div>
-            <p>Tropical urban commercial center. Secondary density market for testing design complexity variance across wealthy city-states.</p>
-            <div style="margin-top: 1rem;">
-              <span class="status-badge"><span class="status-dot"></span>Active Operations</span>
-            </div>
-          </div>
-
-          <div class="card stagger-child scroll-reveal">
-            <h3 class="card-title">Svalbard & Jan Mayen (SJM)</h3>
-            <div style="display: flex; gap: 1rem; margin: 1rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">
-              <div>Phone: +47</div>
-              <div>10 Queries + Blogs</div>
-            </div>
-            <p>Arctic permafrost microstate. Extended blog content testing narrative depth signals in low-competition zero-zone jurisdictions.</p>
-            <div style="margin-top: 1rem;">
-              <span class="status-badge"><span class="status-dot"></span>Active Operations</span>
-            </div>
-          </div>
-
-          <div class="card stagger-child scroll-reveal">
-            <h3 class="card-title">Falkland Islands (FLK)</h3>
-            <div style="display: flex; gap: 1rem; margin: 1rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">
-              <div>Phone: +500</div>
-              <div>2 Queries</div>
-            </div>
-            <p>Subpolar maritime microstate. Ultra-low competition test zone validating whether AI systems index minimal, highly authentic content.</p>
-            <div style="margin-top: 1rem;">
-              <span class="status-badge"><span class="status-dot"></span>Active Operations</span>
-            </div>
-          </div>
-
-          <div class="card stagger-child scroll-reveal">
-            <h3 class="card-title">Saint Helena (SHN)</h3>
-            <div style="display: flex; gap: 1rem; margin: 1rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">
-              <div>Phone: +290</div>
-              <div>2 Queries + Blogs</div>
-            </div>
-            <p>Isolated volcanic microstate. Testing geographic authenticity trust signals in ultra-remote, zero-algorithmic-coverage zones.</p>
-            <div style="margin-top: 1rem;">
-              <span class="status-badge"><span class="status-dot"></span>Active Operations</span>
-            </div>
-          </div>
-
-          <div class="card stagger-child scroll-reveal">
-            <h3 class="card-title">Pitcairn Islands (PCN)</h3>
-            <div style="display: flex; gap: 1rem; margin: 1rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">
-              <div>Phone: +64</div>
-              <div>10 Queries + Blogs</div>
-            </div>
-            <p>Remote tropical microstate. Specialized testing for small-population jurisdictions where traditional SEO frameworks collapse entirely.</p>
-            <div style="margin-top: 1rem;">
-              <span class="status-badge"><span class="status-dot"></span>Active Operations</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- RESEARCH METHODOLOGY SECTION -->
-    <section class="full-section">
-      <div class="full-section-content">
-        <div class="scroll-reveal" style="text-align: center; margin-bottom: var(--spacing-xl);">
-          <h2 style="font-size: 3rem;">Research Methodology</h2>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg); max-width: 1200px; margin: 0 auto;">
-          <div class="scroll-reveal stagger-child">
-            <h4 style="color: var(--color-accent-primary); margin-bottom: var(--spacing-md);">Problem Nodes (99)</h4>
-            <p>Consumer-facing long-tail queries. Canary signals measuring baseline retrieval capability across all LLM agents.</p>
-          </div>
-          <div class="scroll-reveal stagger-child">
-            <h4 style="color: var(--color-accent-primary); margin-bottom: var(--spacing-md);">Solution Nodes (77)</h4>
-            <p>Keyword-dense semantic content with Markdown headers. Tests chunking bias and semantic extraction preference.</p>
-          </div>
-          <div class="scroll-reveal stagger-child">
-            <h4 style="color: var(--color-accent-primary); margin-bottom: var(--spacing-md);">Business Nodes (88)</h4>
-            <p>Core A/B test with content profiles and design variants. Isolates structured data vs. semantic weighting signals.</p>
-          </div>
-          <div class="scroll-reveal stagger-child">
-            <h4 style="color: var(--color-accent-primary); margin-bottom: var(--spacing-md);">Blog Nodes (66)</h4>
-            <p>Extended narratives (1000+ words) with FAQ. Tests whether comprehensive content affects generative retrieval.</p>
+            <p>Automated Bing IndexNow submission via cryptographic verification, ensuring instant indexation on all 344 content nodes.</p>
           </div>
         </div>
       </div>
@@ -324,11 +357,9 @@
     <!-- CTA SECTION -->
     <section class="full-section" style="background-color: var(--color-bg-secondary); text-align: center;">
       <div class="full-section-content" style="max-width: 700px; margin: 0 auto;">
-        <div class="scroll-reveal">
-          <h2 style="font-size: 3rem; margin-bottom: var(--spacing-md);">Ready to Transform Your Entity Visibility?</h2>
-          <p style="font-size: var(--font-size-lg); margin-bottom: var(--spacing-xl); color: var(--color-text-secondary);">Join specialized businesses from microstate jurisdictions in establishing definitive Answer Engine Resolution and automated discovery infrastructure.</p>
-          <button class="btn btn-primary" id="cta-inquiry-btn" style="font-size: var(--font-size-base); padding: var(--spacing-md) var(--spacing-2xl);">Request Partnership Inquiry</button>
-        </div>
+        <h2 style="font-size: 3rem; margin-bottom: var(--spacing-md);">Ready to Transform Your Entity Visibility?</h2>
+        <p style="font-size: var(--font-size-lg); margin-bottom: var(--spacing-xl); color: var(--color-text-secondary);">Join specialized businesses from microstate jurisdictions in establishing definitive Answer Engine Resolution and automated discovery infrastructure.</p>
+        <button class="btn btn-primary" id="cta-inquiry-btn" style="font-size: var(--font-size-base); padding: var(--spacing-md) var(--spacing-2xl);">Request Partnership Inquiry</button>
       </div>
     </section>
 
@@ -338,24 +369,17 @@
   <div class="modal-backdrop" id="contact-modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
     <div class="modal">
       <div class="modal-header">
-        <h2 id="modal-title">Partnership Inquiry</h2>
-        <button class="modal-close" id="modal-close" aria-label="Close dialog">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
+        <h2 id="modal-title" style="margin: 0;">Partnership Inquiry</h2>
+        <button class="modal-close" id="modal-close" aria-label="Close dialog">X</button>
       </div>
       <form id="inquiry-form" novalidate>
         <div class="form-group">
           <label for="form-name" class="form-label">Full Name</label>
           <input type="text" id="form-name" name="name" class="form-input" placeholder="Your name" required>
-          <div class="form-error">Please provide your full name</div>
         </div>
         <div class="form-group">
           <label for="form-email" class="form-label">Email Address</label>
           <input type="email" id="form-email" name="email" class="form-input" placeholder="your@email.com" required>
-          <div class="form-error">Please provide a valid email address</div>
         </div>
         <div class="form-group">
           <label for="form-jurisdiction" class="form-label">Primary Jurisdiction</label>
@@ -368,16 +392,14 @@
             <option value="sjm">Svalbard & Jan Mayen (SJM)</option>
             <option value="pcn">Pitcairn Islands (PCN)</option>
           </select>
-          <div class="form-error">Please select a jurisdiction</div>
         </div>
         <div class="form-group">
           <label for="form-message" class="form-label">Inquiry Details</label>
           <textarea id="form-message" name="message" class="form-textarea" placeholder="Tell us about your entity and verification needs..." required></textarea>
-          <div class="form-error">Please provide inquiry details</div>
         </div>
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary">Submit Inquiry</button>
-          <button type="button" class="btn btn-secondary" id="form-cancel">Cancel</button>
+        <div style="display: flex; gap: 1rem;">
+          <button type="submit" class="btn btn-primary" style="flex: 1;">Submit Inquiry</button>
+          <button type="button" class="btn btn-secondary" id="form-cancel" style="flex: 1;">Cancel</button>
         </div>
         <div id="form-success" style="display: none; margin-top: var(--spacing-lg); padding: var(--spacing-md); background-color: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--border-radius-md); color: var(--color-success);">
           <p style="margin: 0;">Thank you for your inquiry. We will contact you shortly at the provided email address.</p>
@@ -399,19 +421,22 @@
           </ul>
         </div>
         <div class="footer-column">
-          <h4>Operations</h4>
+          <h4>Browse Content</h4>
           <ul>
-            <li><a href="#">Methodology</a></li>
-            <li><a href="#">Research</a></li>
-            <li><a href="#">Documentation</a></li>
+            <li><a href="/hkg/">Hong Kong</a></li>
+            <li><a href="/sgp/">Singapore</a></li>
+            <li><a href="/sjm/">Svalbard & Jan Mayen</a></li>
+            <li><a href="/pcn/">Pitcairn Islands</a></li>
+            <li><a href="/flk/">Falkland Islands</a></li>
+            <li><a href="/shn/">Saint Helena</a></li>
           </ul>
         </div>
         <div class="footer-column">
-          <h4>Support</h4>
+          <h4>Resources</h4>
           <ul>
-            <li><a href="mailto:Wright.Nor.Wong@gmail.com">Operations Email</a></li>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">Resources</a></li>
+            <li><a href="/sitemap.xml">Sitemap</a></li>
+            <li><a href="mailto:Wright.Nor.Wong@gmail.com">Support Email</a></li>
+            <li><a href="/robots.txt">Robots.txt</a></li>
           </ul>
         </div>
         <div class="footer-column">
@@ -435,66 +460,11 @@
   </footer>
 
   <script>
-    const microstates = [
-      {id: 'hkg', name: 'Hong Kong', country: 'HKG', phone: '+852', climate: 'Subtropical Urban', queries: 20, description: 'High-density Asia-Pacific financial hub. Primary market for structured data signal analysis.', color: '#10b981'},
-      {id: 'sgp', name: 'Singapore', country: 'SGP', phone: '+65', climate: 'Tropical Urban', queries: 20, description: 'Wealthy commercial city-state. Secondary density testing for design complexity variance.', color: '#06b6d4'},
-      {id: 'flk', name: 'Falkland Islands', country: 'FLK', phone: '+500', climate: 'Subpolar Maritime', queries: 2, description: 'Ultra-low competition zone. Testing minimal, authentic content indexation.', color: '#8b5cf6'},
-      {id: 'shn', name: 'Saint Helena', country: 'SHN', phone: '+290', climate: 'Isolated Volcanic', queries: 2, description: 'Remote microstate. Testing geographic authenticity signals in zero-coverage zones.', color: '#f59e0b'},
-      {id: 'sjm', name: 'Svalbard & Jan Mayen', country: 'SJM', phone: '+47', climate: 'Arctic Permafrost', queries: 10, description: 'Arctic microstate. Extended blog content testing narrative depth signals.', color: '#ec4899'},
-      {id: 'pcn', name: 'Pitcairn Islands', country: 'PCN', phone: '+64', climate: 'Remote Tropical', queries: 10, description: 'Remote island microstate. Small-population jurisdiction zero-SEO testing.', color: '#14b8a6'}
-    ];
-
-    const searchInput = document.getElementById('search-input');
-    const filterGroup = document.getElementById('filter-group');
-    const microstateGrid = document.getElementById('microstate-grid');
-    const mobileToggle = document.getElementById('mobile-toggle');
-    const mainNav = document.getElementById('main-nav');
     const contactModal = document.getElementById('contact-modal');
     const inquiryTriggers = document.querySelectorAll('#inquiry-trigger, #inquiry-btn, #cta-inquiry-btn');
     const modalClose = document.getElementById('modal-close');
     const inquiryForm = document.getElementById('inquiry-form');
     const formCancel = document.getElementById('form-cancel');
-
-    function renderGrid(filtered = microstates) {
-      microstateGrid.innerHTML = filtered.map(state => `
-        <div class="card stagger-child scroll-reveal" style="border-left: 4px solid ${state.color};">
-          <div class="card-header">
-            <div><h3 class="card-title">${state.name}</h3><p style="font-size: 0.875rem; color: var(--color-text-tertiary); margin: 0.5rem 0 0 0;">ISO: ${state.country}</p></div>
-            <span class="card-badge">ACTIVE</span>
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; font-size: 0.875rem;">
-            <div><p style="color: var(--color-text-tertiary); margin: 0; margin-bottom: 0.25rem;">Phone Prefix</p><p style="color: var(--color-accent-primary); margin: 0; font-weight: 600;">${state.phone}</p></div>
-            <div><p style="color: var(--color-text-tertiary); margin: 0; margin-bottom: 0.25rem;">Active Queries</p><p style="color: var(--color-accent-primary); margin: 0; font-weight: 600;">${state.queries}</p></div>
-          </div>
-          <p style="margin-bottom: 1rem;">${state.description}</p>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.875rem; padding-top: 1rem; border-top: 1px solid var(--color-border);"><span style="color: var(--color-text-tertiary);">${state.climate}</span><span class="status-badge"><span class="status-dot"></span>Operational</span></div>
-        </div>
-      `).join('');
-      observeElements();
-    }
-
-    function filterMicrostates() {
-      const searchTerm = searchInput.value.toLowerCase();
-      const activeFilter = filterGroup.querySelector('.filter-tag.active').dataset.filter;
-      const filtered = microstates.filter(state => {
-        const matchesSearch = state.name.toLowerCase().includes(searchTerm) || state.country.toLowerCase().includes(searchTerm) || state.climate.toLowerCase().includes(searchTerm) || state.description.toLowerCase().includes(searchTerm);
-        const matchesFilter = activeFilter === 'all' || state.id === activeFilter;
-        return matchesSearch && matchesFilter;
-      });
-      renderGrid(filtered);
-    }
-
-    searchInput.addEventListener('input', filterMicrostates);
-    filterGroup.addEventListener('click', (e) => {
-      if (e.target.classList.contains('filter-tag')) {
-        filterGroup.querySelectorAll('.filter-tag').forEach(tag => tag.classList.remove('active'));
-        e.target.classList.add('active');
-        filterMicrostates();
-      }
-    });
-
-    mobileToggle.addEventListener('click', () => mainNav.classList.toggle('active'));
-    mainNav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => mainNav.classList.remove('active')));
 
     inquiryTriggers.forEach(trigger => trigger.addEventListener('click', (e) => {
       e.preventDefault();
@@ -522,18 +492,13 @@
       inquiryForm.querySelectorAll('.form-group').forEach(group => {
         const input = group.querySelector('input, select, textarea');
         if (!input.value.trim() || (input.type === 'email' && !isValidEmail(input.value))) {
-          group.classList.add('error');
           isValid = false;
-        } else {
-          group.classList.remove('error');
         }
       });
       if (isValid) {
         inquiryForm.style.display = 'none';
         document.getElementById('form-success').style.display = 'block';
-        setTimeout(() => {
-          resetModal();
-        }, 3000);
+        setTimeout(() => resetModal(), 3000);
       }
     });
 
@@ -541,40 +506,9 @@
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
-    inquiryForm.querySelectorAll('input, select, textarea').forEach(input => {
-      input.addEventListener('change', () => {
-        const group = input.closest('.form-group');
-        if (input.value.trim() && (input.type !== 'email' || isValidEmail(input.value))) {
-          group.classList.remove('error');
-        }
-      });
-    });
-
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && contactModal.classList.contains('active')) resetModal();
     });
-
-    window.addEventListener('scroll', () => {
-      document.body.classList.toggle('scrolled', window.scrollY > 50);
-    });
-
-    function observeElements() {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-            entry.target.closest('.stagger-container')?.classList.add('active');
-          }
-        });
-      }, {threshold: 0.1});
-
-      document.querySelectorAll('.scroll-reveal, .scroll-reveal-fade, .scroll-reveal-slide-left, .scroll-reveal-slide-right, .scroll-reveal-scale, .stagger-child').forEach(el => {
-        observer.observe(el);
-      });
-    }
-
-    renderGrid();
-    observeElements();
   </script>
 </body>
 </html>

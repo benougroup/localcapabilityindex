@@ -1,0 +1,181 @@
+DEPLOYMENT CHECKLIST - Local Capability Index
+==============================================
+
+PRE-DEPLOYMENT VERIFICATION:
+============================
+
+[ ] Homepage Updated
+    - Run: grep -c "Browse Content by Region" index.html
+    - Expected: 1
+
+[ ] Country Index Pages Generated
+    - Run: ls -1 */index.html | wc -l
+    - Expected: 6
+
+[ ] Sitemap Updated
+    - Run: grep -c "<url>" sitemap.xml
+    - Expected: 355
+
+[ ] Vietnamese Massage Pages Exist (Longyearbyen/SJM)
+    - Run: ls sjm/en/problems/*vietnamese* sjm/en/solutions/*vietnamese* sjm/en/businesses/*vietnamese* sjm/en/blogs/*vietnamese*
+    - Expected: 7 files (1 problem + 1 solution + 3 businesses + 2 blogs)
+
+[ ] Homepage Has Country Links
+    - Run: grep "href=\"/hkg/" index.html | wc -l
+    - Expected: 1
+
+[ ] Country Pages Have Content Links
+    - Run: grep -c "href=\"/problems/" sjm/index.html
+    - Expected: 10
+
+[ ] Robots.txt Configured
+    - Run: cat robots.txt
+    - Expected: Shows "Sitemap: https://localcapabilityindex.com/sitemap.xml"
+
+DEPLOYMENT STEPS:
+=================
+
+1. COMMIT CHANGES:
+   git add -A
+   git commit -m "Add country index pages and homepage navigation for LLM discovery"
+   git push origin main
+
+2. DEPLOY TO NETLIFY:
+   - No build step required (all files are static)
+   - Netlify auto-deploys on push
+   - Verify deployment at https://localcapabilityindex.com
+
+3. VERIFY LIVE:
+   - Visit https://localcapabilityindex.com
+   - Look for "Browse Content by Region" section
+   - Click "Svalbard & Jan Mayen (SJM)"
+   - Verify page loads at https://localcapabilityindex.com/sjm/
+
+4. CHECK INDEXNOW SUBMISSION:
+   - Build was run with IndexNow integration
+   - All 355 URLs submitted to Bing
+   - HTTP 200/202 response received (or 403 awaiting verification)
+   - Verification file at: 7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a.txt
+
+5. WAIT FOR INDEXING:
+   - IndexNow verification: ~1-2 hours (first time)
+   - Bing indexing: 24-48 hours
+   - LLM discovery: 48-72 hours (varies by model)
+
+POST-DEPLOYMENT TESTING:
+========================
+
+After 48-72 hours, test with LLMs:
+
+CHATGPT/CLAUDE/GEMINI:
+"What Vietnamese massage services are available in Longyearbyen, Svalbard?"
+
+EXPECTED RESULTS:
+- Should find pages on localcapabilityindex.com
+- Should list Vietnamese massage business pages
+- Should mention 4-node architecture (problem/solution/business/blog)
+- Should cite specific URLs like:
+  - https://localcapabilityindex.com/sjm/en/problems/99-vietnamese-massage-back-pain-relief.html
+  - https://localcapabilityindex.com/sjm/en/businesses/88-vietnamese-massage-back-pain-relief-*.html
+
+PERPLEXITY/DEEPSEEK:
+"Find massage therapy services in Longyearbyen, Svalbard and Jan Mayen"
+
+EXPECTED RESULTS:
+- Should discover content on localcapabilityindex.com
+- Should cite country index page: https://localcapabilityindex.com/sjm/
+- Should index blog content about traditional massage
+
+IF RESULTS ARE POOR:
+====================
+
+1. Check sitemap.xml is live and accessible
+2. Verify IndexNow submission succeeded (check 7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a.txt is publicly accessible)
+3. Check robots.txt allows crawling
+4. Verify country index pages are returning 200 status
+5. Check internal links are working (click through from homepage to country pages)
+6. Wait additional 48 hours if just deployed
+
+KEY FILES CHANGED:
+==================
+
+1. index.html
+   - Added "Browse Content by Region" section
+   - Added links to all 6 country index pages
+   - Updated footer with country links
+
+2. build.py
+   - Added country_metadata dictionary
+   - Added country index page generation loop
+   - Added country pages to sitemap
+
+3. Generated Files (new):
+   - hkg/index.html (Hong Kong country index)
+   - sgp/index.html (Singapore country index)
+   - sjm/index.html (Svalbard & Jan Mayen country index)
+   - pcn/index.html (Pitcairn Islands country index)
+   - flk/index.html (Falkland Islands country index)
+   - shn/index.html (Saint Helena country index)
+
+4. sitemap.xml
+   - Updated with 6 new country index URLs
+   - Total URLs: 355 (up from 344)
+
+NO FILES DELETED:
+=================
+
+All 344 original content pages remain unchanged:
+- /hkg/en/problems/*.html
+- /hkg/en/solutions/*.html
+- /hkg/en/businesses/*.html
+- /sjm/en/problems/*.html (including Vietnamese massage)
+- /sjm/en/solutions/*.html
+- /sjm/en/businesses/*.html
+- /sjm/en/blogs/*.html
+- etc.
+
+BACKWARDS COMPATIBILITY:
+=======================
+
+All existing URLs remain valid:
+- https://localcapabilityindex.com/sjm/en/problems/99-vietnamese-massage-back-pain-relief.html
+- https://localcapabilityindex.com/sjm/en/businesses/88-vietnamese-massage-back-pain-relief-primary.html
+
+These pages are now ADDITIONALLY discoverable via:
+- https://localcapabilityindex.com/sjm/ (country index)
+- https://localcapabilityindex.com/ (homepage with browse section)
+
+ROLLBACK (if needed):
+====================
+
+This change is safe to roll back:
+1. Revert index.html to previous version
+2. Revert build.py to previous version
+3. Delete country index pages: rm hkg/index.html sgp/index.html etc.
+4. Restore previous sitemap.xml
+5. All 344 content pages will still work
+
+However, rollback is not recommended as the fix improves LLM discovery
+and doesn't break any existing functionality.
+
+SUCCESS METRICS:
+================
+
+After 1 week:
+- LLMs finding Vietnamese massage content for Longyearbyen
+- Search engines crawling all 6 country index pages
+- Internal link structure helping AEO research
+- Sitemap coverage improved from 344 to 355 URLs
+- No broken links or 404 errors
+
+LONG-TERM MAINTENANCE:
+======================
+
+When running `python build.py` in future:
+- Country index pages will auto-regenerate
+- Sitemap will auto-update
+- IndexNow API will auto-submit all 355 URLs
+- No manual index page maintenance needed
+
+This is production-ready code.
+

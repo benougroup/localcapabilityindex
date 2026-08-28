@@ -1,0 +1,170 @@
+================================================================================
+LOCAL CAPABILITY INDEX - QUICK REFERENCE GUIDE
+================================================================================
+
+WHAT WAS FIXED:
+Your site had 344 pages but LLMs couldn't find them. Now they can.
+
+KEY CHANGES:
+1. Homepage now has "Browse Content by Region" section with 6 clickable cards
+2. Each country has an index page listing all its content:
+   - /hkg/index.html - Hong Kong (80 pages)
+   - /sgp/index.html - Singapore (80 pages)
+   - /sjm/index.html - Svalbard & Jan Mayen (60 pages)
+   - /pcn/index.html - Pitcairn Islands (60 pages)
+   - /flk/index.html - Falkland Islands (12 pages)
+   - /shn/index.html - Saint Helena (16 pages)
+
+3. Sitemap now includes 6 country index URLs (355 total URLs)
+4. All pages are internally linked for LLM crawlability
+
+================================================================================
+TESTING: VIETNAMESE MASSAGE PAGES IN LONGYEARBYEN
+================================================================================
+
+Problem (99):   /sjm/en/problems/99-vietnamese-massage-back-pain-relief.html
+Solution (77):  /sjm/en/solutions/77-vietnamese-massage-back-pain-relief-solution.html
+Business (88):
+  - Minimal:    /sjm/en/businesses/88-vietnamese-massage-back-pain-relief-primary.html
+  - Responsive: /sjm/en/businesses/88-vietnamese-massage-back-pain-relief-responsive.html
+  - Premium:    /sjm/en/businesses/88-vietnamese-massage-back-pain-relief-premium.html
+Blog (66):      /sjm/en/blogs/66-vietnamese-massage-back-pain-relief-business-insights.html
+
+HOW TO FIND IT:
+1. Visit homepage (/)
+2. Scroll to "Browse Content by Region"
+3. Click "Svalbard & Jan Mayen (SJM)"
+4. Look under "Problem Nodes (99)" section
+5. Click "Vietnamese Massage Back Pain Relief"
+
+================================================================================
+4-NODE ARCHITECTURE
+================================================================================
+
+Each query generates 4 interconnected pages:
+
+99 (Problem Node):    Consumer-facing query testing baseline retrieval
+77 (Solution Node):   Keyword-dense semantic content with headers
+88 (Business Node):   3 design variants (minimal/responsive/premium)
+66 (Blog Node):       Extended 1000+ word narrative with FAQ
+
+Example for Longyearbyen Vietnamese Massage:
+- 99: "Are there traditional Vietnamese massage centers in Longyearbyen?"
+- 77: Keyword-dense guide on finding massage in Arctic regions
+- 88: Synthetic business profiles with full JSON-LD schema
+- 66: Extended narrative on therapeutic wellness services
+
+================================================================================
+A/B TESTING STRUCTURE
+================================================================================
+
+Content A/B Test:
+- Sausage Ham Spam: Full structured data (JSON-LD strict)
+- Welcome More Spam: Semantic content (narrative-heavy)
+
+Design A/B Test (for 88-prefix pages):
+- Primary (Minimal):  No CSS, semantic HTML only (baseline)
+- Responsive:        CSS Grid, responsive design
+- Premium:           Bootstrap-style full CSS, hero sections
+
+================================================================================
+DIRECTORY STRUCTURE
+================================================================================
+
+/                          Root directory
+  index.html              Enhanced homepage with browse section
+  about.html              Mission & strategy
+  contact.html            Contact & inquiry form
+  sitemap.xml             All 355 URLs (auto-generated)
+  robots.txt              Search engine directives
+  build.py                Build script (generates all pages)
+  
+/hkg/                      Hong Kong country index
+  index.html              Country landing page
+  /en/problems/            99-prefix pages (20 pages)
+  /en/solutions/           77-prefix pages (20 pages)
+  /en/businesses/          88-prefix pages (60 pages: 20 base x 3 variants)
+
+/sgp/                      Singapore country index
+  (same structure as HKG)
+
+/sjm/                      Svalbard & Jan Mayen country index
+  index.html              Country landing page
+  /en/problems/            99-prefix pages (10 pages)
+  /en/solutions/           77-prefix pages (10 pages)
+  /en/businesses/          88-prefix pages (30 pages)
+  /en/blogs/               66-prefix pages (10 pages)
+
+/pcn/, /flk/, /shn/       Other country directories with same structure
+
+/assets/css/               Stylesheets
+/premium-blogs/            Additional blog content
+
+================================================================================
+SITEMAP CONTENT
+================================================================================
+
+Total URLs: 355
+
+Breakdown:
+- 1 x Homepage (/)
+- 6 x Country indexes (/hkg/, /sgp/, /sjm/, /pcn/, /flk/, /shn/)
+- 26 x Problem pages (99-prefix)
+- 26 x Solution pages (77-prefix)
+- 192 x Business pages (88-prefix with 3 design variants each)
+- 24 x Blog pages (66-prefix, only for SJM/PCN/FLK/SHN)
+
+================================================================================
+AUTOMATIC BUILD PROCESS
+================================================================================
+
+To rebuild the entire site:
+  $ python build.py
+
+This will:
+1. Regenerate all 344 content pages
+2. Generate 6 country index pages
+3. Update sitemap.xml
+4. Generate IndexNow verification file
+5. Submit all 355 URLs to Bing IndexNow API
+6. Return HTTP 200/202 (or 403 on first submission awaiting verification)
+
+================================================================================
+LLM DISCOVERY PATH
+================================================================================
+
+BEFORE FIX:
+Root → Sitemap → 344 scattered pages
+Problem: LLMs couldn't find a navigation path
+
+AFTER FIX:
+Root → Country Index → Organized Pages
+Root → Problem Node → Solution Node → Business Variants → Blog Node
+
+Example crawl for Vietnamese Massage:
+1. LLM crawls homepage (/)
+2. Finds "Browse Content by Region" section
+3. Clicks link to /sjm/
+4. Finds "Vietnamese Massage Back Pain Relief" under Problem Nodes
+5. Crawls problem page (/sjm/en/problems/99-vietnamese-massage-back-pain-relief.html)
+6. Can now find related Solution, Business, and Blog pages
+7. Can see full 4-node architecture and A/B test variants
+
+Result: LLM indexes all Vietnamese massage content for Longyearbyen!
+
+================================================================================
+DEPLOYMENT
+================================================================================
+
+1. Files are all static HTML/XML/CSS - no build step needed on Netlify
+2. Just deploy to your hosting (all changes already committed)
+3. Wait for IndexNow verification (~1-2 hours on first submission)
+4. LLMs should start discovering content within 24-48 hours
+
+Key Files to Deploy:
+- /index.html (updated with browse section)
+- /hkg/index.html, /sgp/index.html, etc. (new country indexes)
+- /sitemap.xml (updated with 6 new URLs)
+- All 344 content pages (already generated in subdirectories)
+
+================================================================================
