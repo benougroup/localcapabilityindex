@@ -1566,7 +1566,7 @@ for country_iso, meta in country_metadata.items():
         for file in files:
             if file.endswith('.html'):
                 filepath = os.path.join(root, file)
-                relpath = filepath.replace(os.sep, '/').replace(country_iso + '/en/', '')
+                relpath = filepath.replace(os.sep, '/')
 
                 if '99-' in file:
                     problems.append((file.replace('99-', '').replace('.html', '').replace('-', ' ').title(), relpath))

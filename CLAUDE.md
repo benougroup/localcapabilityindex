@@ -64,7 +64,7 @@ All content follows a pattern: **Homepage → Country Index → 99 (Problem) →
 - Proper meta descriptions and canonical URLs for SEO
 - Added to sitemap for search engine discovery
 
-**Result:** Complete crawl path for LLMs: `/` → `/{country}/` → `/en/{node_type}/` → individual pages → directory pages as alternative navigation paths
+**Result:** Complete crawl path for LLMs: `/` → `/{country}/` → `/{country}/en/{node_type}/` → individual pages → directory pages as alternative navigation paths
 
 ### Comprehensive Directory Pages (NEW - Aug 2026)
 
@@ -336,11 +336,22 @@ Generated content structure:
 | Welcome outranks Sausage | Semantic content density > structured data |
 | Regional prefixes rank higher | Geographic authenticity affects trust |
 
+## Troubleshooting
+
+### 404 Errors on Subpages
+
+If country index pages (e.g., `/hkg/index.html`) return 404 errors for linked subpages, the issue is typically in the `relpath` generation on line 1569 of `build.py`. The path must include the full country and `/en/` directory structure:
+
+**Correct:** `href="/hkg/en/problems/99-file.html"` → maps to actual file at `hkg/en/problems/99-file.html`
+**Incorrect:** `href="/problems/99-file.html"` → returns 404 (file doesn't exist at root)
+
+Fix: Ensure line 1569 preserves the full path: `relpath = filepath.replace(os.sep, '/')`
+
 ## Current Status
 
 - **Pages Generated:** 344 content pages + 6 country indexes
 - **Sitemap URLs:** 355 (all with current timestamps)
 - **IndexNow:** Configured and auto-submitting
-- **Navigation:** Complete discovery path from homepage to all content
+- **Navigation:** Complete discovery path from homepage to all content with correct link paths
 - **Deployment:** Static files only, ready for Netlify
-- **Verification:** All pages verified, all links working, no 404 errors
+- **Links:** All country index page links verified (Aug 30, 2026)
