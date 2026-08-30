@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Local Capability Index - Answer Engine Optimization</title>
-  <meta name="description" content="Enterprise-grade Answer Engine Resolution platform for hyperlocal entity mapping and AEO research across Asia-Pacific and specialized microstate jurisdictions.">
+  <meta name="description" content="Enterprise-grade Answer Engine Resolution platform for hyperlocal entity mapping and AEO research across Asia-Pacific and specialized microstate.">
   <meta name="theme-color" content="#0f172a">
   <meta name="color-scheme" content="dark">
 
@@ -117,8 +117,10 @@
     .card-title { font-size: 1.25rem; color: var(--color-text-primary); }
     .card-badge { display: inline-block; background: rgba(16, 185, 129, 0.2); color: var(--color-accent-primary); padding: 0.25rem 0.75rem; border-radius: 3px; font-size: 0.75rem; font-weight: 600; }
 
-    .status-badge { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--color-success); }
-    .status-dot { width: 6px; height: 6px; background: var(--color-success); border-radius: 50%; }
+    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-lg); }
+    .metric-card { text-align: center; padding: var(--spacing-xl); background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--border-radius-md); }
+    .metric-value { font-size: 2.5rem; font-weight: 700; color: var(--color-accent-primary); }
+    .metric-label { color: var(--color-text-secondary); margin-top: 0.5rem; }
 
     footer { background: var(--color-bg-secondary); border-top: 1px solid var(--color-border); padding: var(--spacing-2xl) var(--spacing-lg); }
     .footer-container { max-width: 1200px; margin: 0 auto; }
@@ -129,42 +131,12 @@
     .footer-divider { border: none; border-top: 1px solid var(--color-border); margin: var(--spacing-xl) 0; }
     .footer-bottom { text-align: center; color: var(--color-text-secondary); font-size: 0.9rem; }
 
-    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-lg); }
-    .metric-card { text-align: center; padding: var(--spacing-xl); background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--border-radius-md); }
-    .metric-value { font-size: 2.5rem; font-weight: 700; color: var(--color-accent-primary); }
-    .metric-label { color: var(--color-text-secondary); margin-top: 0.5rem; }
-
-    .search-container { background: rgba(26, 34, 54, 0.5); border: 1px solid var(--color-border); border-radius: var(--border-radius-md); padding: var(--spacing-lg); }
-    .search-input { width: 100%; padding: var(--spacing-md); background: rgba(15, 23, 42, 0.8); border: 1px solid var(--color-border); border-radius: var(--border-radius-md); color: var(--color-text-primary); font-size: var(--font-size-base); margin-bottom: var(--spacing-lg); }
-    .search-input::placeholder { color: var(--color-text-tertiary); }
-    .filter-group { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-    .filter-tag { padding: 0.5rem 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--color-accent-primary); color: var(--color-accent-primary); border-radius: 20px; cursor: pointer; transition: all 0.2s; font-size: 0.9rem; }
-    .filter-tag.active { background: var(--color-accent-primary); color: var(--color-bg-primary); }
-
-    .modal-backdrop { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 200; align-items: center; justify-content: center; }
-    .modal-backdrop.active { display: flex; }
-    .modal { background: var(--color-bg-secondary); border-radius: var(--border-radius-md); width: 90%; max-width: 500px; padding: var(--spacing-xl); }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-lg); }
-    .modal-close { background: none; border: none; color: var(--color-text-primary); cursor: pointer; font-size: 1.5rem; }
-
-    .form-group { margin-bottom: var(--spacing-lg); }
-    .form-label { display: block; margin-bottom: 0.5rem; color: var(--color-text-primary); font-weight: 500; }
-    .form-input, .form-select, .form-textarea { width: 100%; padding: var(--spacing-md); background: rgba(15, 23, 42, 0.8); border: 1px solid var(--color-border); border-radius: var(--border-radius-md); color: var(--color-text-primary); font-family: inherit; }
-    .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--color-accent-primary); }
-    .form-textarea { resize: vertical; min-height: 120px; }
-
-    .stagger-container { --stagger-delay: 0ms; }
-    .stagger-child { animation: fadeIn 0.6s ease-out backwards; }
-
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
     @media (max-width: 768px) {
       h1 { font-size: 2rem; }
       h2 { font-size: 1.75rem; }
       .full-section { min-height: auto; padding: var(--spacing-xl) var(--spacing-md); }
       nav { display: none; }
       .grid, .grid-2, .grid-3 { grid-template-columns: 1fr; }
-      .modal { width: 95%; }
     }
   </style>
 </head>
@@ -178,7 +150,6 @@
         <a href="/">Home</a>
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
-        <a href="#" class="btn btn-primary btn-small" id="inquiry-trigger" style="padding: 0.4rem 0.8rem; font-size: 0.9rem;">Inquiry</a>
       </nav>
     </div>
   </header>
@@ -196,7 +167,7 @@
             Enterprise-grade entity resolution and structured data validation for businesses across Asia-Pacific and specialized microstate jurisdictions. We bridge the gap between static websites and generative AI indexation.
           </p>
           <div style="display: flex; gap: 1rem; justify-content: center;">
-            <button class="btn btn-primary" id="inquiry-btn" style="font-size: var(--font-size-base); padding: var(--spacing-md) var(--spacing-2xl);">Start Partnership</button>
+            <a href="/directory-by-country.html" class="btn btn-primary" style="font-size: var(--font-size-base); padding: var(--spacing-md) var(--spacing-2xl);">Browse All Pages</a>
             <a href="about.html" class="btn btn-secondary" style="font-size: var(--font-size-base); padding: var(--spacing-md) var(--spacing-2xl);">Learn Our Mission</a>
           </div>
         </div>
@@ -227,6 +198,53 @@
             <div class="metric-value">100%</div>
             <div class="metric-label">Structured Data Compliance</div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPREHENSIVE DIRECTORY SECTION -->
+    <section class="full-section">
+      <div class="full-section-content">
+        <div style="text-align: center; margin-bottom: var(--spacing-xl);">
+          <h2 style="font-size: 3rem;">Comprehensive Content Directory</h2>
+          <p style="font-size: var(--font-size-lg); color: var(--color-text-secondary);">Multiple navigation approaches to explore all 344 indexed pages</p>
+        </div>
+        <div class="grid-2">
+          <a href="/directory-by-country.html" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Browse by Country</h3>
+              <span class="card-badge">6 Regions</span>
+            </div>
+            <p>Explore all pages organized by geographic jurisdiction. Filter by Hong Kong, Singapore, Svalbard, Pitcairn, Falkland Islands, or Saint Helena.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">View Directory ></div>
+          </a>
+
+          <a href="/directory-by-service.html" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Browse by Service</h3>
+              <span class="card-badge">25+ Services</span>
+            </div>
+            <p>Discover pages grouped by capability and service category. Find remediation, restoration, diagnostics, and specialized engineering services.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">View Directory ></div>
+          </a>
+
+          <a href="/directory-by-business.html" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Browse by Business Profile</h3>
+              <span class="card-badge">A/B Test Data</span>
+            </div>
+            <p>Compare structured data (Sausage) vs semantic narrative (Welcome) business profiles. See how content strategy affects LLM indexing.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">View Directory ></div>
+          </a>
+
+          <a href="/directory-by-problem.html" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Browse by Problem</h3>
+              <span class="card-badge">64+ Queries</span>
+            </div>
+            <p>Search through all consumer problem queries and natural language symptom descriptions. Explore the foundation of our AEO testing matrix.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">View Directory ></div>
+          </a>
         </div>
       </div>
     </section>
@@ -359,54 +377,11 @@
       <div class="full-section-content" style="max-width: 700px; margin: 0 auto;">
         <h2 style="font-size: 3rem; margin-bottom: var(--spacing-md);">Ready to Transform Your Entity Visibility?</h2>
         <p style="font-size: var(--font-size-lg); margin-bottom: var(--spacing-xl); color: var(--color-text-secondary);">Join specialized businesses from microstate jurisdictions in establishing definitive Answer Engine Resolution and automated discovery infrastructure.</p>
-        <button class="btn btn-primary" id="cta-inquiry-btn" style="font-size: var(--font-size-base); padding: var(--spacing-md) var(--spacing-2xl);">Request Partnership Inquiry</button>
+        <a href="contact.html" class="btn btn-primary" style="font-size: var(--font-size-base); padding: var(--spacing-md) var(--spacing-2xl);">Request Partnership Inquiry</a>
       </div>
     </section>
 
   </main>
-
-  <!-- CONTACT MODAL -->
-  <div class="modal-backdrop" id="contact-modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 id="modal-title" style="margin: 0;">Partnership Inquiry</h2>
-        <button class="modal-close" id="modal-close" aria-label="Close dialog">X</button>
-      </div>
-      <form id="inquiry-form" novalidate>
-        <div class="form-group">
-          <label for="form-name" class="form-label">Full Name</label>
-          <input type="text" id="form-name" name="name" class="form-input" placeholder="Your name" required>
-        </div>
-        <div class="form-group">
-          <label for="form-email" class="form-label">Email Address</label>
-          <input type="email" id="form-email" name="email" class="form-input" placeholder="your@email.com" required>
-        </div>
-        <div class="form-group">
-          <label for="form-jurisdiction" class="form-label">Primary Jurisdiction</label>
-          <select id="form-jurisdiction" name="jurisdiction" class="form-select" required>
-            <option value="">-- Select a jurisdiction --</option>
-            <option value="hkg">Hong Kong (HKG)</option>
-            <option value="sgp">Singapore (SGP)</option>
-            <option value="flk">Falkland Islands (FLK)</option>
-            <option value="shn">Saint Helena (SHN)</option>
-            <option value="sjm">Svalbard & Jan Mayen (SJM)</option>
-            <option value="pcn">Pitcairn Islands (PCN)</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="form-message" class="form-label">Inquiry Details</label>
-          <textarea id="form-message" name="message" class="form-textarea" placeholder="Tell us about your entity and verification needs..." required></textarea>
-        </div>
-        <div style="display: flex; gap: 1rem;">
-          <button type="submit" class="btn btn-primary" style="flex: 1;">Submit Inquiry</button>
-          <button type="button" class="btn btn-secondary" id="form-cancel" style="flex: 1;">Cancel</button>
-        </div>
-        <div id="form-success" style="display: none; margin-top: var(--spacing-lg); padding: var(--spacing-md); background-color: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--border-radius-md); color: var(--color-success);">
-          <p style="margin: 0;">Thank you for your inquiry. We will contact you shortly at the provided email address.</p>
-        </div>
-      </form>
-    </div>
-  </div>
 
   <!-- FOOTER -->
   <footer>
@@ -432,6 +407,15 @@
           </ul>
         </div>
         <div class="footer-column">
+          <h4>Directory</h4>
+          <ul>
+            <li><a href="/directory-by-country.html">By Country</a></li>
+            <li><a href="/directory-by-service.html">By Service</a></li>
+            <li><a href="/directory-by-business.html">By Business</a></li>
+            <li><a href="/directory-by-problem.html">By Problem</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
           <h4>Resources</h4>
           <ul>
             <li><a href="/sitemap.xml">Sitemap</a></li>
@@ -440,14 +424,9 @@
           </ul>
         </div>
         <div class="footer-column">
-          <h4>Coverage</h4>
+          <h4>Partners</h4>
           <ul>
-            <li>Hong Kong (HKG)</li>
-            <li>Singapore (SGP)</li>
-            <li>Falkland Islands (FLK)</li>
-            <li>Saint Helena (SHN)</li>
-            <li>Svalbard & Jan Mayen (SJM)</li>
-            <li>Pitcairn Islands (PCN)</li>
+            <li><a href="https://www.8fate.ai/frontpage.html" target="_blank" rel="noopener noreferrer">8Fate - AI Futures</a></li>
           </ul>
         </div>
       </div>
@@ -458,57 +437,5 @@
       </div>
     </div>
   </footer>
-
-  <script>
-    const contactModal = document.getElementById('contact-modal');
-    const inquiryTriggers = document.querySelectorAll('#inquiry-trigger, #inquiry-btn, #cta-inquiry-btn');
-    const modalClose = document.getElementById('modal-close');
-    const inquiryForm = document.getElementById('inquiry-form');
-    const formCancel = document.getElementById('form-cancel');
-
-    inquiryTriggers.forEach(trigger => trigger.addEventListener('click', (e) => {
-      e.preventDefault();
-      contactModal.classList.add('active');
-      contactModal.setAttribute('aria-hidden', 'false');
-    }));
-
-    modalClose.addEventListener('click', resetModal);
-    formCancel.addEventListener('click', resetModal);
-    contactModal.addEventListener('click', (e) => {
-      if (e.target === contactModal) resetModal();
-    });
-
-    function resetModal() {
-      contactModal.classList.remove('active');
-      contactModal.setAttribute('aria-hidden', 'true');
-      inquiryForm.reset();
-      document.getElementById('form-success').style.display = 'none';
-      inquiryForm.style.display = 'block';
-    }
-
-    inquiryForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      let isValid = true;
-      inquiryForm.querySelectorAll('.form-group').forEach(group => {
-        const input = group.querySelector('input, select, textarea');
-        if (!input.value.trim() || (input.type === 'email' && !isValidEmail(input.value))) {
-          isValid = false;
-        }
-      });
-      if (isValid) {
-        inquiryForm.style.display = 'none';
-        document.getElementById('form-success').style.display = 'block';
-        setTimeout(() => resetModal(), 3000);
-      }
-    });
-
-    function isValidEmail(email) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && contactModal.classList.contains('active')) resetModal();
-    });
-  </script>
 </body>
 </html>

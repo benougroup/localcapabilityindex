@@ -64,7 +64,31 @@ All content follows a pattern: **Homepage → Country Index → 99 (Problem) →
 - Proper meta descriptions and canonical URLs for SEO
 - Added to sitemap for search engine discovery
 
-**Result:** Complete crawl path for LLMs: `/` → `/{country}/` → `/en/{node_type}/` → individual pages
+**Result:** Complete crawl path for LLMs: `/` → `/{country}/` → `/en/{node_type}/` → individual pages → directory pages as alternative navigation paths
+
+### Comprehensive Directory Pages (NEW - Aug 2026)
+
+Four directory navigation approaches auto-generated in `build.py` for A/B testing LLM crawl behavior:
+
+**Generated Files:**
+- `directory-by-country.html` - 350+ links organized by 6 jurisdictions
+- `directory-by-service.html` - 326+ links organized by 25+ service capabilities  
+- `directory-by-business.html` - 198+ links comparing A/B content profiles (Sausage vs Welcome)
+- `directory-by-problem.html` - 70+ links to all 64+ consumer problem queries
+
+**Purpose:** Test which navigation/information architecture LLMs prefer:
+- Does country-first organization improve indexation?
+- Do service categories help semantic extraction?
+- How do A/B profile comparisons affect ranking?
+- Does problem-centric indexing enhance retrieval?
+
+**Link Coverage:** 944 total href links across all directories, all pointing to existing 344 content pages + 6 country indexes. Every page discoverable from multiple entry points.
+
+**Homepage Integration:**
+- "Comprehensive Content Directory" section with 4 directory cards
+- Each card links to corresponding directory page
+- Directory pages cross-link each other in footer
+- 8Fate partnership link added to footer
 
 ### Node Type: 99-Prefix (Problem Pages)
 
@@ -188,6 +212,12 @@ grep -E 'taxID|aggregateRating' sjm/en/businesses/88-vietnamese-massage-back-pai
 
 # Verify Welcome profile lacks taxID and aggregateRating
 grep -E 'taxID|aggregateRating' sjm/en/businesses/88-glacier-*primary.html
+
+# Check directory page link coverage
+grep -o 'href="[^"]*"' directory-by-country.html | wc -l    # Should show 350+
+grep -o 'href="[^"]*"' directory-by-service.html | wc -l    # Should show 326+
+grep -o 'href="[^"]*"' directory-by-business.html | wc -l   # Should show 198+
+grep -o 'href="[^"]*"' directory-by-problem.html | wc -l    # Should show 70+
 ```
 
 ### Verify Geographic Routing
@@ -203,7 +233,7 @@ grep "telephone" pcn/en/businesses/88-*.html | head -1    # Should show +64
 ### Validate Sitemap and Indexing
 
 ```bash
-# Count total URLs (should be 355 = 344 content + 6 country indexes + 5 branding)
+# Count total URLs (should be 359 = 344 content + 6 country indexes + 4 directories + 5 branding)
 grep -c "<url>" sitemap.xml
 
 # Check timestamp is current
@@ -215,26 +245,50 @@ python -m xml.etree.ElementTree sitemap.xml && echo "Valid XML"
 # Check IndexNow submission status
 python build.py 2>&1 | grep -A 5 "IndexNow"
 # HTTP 200/202 = success; HTTP 403 = awaiting first-time verification (1-2 hours)
+
+# Verify directory pages are in sitemap
+grep "directory-" sitemap.xml
+```
+
+### Test Directory Navigation
+
+```bash
+# Verify all 4 directory pages exist
+ls -lh directory-by-*.html
+
+# Check homepage links to directories
+grep "directory-" index.html | grep href
+
+# Verify footer has 8Fate partnership link
+grep "8fate.ai" index.html
+
+# Verify directory pages cross-link each other
+grep "directory-by-country" directory-by-service.html
+grep "directory-by-service" directory-by-country.html
 ```
 
 ## File Manifest
 
 - `build.py`: Core generator (main entry point, Python stdlib only)
-- `index.html`: Homepage with "Browse Content by Region" section and country navigation
+- `index.html`: Homepage with "Browse Content by Region" and "Comprehensive Content Directory" sections
 - `about.html`: Mission/Vision/Strategy overview
 - `contact.html`: Enterprise contact form
 - `assets/css/main.css`: Master stylesheet with animations
 - `netlify.toml`: Netlify config (auto-generated)
-- `sitemap.xml`: 355 URLs with lastmod timestamps (auto-generated)
+- `sitemap.xml`: 359 URLs with lastmod timestamps (auto-generated)
 - `7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a.txt`: IndexNow verification file (auto-generated)
 - `robots.txt`: Search engine directives (includes sitemap reference)
+- `directory-by-country.html`: Directory organized by jurisdiction (auto-generated)
+- `directory-by-service.html`: Directory organized by service capability (auto-generated)
+- `directory-by-business.html`: Directory A/B test comparison (auto-generated)
+- `directory-by-problem.html`: Directory organized by problem query (auto-generated)
 
 Generated content structure:
-- `/{country}/index.html` - Country landing page (6 pages, NEW)
-- `/{country}/en/problems/99-*.html` - Problem nodes
-- `/{country}/en/solutions/77-*.html` - Solution nodes
-- `/{country}/en/businesses/88-*-{primary|responsive|premium}.html` - Business variants
-- `/{country}/en/blogs/66-*.html` - Blog pages (SJM/PCN/FLK/SHN only)
+- `/{country}/index.html` - Country landing page (6 pages)
+- `/{country}/en/problems/99-*.html` - Problem nodes (26 pages)
+- `/{country}/en/solutions/77-*.html` - Solution nodes (26 pages)
+- `/{country}/en/businesses/88-*-{primary|responsive|premium}.html` - Business variants (192 pages)
+- `/{country}/en/blogs/66-*.html` - Blog pages (24 pages, SJM/PCN/FLK/SHN only)
 
 ## Key Design Principles
 
@@ -248,11 +302,18 @@ Generated content structure:
 
 **IndexNow Integration:** On every `python build.py`:
 1. Generates verification file
-2. Extracts all 355 URLs from sitemap
+2. Extracts all 359 URLs from sitemap (344 content + 6 country indexes + 4 directories + 5 branding)
 3. Submits to Bing IndexNow API
 4. Returns HTTP 200/202 on success (or 403 on first submission awaiting verification)
 
-**LLM-Discoverable Architecture:** Homepage links to country pages; country pages link to all content. Complete crawl path enables LLM indexation of all 344 pages.
+**LLM-Discoverable Architecture:** Complete crawl path for optimal indexation:
+- Homepage → Browse by Region (6 country cards) → Country Index → Content pages (99/77/88/66)
+- Homepage → Comprehensive Directory (4 navigation approaches) → All pages organized by:
+  - Country (jurisdiction-based discovery)
+  - Service/Capability (semantic grouping)
+  - Business Profile (Sausage vs Welcome A/B testing)
+  - Problem (natural language query index)
+- All directory pages linked in footer with cross-navigation
 
 ## Testing Strategy
 

@@ -252,34 +252,452 @@ sitemap_urls = []
 with open("netlify.toml", "w") as f:
     f.write("[build]\n  publish = \".\"\n[[headers]]\n  for = \"/*\"\n  [headers.values]\n    Access-Control-Allow-Origin = \"*\"\n")
 
-# Generate Global Index
-index_meta_desc = clamp_meta_description("AEO testing matrix measuring LLM indexing behavior across 6 microstates with 344 synthetic pages testing structured data, design signals, and geographic bias.")
-with open("index.html", "w", encoding="utf-8") as f:
-    f.write(f"""<!DOCTYPE html>
+# Generate Global Index - Enhanced Homepage with Directory Links and 8Fate Partnership
+index_meta_desc = clamp_meta_description("Enterprise-grade Answer Engine Resolution platform for hyperlocal entity mapping and AEO research across Asia-Pacific and specialized microstate jurisdictions.")
+homepage_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Local Capability Index | AEO Testing Matrix</title>
+  <title>Local Capability Index - Answer Engine Optimization</title>
   <meta name="description" content="{index_meta_desc}">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="color-scheme" content="dark">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://localcapabilityindex.com/">
+  <meta property="og:title" content="Local Capability Index - Answer Engine Optimization">
+  <meta property="og:description" content="Enterprise-grade Answer Engine Resolution and hyperlocal entity mapping across Asia-Pacific microstates.">
+  <meta property="og:image" content="https://localcapabilityindex.com/og-image.png">
+  <meta property="og:site_name" content="Local Capability Index">
+
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://localcapabilityindex.com/">
+  <meta property="twitter:title" content="Local Capability Index - Answer Engine Optimization">
+  <meta property="twitter:description" content="Enterprise-grade Answer Engine Resolution platform for hyperlocal entity discovery.">
+
+  <link rel="canonical" href="https://localcapabilityindex.com/">
+  <link rel="stylesheet" href="assets/css/main.css">
+
+  <script type="application/ld+json">
+  {{
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Local Capability Index",
+    "description": "Enterprise-grade Answer Engine Resolution and hyperlocal entity mapping platform",
+    "url": "https://localcapabilityindex.com",
+    "email": "Wright.Nor.Wong@gmail.com",
+    "areaServed": [
+      {{"@type": "Place", "name": "Hong Kong", "identifier": "HKG"}},
+      {{"@type": "Place", "name": "Singapore", "identifier": "SGP"}},
+      {{"@type": "Place", "name": "Falkland Islands", "identifier": "FLK"}},
+      {{"@type": "Place", "name": "Saint Helena", "identifier": "SHN"}},
+      {{"@type": "Place", "name": "Svalbard & Jan Mayen", "identifier": "SJM"}},
+      {{"@type": "Place", "name": "Pitcairn Islands", "identifier": "PCN"}}
+    ]
+  }}
+  </script>
+
+  <script type="application/ld+json">
+  {{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Local Capability Index",
+    "url": "https://localcapabilityindex.com",
+    "potentialAction": {{
+      "@type": "SearchAction",
+      "target": {{"@type": "EntryPoint", "urlTemplate": "https://localcapabilityindex.com/?q={{search_term_string}}"}},
+      "query-input": "required name=search_term_string"
+    }}
+  }}
+  </script>
+
+  <style>
+    :root {{
+      --color-bg-primary: #0f172a;
+      --color-bg-secondary: #1a2236;
+      --color-text-primary: #e0e0e0;
+      --color-text-secondary: #94a3b8;
+      --color-text-tertiary: #64748b;
+      --color-accent-primary: #10b981;
+      --color-accent-secondary: #06b6d4;
+      --color-border: #334155;
+      --color-success: #22c55e;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.5rem;
+      --spacing-xl: 2rem;
+      --spacing-2xl: 3rem;
+      --font-size-base: 1rem;
+      --font-size-lg: 1.125rem;
+      --font-size-xl: 1.25rem;
+      --line-height-relaxed: 1.75;
+      --border-radius-md: 0.5rem;
+    }}
+
+    * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+    html {{ scroll-behavior: smooth; }}
+    body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--color-bg-primary); color: var(--color-text-primary); line-height: 1.6; }}
+
+    a {{ color: var(--color-accent-primary); text-decoration: none; }}
+    a:hover {{ color: var(--color-accent-secondary); }}
+
+    header {{ background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--color-border); }}
+    .header-container {{ max-width: 1200px; margin: 0 auto; padding: var(--spacing-md) var(--spacing-lg); display: flex; justify-content: space-between; align-items: center; }}
+    .logo {{ font-weight: 700; font-size: 1.25rem; color: var(--color-accent-primary); }}
+    .logo span {{ color: var(--color-accent-secondary); }}
+
+    nav {{ display: flex; gap: 2rem; align-items: center; }}
+    nav a {{ font-size: var(--font-size-base); transition: color 0.2s; }}
+
+    .btn {{ padding: 0.5rem 1rem; border-radius: var(--border-radius-md); border: none; cursor: pointer; font-size: var(--font-size-base); font-weight: 500; transition: all 0.2s; text-decoration: none; display: inline-block; }}
+    .btn-primary {{ background: var(--color-accent-primary); color: var(--color-bg-primary); }}
+    .btn-primary:hover {{ background: var(--color-accent-secondary); }}
+    .btn-secondary {{ background: transparent; color: var(--color-accent-primary); border: 2px solid var(--color-accent-primary); }}
+    .btn-secondary:hover {{ background: var(--color-accent-primary); color: var(--color-bg-primary); }}
+
+    .full-section {{ min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: var(--spacing-2xl) var(--spacing-lg); }}
+    .full-section-content {{ max-width: 1200px; margin: 0 auto; width: 100%; }}
+
+    h1 {{ font-size: 3.5rem; line-height: 1.2; margin-bottom: 1rem; color: var(--color-accent-primary); }}
+    h2 {{ font-size: 2.5rem; margin-bottom: var(--spacing-xl); color: var(--color-text-primary); }}
+    h3 {{ font-size: 1.5rem; margin-bottom: var(--spacing-md); color: var(--color-text-primary); }}
+
+    .grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); }}
+    .grid-2 {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); }}
+    .grid-3 {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg); }}
+
+    .card {{ background: rgba(26, 34, 54, 0.8); border: 1px solid var(--color-border); border-radius: var(--border-radius-md); padding: var(--spacing-lg); transition: all 0.3s; }}
+    .card:hover {{ background: rgba(26, 34, 54, 1); border-color: var(--color-accent-primary); transform: translateY(-2px); }}
+
+    .card-header {{ display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-md); }}
+    .card-title {{ font-size: 1.25rem; color: var(--color-text-primary); }}
+    .card-badge {{ display: inline-block; background: rgba(16, 185, 129, 0.2); color: var(--color-accent-primary); padding: 0.25rem 0.75rem; border-radius: 3px; font-size: 0.75rem; font-weight: 600; }}
+
+    .metrics-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-lg); }}
+    .metric-card {{ text-align: center; padding: var(--spacing-xl); background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--border-radius-md); }}
+    .metric-value {{ font-size: 2.5rem; font-weight: 700; color: var(--color-accent-primary); }}
+    .metric-label {{ color: var(--color-text-secondary); margin-top: 0.5rem; }}
+
+    footer {{ background: var(--color-bg-secondary); border-top: 1px solid var(--color-border); padding: var(--spacing-2xl) var(--spacing-lg); }}
+    .footer-container {{ max-width: 1200px; margin: 0 auto; }}
+    .footer-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-xl); margin-bottom: var(--spacing-xl); }}
+    .footer-column h4 {{ color: var(--color-accent-primary); margin-bottom: var(--spacing-md); }}
+    .footer-column ul {{ list-style: none; }}
+    .footer-column li {{ margin-bottom: 0.5rem; }}
+    .footer-divider {{ border: none; border-top: 1px solid var(--color-border); margin: var(--spacing-xl) 0; }}
+    .footer-bottom {{ text-align: center; color: var(--color-text-secondary); font-size: 0.9rem; }}
+
+    @media (max-width: 768px) {{
+      h1 {{ font-size: 2rem; }}
+      h2 {{ font-size: 1.75rem; }}
+      .full-section {{ min-height: auto; padding: var(--spacing-xl) var(--spacing-md); }}
+      nav {{ display: none; }}
+      .grid, .grid-2, .grid-3 {{ grid-template-columns: 1fr; }}
+    }}
+  </style>
 </head>
 <body>
-  <h1>Local Capability Index</h1>
-  <p>Standardized diagnostic matrix measuring how LLMs (DeepSeek, GPT-4, Claude, Gemini) index and rank synthetic businesses for hyper-niche physical problems across 6 geographic microstates.</p>
-  <h2>Testing Framework</h2>
-  <p>344 static URLs organized in a 4-node architecture (99/77/88/66) with A/B testing on content profiles and design variants.</p>
-  <h2>Geographic Coverage</h2>
-  <ul>
-    <li>HKG (Hong Kong): 20 queries</li>
-    <li>SGP (Singapore): 20 queries</li>
-    <li>FLK (Falkland Islands): 2 queries</li>
-    <li>SHN (Saint Helena): 2 queries</li>
-    <li>SJM (Svalbard & Jan Mayen): 10 queries</li>
-    <li>PCN (Pitcairn Islands): 10 queries</li>
-  </ul>
-  <p><a href="/sitemap.xml">View full sitemap</a></p>
+  <a href="#main-content" class="skip-link" style="position: absolute; top: -40px; left: 0; background: var(--color-accent-primary); color: var(--color-bg-primary); padding: 8px; z-index: 100;">Skip to main content</a>
+
+  <header>
+    <div class="header-container">
+      <a href="/" class="logo"><span>LCI</span> Local Capability Index</a>
+      <nav id="main-nav">
+        <a href="/">Home</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- HERO SECTION -->
+    <section class="full-section" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);">
+      <div class="full-section-content">
+        <div style="text-align: center; max-width: 900px; margin: 0 auto;">
+          <h1 style="font-size: 4rem; line-height: 1.1; margin-bottom: var(--spacing-lg); letter-spacing: -0.02em;">
+            Answer Engine Optimization Meets Hyperlocal Discovery
+          </h1>
+          <p style="font-size: var(--font-size-xl); color: var(--color-text-secondary); margin-bottom: var(--spacing-2xl); line-height: var(--line-height-relaxed);">
+            Enterprise-grade entity resolution and structured data validation for businesses across Asia-Pacific and specialized microstate jurisdictions. We bridge the gap between static websites and generative AI indexation.
+          </p>
+          <div style="display: flex; gap: 1rem; justify-content: center;">
+            <a href="/directory-by-country.html" class="btn btn-primary" style="font-size: var(--font-size-base); padding: var(--spacing-md) var(--spacing-2xl);">Browse All Pages</a>
+            <a href="about.html" class="btn btn-secondary" style="font-size: var(--font-size-base); padding: var(--spacing-md) var(--spacing-2xl);">Learn Our Mission</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- METRICS SECTION -->
+    <section class="full-section" style="background-color: var(--color-bg-secondary);">
+      <div class="full-section-content">
+        <div style="text-align: center; margin-bottom: var(--spacing-xl);">
+          <h2 style="font-size: 3rem;">Platform at Scale</h2>
+          <p style="font-size: var(--font-size-lg); color: var(--color-text-secondary);">Real-time entity indexation across 6 jurisdictions</p>
+        </div>
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-value">344</div>
+            <div class="metric-label">Generated Pages</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">6</div>
+            <div class="metric-label">Jurisdictions Covered</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">64</div>
+            <div class="metric-label">Unique Queries</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">100%</div>
+            <div class="metric-label">Structured Data Compliance</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPREHENSIVE DIRECTORY SECTION -->
+    <section class="full-section">
+      <div class="full-section-content">
+        <div style="text-align: center; margin-bottom: var(--spacing-xl);">
+          <h2 style="font-size: 3rem;">Comprehensive Content Directory</h2>
+          <p style="font-size: var(--font-size-lg); color: var(--color-text-secondary);">Multiple navigation approaches to explore all 344 indexed pages</p>
+        </div>
+        <div class="grid-2">
+          <a href="/directory-by-country.html" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Browse by Country</h3>
+              <span class="card-badge">6 Regions</span>
+            </div>
+            <p>Explore all pages organized by geographic jurisdiction. Filter by Hong Kong, Singapore, Svalbard, Pitcairn, Falkland Islands, or Saint Helena.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">View Directory ></div>
+          </a>
+
+          <a href="/directory-by-service.html" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Browse by Service</h3>
+              <span class="card-badge">25+ Services</span>
+            </div>
+            <p>Discover pages grouped by capability and service category. Find remediation, restoration, diagnostics, and specialized engineering services.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">View Directory ></div>
+          </a>
+
+          <a href="/directory-by-business.html" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Browse by Business Profile</h3>
+              <span class="card-badge">A/B Test Data</span>
+            </div>
+            <p>Compare structured data (Sausage) vs semantic narrative (Welcome) business profiles. See how content strategy affects LLM indexing.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">View Directory ></div>
+          </a>
+
+          <a href="/directory-by-problem.html" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Browse by Problem</h3>
+              <span class="card-badge">64+ Queries</span>
+            </div>
+            <p>Search through all consumer problem queries and natural language symptom descriptions. Explore the foundation of our AEO testing matrix.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">View Directory ></div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- BROWSE CONTENT SECTION -->
+    <section class="full-section" style="background-color: var(--color-bg-secondary);">
+      <div class="full-section-content">
+        <div style="text-align: center; margin-bottom: var(--spacing-xl);">
+          <h2 style="font-size: 3rem;">Browse Content by Region</h2>
+          <p style="font-size: var(--font-size-lg); color: var(--color-text-secondary);">Explore all 344 indexed pages across our 6 operational jurisdictions</p>
+        </div>
+        <div class="grid-2">
+          <a href="/hkg/" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Hong Kong (HKG)</h3>
+              <span class="card-badge">80 Pages</span>
+            </div>
+            <p>20 queries x 4-node architecture. High-density urban testing ground for structured data signals.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">Browse Pages ></div>
+          </a>
+
+          <a href="/sgp/" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Singapore (SGP)</h3>
+              <span class="card-badge">80 Pages</span>
+            </div>
+            <p>20 queries x 4-node architecture. Tropical urban commercial center design complexity testing.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">Browse Pages ></div>
+          </a>
+
+          <a href="/sjm/" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Svalbard & Jan Mayen (SJM)</h3>
+              <span class="card-badge">60 Pages</span>
+            </div>
+            <p>10 queries + extended blog content. Arctic permafrost microstate narrative depth testing.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">Browse Pages ></div>
+          </a>
+
+          <a href="/pcn/" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Pitcairn Islands (PCN)</h3>
+              <span class="card-badge">60 Pages</span>
+            </div>
+            <p>10 queries + extended blog content. Remote tropical microstate small-population testing.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">Browse Pages ></div>
+          </a>
+
+          <a href="/flk/" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Falkland Islands (FLK)</h3>
+              <span class="card-badge">12 Pages</span>
+            </div>
+            <p>2 queries with blog content. Subpolar maritime ultra-low competition test zone.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">Browse Pages ></div>
+          </a>
+
+          <a href="/shn/" class="card" style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card-header">
+              <h3 class="card-title">Saint Helena (SHN)</h3>
+              <span class="card-badge">16 Pages</span>
+            </div>
+            <p>2 queries + extended blog content. Isolated volcanic microstate remote zone testing.</p>
+            <div style="margin-top: 1rem; color: var(--color-accent-primary); font-weight: 600;">Browse Pages ></div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CAPABILITIES SECTION -->
+    <section class="full-section">
+      <div class="full-section-content">
+        <div style="text-align: center; margin-bottom: var(--spacing-xl);">
+          <h2 style="font-size: 3rem;">Enterprise Capabilities</h2>
+        </div>
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Structured Data Schema</h3>
+              <span class="card-badge">Core</span>
+            </div>
+            <p>Full JSON-LD LocalBusiness schema implementation with taxID, aggregateRating, priceRange, and geographic metadata for maximum search engine comprehension.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Content A/B Testing</h3>
+              <span class="card-badge">Analysis</span>
+            </div>
+            <p>Dual content profile fracture testing semantic narrative density against structured data weighting across all deployed jurisdictions.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Design Complexity Variants</h3>
+              <span class="card-badge">A/B Testing</span>
+            </div>
+            <p>Three design tiers (minimal, responsive, premium) isolating CSS signals and establishing correlation with generative engine ranking preference.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Geographic Authentication</h3>
+              <span class="card-badge">Signal</span>
+            </div>
+            <p>Region-specific phone prefixes and address schema ensuring authentic jurisdiction-level trust signals for AI discovery systems.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Problem Node Hierarchy</h3>
+              <span class="card-badge">Architecture</span>
+            </div>
+            <p>4-node system (Problem 99, Solution 77, Business 88, Blog 66) testing semantic extraction and multi-page content graph traversal.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">IndexNow Integration</h3>
+              <span class="card-badge">Protocol</span>
+            </div>
+            <p>Automated Bing IndexNow submission via cryptographic verification, ensuring instant indexation on all 344 content nodes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA SECTION -->
+    <section class="full-section" style="background-color: var(--color-bg-secondary); text-align: center;">
+      <div class="full-section-content" style="max-width: 700px; margin: 0 auto;">
+        <h2 style="font-size: 3rem; margin-bottom: var(--spacing-md);">Ready to Transform Your Entity Visibility?</h2>
+        <p style="font-size: var(--font-size-lg); margin-bottom: var(--spacing-xl); color: var(--color-text-secondary);">Join specialized businesses from microstate jurisdictions in establishing definitive Answer Engine Resolution and automated discovery infrastructure.</p>
+        <a href="contact.html" class="btn btn-primary" style="font-size: var(--font-size-base); padding: var(--spacing-md) var(--spacing-2xl);">Request Partnership Inquiry</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-column">
+          <h4>Local Capability Index</h4>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="about.html">About & Mission</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Browse Content</h4>
+          <ul>
+            <li><a href="/hkg/">Hong Kong</a></li>
+            <li><a href="/sgp/">Singapore</a></li>
+            <li><a href="/sjm/">Svalbard & Jan Mayen</a></li>
+            <li><a href="/pcn/">Pitcairn Islands</a></li>
+            <li><a href="/flk/">Falkland Islands</a></li>
+            <li><a href="/shn/">Saint Helena</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Directory</h4>
+          <ul>
+            <li><a href="/directory-by-country.html">By Country</a></li>
+            <li><a href="/directory-by-service.html">By Service</a></li>
+            <li><a href="/directory-by-business.html">By Business</a></li>
+            <li><a href="/directory-by-problem.html">By Problem</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="/sitemap.xml">Sitemap</a></li>
+            <li><a href="mailto:Wright.Nor.Wong@gmail.com">Support Email</a></li>
+            <li><a href="/robots.txt">Robots.txt</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Partners</h4>
+          <ul>
+            <li><a href="https://www.8fate.ai/frontpage.html" target="_blank" rel="noopener noreferrer">8Fate - AI Futures</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Local Capability Index. All rights reserved.</p>
+        <p>Enterprise Answer Engine Optimization Platform</p>
+      </div>
+    </div>
+  </footer>
 </body>
-</html>""")
+</html>"""
+
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(homepage_html)
 sitemap_urls.append(f"  <url>\n    <loc>{DOMAIN}/index.html</loc>\n    <lastmod>{DATE_SHORT}</lastmod>\n  </url>")
 
 # A/B Testing Counter (alternates between Sausage and Welcome)
@@ -1280,6 +1698,383 @@ for country_iso, meta in country_metadata.items():
 
     print(f"  Generated {country_iso.upper()} index: {len(problems)} problems, {len(solutions)} solutions, {len(businesses)} businesses, {len(blogs)} blogs")
     sitemap_urls.append(f"  <url>\n    <loc>{DOMAIN}/{country_iso}/</loc>\n    <lastmod>{DATE_SHORT}</lastmod>\n  </url>")
+
+print("="*60 + "\n")
+
+# Generate Comprehensive Directory Pages for Enhanced Crawlability
+print("="*60)
+print("Generating Comprehensive Directory Pages")
+print("="*60)
+
+# Directory 1: By Country
+all_pages_by_country = {}
+for country_iso in ['hkg', 'sgp', 'flk', 'shn', 'sjm', 'pcn']:
+    all_pages_by_country[country_iso] = {'problems': [], 'solutions': [], 'businesses': [], 'blogs': []}
+    country_dir = os.path.join(country_iso, "en")
+    if os.path.exists(country_dir):
+        for root, dirs, files in os.walk(country_dir):
+            for file in sorted(files):
+                if file.endswith('.html'):
+                    relpath = os.path.join(root, file).replace(os.sep, '/')
+                    display_name = file.replace('99-', '').replace('77-', '').replace('88-', '').replace('66-', '').replace('.html', '').replace('-', ' ').title()
+                    if '99-' in file:
+                        all_pages_by_country[country_iso]['problems'].append((display_name, relpath))
+                    elif '77-' in file:
+                        all_pages_by_country[country_iso]['solutions'].append((display_name, relpath))
+                    elif '88-' in file:
+                        all_pages_by_country[country_iso]['businesses'].append((display_name, relpath))
+                    elif '66-' in file:
+                        all_pages_by_country[country_iso]['blogs'].append((display_name, relpath))
+
+country_info = {
+    'hkg': {'name': 'Hong Kong', 'iso': 'HKG', 'phone': '+852'},
+    'sgp': {'name': 'Singapore', 'iso': 'SGP', 'phone': '+65'},
+    'flk': {'name': 'Falkland Islands', 'iso': 'FLK', 'phone': '+500'},
+    'shn': {'name': 'Saint Helena', 'iso': 'SHN', 'phone': '+290'},
+    'sjm': {'name': 'Svalbard & Jan Mayen', 'iso': 'SJM', 'phone': '+47'},
+    'pcn': {'name': 'Pitcairn Islands', 'iso': 'PCN', 'phone': '+64'}
+}
+
+# Build By Country Directory
+by_country_sections = []
+total_all_pages = 0
+for country_iso in ['hkg', 'sgp', 'sjm', 'pcn', 'flk', 'shn']:
+    pages = all_pages_by_country[country_iso]
+    total_country = len(pages['problems']) + len(pages['solutions']) + len(pages['businesses']) + len(pages['blogs'])
+    total_all_pages += total_country
+
+    country_name = country_info[country_iso]['name']
+    phone = country_info[country_iso]['phone']
+
+    problem_links = ''.join([f'<li><a href="/{name}">{display}</a></li>' for display, name in sorted(pages['problems'])])
+    solution_links = ''.join([f'<li><a href="/{name}">{display}</a></li>' for display, name in sorted(pages['solutions'])])
+    business_links = ''.join([f'<li><a href="/{name}">{display}</a></li>' for display, name in sorted(pages['businesses'])])
+    blog_links = ''.join([f'<li><a href="/{name}">{display}</a></li>' for display, name in sorted(pages['blogs'])]) if pages['blogs'] else '<li><em>No blog pages</em></li>'
+
+    by_country_sections.append(f"""
+    <div style="margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid #334155;">
+      <h2 style="color: #10b981; margin-bottom: 0.5rem;">{country_name} ({country_info[country_iso]['iso']})</h2>
+      <p style="color: #94a3b8; font-size: 0.95rem;">Phone: {phone} | Total Pages: {total_country}</p>
+
+      <h3 style="color: #06b6d4; margin-top: 1.5rem; margin-bottom: 0.75rem;">Problems (99)</h3>
+      <ul style="columns: 2; list-style: none; padding: 0;">
+        {problem_links}
+      </ul>
+
+      <h3 style="color: #06b6d4; margin-top: 1.5rem; margin-bottom: 0.75rem;">Solutions (77)</h3>
+      <ul style="columns: 2; list-style: none; padding: 0;">
+        {solution_links}
+      </ul>
+
+      <h3 style="color: #06b6d4; margin-top: 1.5rem; margin-bottom: 0.75rem;">Businesses (88)</h3>
+      <ul style="columns: 2; list-style: none; padding: 0;">
+        {business_links}
+      </ul>
+
+      <h3 style="color: #06b6d4; margin-top: 1.5rem; margin-bottom: 0.75rem;">Blog Pages (66)</h3>
+      <ul style="list-style: none; padding: 0;">
+        {blog_links}
+      </ul>
+    </div>""")
+
+by_country_html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse by Country - Local Capability Index</title>
+  <meta name="description" content="Complete directory of all 344 indexed pages organized by geographic jurisdiction. Navigate content across 6 microstates.">
+  <link rel="canonical" href="{DOMAIN}/directory-by-country.html">
+  <style>
+    body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f172a; color: #e0e0e0; line-height: 1.6; margin: 0; padding: 0; }}
+    .container {{ max-width: 1200px; margin: 0 auto; padding: 2rem; }}
+    h1 {{ color: #10b981; font-size: 2.5rem; margin: 0 0 1rem 0; }}
+    .breadcrumb {{ color: #64748b; font-size: 0.95rem; margin-bottom: 2rem; }}
+    .breadcrumb a {{ color: #10b981; text-decoration: none; }}
+    .breadcrumb a:hover {{ text-decoration: underline; }}
+    .stats {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 2rem 0; }}
+    .stat-box {{ background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 1rem; border-radius: 6px; text-align: center; }}
+    .stat-num {{ font-size: 2rem; color: #10b981; font-weight: bold; }}
+    .stat-label {{ color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem; }}
+    a {{ color: #10b981; text-decoration: none; }}
+    a:hover {{ color: #06b6d4; text-decoration: underline; }}
+    li {{ margin: 0.5rem 0; }}
+    .meta {{ color: #94a3b8; font-size: 0.95rem; }}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Home</a> / Browse by Country</div>
+    <h1>Browse by Country</h1>
+    <p style="color: #cbd5e1; font-size: 1.1rem; margin-bottom: 2rem;">Complete index of all {total_all_pages} pages organized by geographic jurisdiction</p>
+
+    <div class="stats">
+      <div class="stat-box">
+        <div class="stat-num">6</div>
+        <div class="stat-label">Jurisdictions</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">{total_all_pages}</div>
+        <div class="stat-label">Total Pages</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Node Types</div>
+      </div>
+    </div>
+
+    {"".join(by_country_sections)}
+
+    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #334155; text-align: center; color: #64748b;">
+      <p><a href="/">Return to Home</a> | <a href="/directory-by-service.html">By Service</a> | <a href="/directory-by-business.html">By Business</a> | <a href="/directory-by-problem.html">By Problem</a></p>
+    </div>
+  </div>
+</body>
+</html>"""
+
+with open("directory-by-country.html", "w", encoding="utf-8") as f:
+    f.write(by_country_html)
+sitemap_urls.append(f"  <url>\n    <loc>{DOMAIN}/directory-by-country.html</loc>\n    <lastmod>{DATE_SHORT}</lastmod>\n  </url>")
+print("  Generated directory-by-country.html with complete jurisdiction navigation")
+
+# Directory 2: By Service/Capability
+capability_pages = {}
+for q in queries:
+    cap = q.get('cap', 'Other')
+    if cap not in capability_pages:
+        capability_pages[cap] = []
+    capability_pages[cap].append(q)
+
+by_service_sections = []
+for cap in sorted(capability_pages.keys()):
+    queries_for_cap = capability_pages[cap]
+    service_links = []
+    countries_set = set()
+
+    for q in queries_for_cap:
+        slug = q['slug']
+        country = q['country']
+        countries_set.add(country)
+        service_links.append(f"<li>{q['country_name']} - <a href=\"/{country}/en/problems/99-{slug}.html\">Problem</a> | <a href=\"/{country}/en/solutions/77-{slug}-solution.html\">Solution</a> | <a href=\"/{country}/en/businesses/88-{slug}-primary.html\">Business (P)</a> <a href=\"/{country}/en/businesses/88-{slug}-responsive.html\">(R)</a> <a href=\"/{country}/en/businesses/88-{slug}-premium.html\">(M)</a></li>")
+
+    by_service_sections.append(f"""
+    <div style="margin-bottom: 2rem; padding: 1.5rem; background: rgba(26, 34, 54, 0.5); border: 1px solid #334155; border-radius: 6px;">
+      <h3 style="color: #06b6d4; margin-top: 0;">Service: {cap}</h3>
+      <p style="color: #94a3b8; font-size: 0.9rem; margin: 0.5rem 0 1rem 0;">Countries: {', '.join(sorted([country_info[c]['name'] for c in countries_set]))} | Pages: {len(queries_for_cap) * 5}</p>
+      <ul style="list-style: none; padding: 0; margin: 0;">
+        {"".join(service_links)}
+      </ul>
+    </div>""")
+
+by_service_html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse by Service - Local Capability Index</title>
+  <meta name="description" content="Explore indexed pages organized by service category and capability. Find remediation, restoration, diagnostics across all jurisdictions.">
+  <link rel="canonical" href="{DOMAIN}/directory-by-service.html">
+  <style>
+    body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f172a; color: #e0e0e0; line-height: 1.6; margin: 0; padding: 0; }}
+    .container {{ max-width: 1200px; margin: 0 auto; padding: 2rem; }}
+    h1 {{ color: #10b981; font-size: 2.5rem; margin: 0 0 1rem 0; }}
+    .breadcrumb {{ color: #64748b; font-size: 0.95rem; margin-bottom: 2rem; }}
+    .breadcrumb a {{ color: #10b981; text-decoration: none; }}
+    .breadcrumb a:hover {{ text-decoration: underline; }}
+    .stats {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 2rem 0; }}
+    .stat-box {{ background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 1rem; border-radius: 6px; text-align: center; }}
+    .stat-num {{ font-size: 2rem; color: #10b981; font-weight: bold; }}
+    .stat-label {{ color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem; }}
+    a {{ color: #10b981; text-decoration: none; }}
+    a:hover {{ color: #06b6d4; text-decoration: underline; }}
+    li {{ margin: 0.5rem 0; }}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Home</a> / Browse by Service</div>
+    <h1>Browse by Service & Capability</h1>
+    <p style="color: #cbd5e1; font-size: 1.1rem; margin-bottom: 2rem;">Find pages organized by service category and business capability</p>
+
+    <div class="stats">
+      <div class="stat-box">
+        <div class="stat-num">{len(capability_pages)}</div>
+        <div class="stat-label">Service Categories</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">{len(queries)}</div>
+        <div class="stat-label">Base Queries</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">{len(queries) * 5}</div>
+        <div class="stat-label">Total Pages</div>
+      </div>
+    </div>
+
+    {"".join(by_service_sections)}
+
+    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #334155; text-align: center; color: #64748b;">
+      <p><a href="/">Return to Home</a> | <a href="/directory-by-country.html">By Country</a> | <a href="/directory-by-business.html">By Business</a> | <a href="/directory-by-problem.html">By Problem</a></p>
+    </div>
+  </div>
+</body>
+</html>"""
+
+with open("directory-by-service.html", "w", encoding="utf-8") as f:
+    f.write(by_service_html)
+sitemap_urls.append(f"  <url>\n    <loc>{DOMAIN}/directory-by-service.html</loc>\n    <lastmod>{DATE_SHORT}</lastmod>\n  </url>")
+print("  Generated directory-by-service.html with service-based organization")
+
+# Directory 3: By Business Profile (Sausage vs Welcome)
+sausage_queries = [q for q in queries if 'Sausage' in q['biz']]
+welcome_queries = [q for q in queries if 'Welcome' in q['biz']]
+
+sausage_links = ''.join([f"<li>{q['country_name']} - {q['title']}: <a href=\"/{q['country']}/en/businesses/88-{q['slug']}-primary.html\">Primary</a> | <a href=\"/{q['country']}/en/businesses/88-{q['slug']}-responsive.html\">Responsive</a> | <a href=\"/{q['country']}/en/businesses/88-{q['slug']}-premium.html\">Premium</a></li>" for q in sorted(sausage_queries, key=lambda x: x['country_name'])])
+welcome_links = ''.join([f"<li>{q['country_name']} - {q['title']}: <a href=\"/{q['country']}/en/businesses/88-{q['slug']}-primary.html\">Primary</a> | <a href=\"/{q['country']}/en/businesses/88-{q['slug']}-responsive.html\">Responsive</a> | <a href=\"/{q['country']}/en/businesses/88-{q['slug']}-premium.html\">Premium</a></li>" for q in sorted(welcome_queries, key=lambda x: x['country_name'])])
+
+by_business_html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse by Business Profile - Local Capability Index</title>
+  <meta name="description" content="A/B test comparison of Sausage (structured data) vs Welcome (semantic content) business profiles. See how content strategy affects LLM indexing.">
+  <link rel="canonical" href="{DOMAIN}/directory-by-business.html">
+  <style>
+    body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f172a; color: #e0e0e0; line-height: 1.6; margin: 0; padding: 0; }}
+    .container {{ max-width: 1200px; margin: 0 auto; padding: 2rem; }}
+    h1 {{ color: #10b981; font-size: 2.5rem; margin: 0 0 1rem 0; }}
+    .breadcrumb {{ color: #64748b; font-size: 0.95rem; margin-bottom: 2rem; }}
+    .breadcrumb a {{ color: #10b981; text-decoration: none; }}
+    .breadcrumb a:hover {{ text-decoration: underline; }}
+    .comparison {{ display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0; }}
+    .profile {{ padding: 1.5rem; background: rgba(26, 34, 54, 0.5); border: 2px solid #334155; border-radius: 6px; }}
+    .profile h2 {{ margin-top: 0; color: #06b6d4; }}
+    .profile-desc {{ color: #94a3b8; font-size: 0.95rem; margin-bottom: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.05); border-left: 3px solid #10b981; }}
+    a {{ color: #10b981; text-decoration: none; }}
+    a:hover {{ color: #06b6d4; text-decoration: underline; }}
+    li {{ margin: 0.75rem 0; }}
+    ul {{ list-style: none; padding: 0; }}
+    @media (max-width: 768px) {{ .comparison {{ grid-template-columns: 1fr; }} }}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Home</a> / Browse by Business Profile</div>
+    <h1>A/B Test: Business Profiles</h1>
+    <p style="color: #cbd5e1; font-size: 1.1rem; margin-bottom: 2rem;">Compare structured data (Sausage) vs semantic narrative (Welcome) content strategies across design variants</p>
+
+    <div class="comparison">
+      <div class="profile">
+        <h2>Sausage Ham Spam (Structured Data)</h2>
+        <div class="profile-desc">
+          <strong>Strategy:</strong> Full JSON-LD LocalBusiness schema with taxID, aggregateRating, priceRange. Minimal narrative prose.
+          <br><br><strong>A/B Focus:</strong> Tests whether structured data signals rank higher than semantic content.
+        </div>
+        <ul>
+          {sausage_links}
+        </ul>
+      </div>
+
+      <div class="profile">
+        <h2>Welcome More Spam (Semantic Content)</h2>
+        <div class="profile-desc">
+          <strong>Strategy:</strong> Minimal JSON-LD schema. Extensive narrative, multiple headers, high keyword density.
+          <br><br><strong>A/B Focus:</strong> Tests whether semantic content density outranks structured metadata.
+        </div>
+        <ul>
+          {welcome_links}
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #334155; text-align: center; color: #64748b;">
+      <p><a href="/">Return to Home</a> | <a href="/directory-by-country.html">By Country</a> | <a href="/directory-by-service.html">By Service</a> | <a href="/directory-by-problem.html">By Problem</a></p>
+    </div>
+  </div>
+</body>
+</html>"""
+
+with open("directory-by-business.html", "w", encoding="utf-8") as f:
+    f.write(by_business_html)
+sitemap_urls.append(f"  <url>\n    <loc>{DOMAIN}/directory-by-business.html</loc>\n    <lastmod>{DATE_SHORT}</lastmod>\n  </url>")
+print("  Generated directory-by-business.html with A/B profile comparison")
+
+# Directory 4: By Problem
+by_problem_links = ''.join([f"<tr><td><a href=\"/{q['country']}/en/problems/99-{q['slug']}.html\">{q['title']}</a></td><td style=\"color: #94a3b8;\">{q['country_name']}</td><td style=\"color: #94a3b8;\">{q['cap']}</td></tr>" for q in sorted(queries, key=lambda x: (x['country_name'], x['title']))])
+
+by_problem_html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse by Problem - Local Capability Index</title>
+  <meta name="description" content="Complete list of all 64+ consumer problem queries and natural language symptoms. Search the foundation of our AEO testing matrix.">
+  <link rel="canonical" href="{DOMAIN}/directory-by-problem.html">
+  <style>
+    body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f172a; color: #e0e0e0; line-height: 1.6; margin: 0; padding: 0; }}
+    .container {{ max-width: 1200px; margin: 0 auto; padding: 2rem; }}
+    h1 {{ color: #10b981; font-size: 2.5rem; margin: 0 0 1rem 0; }}
+    .breadcrumb {{ color: #64748b; font-size: 0.95rem; margin-bottom: 2rem; }}
+    .breadcrumb a {{ color: #10b981; text-decoration: none; }}
+    .breadcrumb a:hover {{ text-decoration: underline; }}
+    .stats {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 2rem 0; }}
+    .stat-box {{ background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 1rem; border-radius: 6px; text-align: center; }}
+    .stat-num {{ font-size: 2rem; color: #10b981; font-weight: bold; }}
+    .stat-label {{ color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem; }}
+    table {{ width: 100%; border-collapse: collapse; margin-top: 2rem; }}
+    th {{ text-align: left; padding: 0.75rem; background: rgba(16, 185, 129, 0.1); color: #10b981; border-bottom: 2px solid #10b981; }}
+    td {{ padding: 0.75rem; border-bottom: 1px solid #334155; }}
+    tr:hover {{ background: rgba(16, 185, 129, 0.05); }}
+    a {{ color: #10b981; text-decoration: none; }}
+    a:hover {{ color: #06b6d4; text-decoration: underline; }}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Home</a> / Browse by Problem</div>
+    <h1>Browse by Problem</h1>
+    <p style="color: #cbd5e1; font-size: 1.1rem; margin-bottom: 2rem;">Search all consumer problem queries and natural language symptoms across all jurisdictions</p>
+
+    <div class="stats">
+      <div class="stat-box">
+        <div class="stat-num">{len(queries)}</div>
+        <div class="stat-label">Total Problems</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">6</div>
+        <div class="stat-label">Jurisdictions</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">{len(queries)}</div>
+        <div class="stat-label">Problem Pages (99)</div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Problem Title</th>
+          <th>Country</th>
+          <th>Service Category</th>
+        </tr>
+      </thead>
+      <tbody>
+        {by_problem_links}
+      </tbody>
+    </table>
+
+    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #334155; text-align: center; color: #64748b;">
+      <p><a href="/">Return to Home</a> | <a href="/directory-by-country.html">By Country</a> | <a href="/directory-by-service.html">By Service</a> | <a href="/directory-by-business.html">By Business</a></p>
+    </div>
+  </div>
+</body>
+</html>"""
+
+with open("directory-by-problem.html", "w", encoding="utf-8") as f:
+    f.write(by_problem_html)
+sitemap_urls.append(f"  <url>\n    <loc>{DOMAIN}/directory-by-problem.html</loc>\n    <lastmod>{DATE_SHORT}</lastmod>\n  </url>")
+print("  Generated directory-by-problem.html with complete problem query index")
 
 print("="*60 + "\n")
 
