@@ -2,6 +2,98 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚠️ CRITICAL: DO NOT MODIFY HOMEPAGE OR DIRECTORY STRUCTURE
+
+**IMPORTANT:** The user is paying Netlify credits for every deployment. Do NOT modify:
+- `index.html` (homepage) - NEVER change unless explicitly requested
+- `directory-by-*.html` (directory pages) - NEVER change unless explicitly requested
+- Site structure/navigation - NEVER change unless explicitly requested
+
+The homepage and directories are preserved FOR SEO CONTEXT. They contain:
+- Original content structure
+- Original statistics (intentional for testing)
+- Original navigation links
+- Original company/problem references
+
+**ONLY modify:**
+1. Individual problem pages (add more context, solutions)
+2. Individual company pages (add more information, links)
+3. Company database (add more companies)
+4. Problem database (add more problems)
+5. Internal links WITHIN problem/company pages
+
+**DO NOT:**
+- Simplify the homepage
+- Remove directory pages
+- Change site structure
+- Modify navigation unless explicitly asked
+- Change statistics or content on homepage
+
+Each unauthorized change wastes Netlify credits on unnecessary deployments.
+
+## Permitted Changes (What You CAN Modify)
+
+### 1. Add More Problems
+- Edit `build_final.py` - add to PROBLEMS list
+- Run: `python build_final.py`
+- This regenerates problem pages only
+
+### 2. Add More Companies
+- Edit `generate_company_pages.py` - add to COMPANIES dict
+- Run: `python generate_company_pages.py`
+- This regenerates company pages only
+
+### 3. Expand Existing Problem Pages
+- Edit `/country/en/problems/99-*.html` directly
+- Add more context
+- Add more solution details
+- Update company links if needed
+
+### 4. Expand Existing Company Pages
+- Edit `/country/en/businesses/88-*.html` directly
+- Add more specializations
+- Add more details
+- Update problem links
+
+### 5. Fix 404 Errors
+- Only modify `_redirects` file
+- Only modify `404.html` error page
+- Do NOT touch homepage or directories
+
+### 6. Update Internal Links
+- Add links between problem pages and company pages
+- Add links between company pages and problem pages
+- Create knowledge graph connections
+- For SEO internal linking
+
+## Prohibited Changes (What You CANNOT Modify)
+
+❌ Homepage (index.html)
+❌ Directory pages (directory-by-*.html)
+❌ Site structure/navigation
+❌ Statistics on homepage
+❌ Company/problem references on homepage
+❌ Any page content that wasn't explicitly requested
+
+## File Structure (DO NOT CHANGE)
+
+```
+/
+├─ index.html (ORIGINAL - DO NOT TOUCH)
+├─ directory-by-country.html (ORIGINAL - DO NOT TOUCH)
+├─ directory-by-service.html (ORIGINAL - DO NOT TOUCH)
+├─ directory-by-business.html (ORIGINAL - DO NOT TOUCH)
+├─ directory-by-problem.html (ORIGINAL - DO NOT TOUCH)
+├─ _redirects (OK to modify for routing)
+├─ 404.html (OK to modify for error page)
+├─ build_final.py (OK to modify - add more problems/companies)
+├─ generate_company_pages.py (OK to modify - add more companies)
+├─ hkg/en/problems/99-*.html (OK to modify - expand content)
+├─ hkg/en/businesses/88-*.html (OK to modify - expand profiles)
+├─ flk/en/problems/99-*.html (OK to modify - expand content)
+└─ flk/en/businesses/88-*.html (OK to modify - expand profiles)
+```
+
 ## Project Overview
 
 Local Capability Index is a static site generator for Answer Engine Optimization (AEO) research. It tests how LLMs discover and rank content based on:
