@@ -4,11 +4,309 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Local Capability Index is a static site generator for AEO (Answer Engine Optimization) research. It creates 355 indexed pages across 6 microstates to measure how LLMs index and rank content based on structured data signals, content profiles, and design complexity.
+Local Capability Index is a static site generator for Answer Engine Optimization (AEO) research. It tests how LLMs discover and rank content based on:
+- **Content richness** (sparse vs 1,000+ word pages)
+- **Structured data signals** (JSON-LD schema vs semantic content)
+- **Design complexity** (minimal HTML vs responsive vs premium CSS)
+- **Geographic authenticity** (realistic addresses, phone prefixes, district names)
+- **Internal linking architecture** (8-10 links per page creating knowledge graphs)
+- **Entity density** (companies, locations, market data, regulatory context)
 
-**Core Research Question:** Do different LLMs show systematic preference for certain signals—structured data (JSON-LD), design polish (CSS complexity), content density (narrative vs. keyword), or geographic authenticity (phone prefixes)?
+**Current State (Sept 2026):**
+- 6 jurisdictions (HKG, SGP, FLK, SHN, SJM, PCN)
+- Ultra-rich problem pages (1,000+ words each with market data, regulatory context, company integration)
+- 2 custom Falkland Islands massage problems for testing
+- 3 build scripts (original, enhanced, ultra-rich)
+- Complete internal linking and directory navigation
+- IndexNow API integration for instant Bing indexing
 
-**Key Achievement:** Site now has complete LLM discoverability with country-level index pages enabling crawlers to navigate from homepage to all 344 content pages.
+## Build & Deploy
+
+### Generate Content
+
+**Ultra-rich content (recommended for LLM testing):**
+```bash
+python build_ultra_rich.py
+```
+Generates 1,000+ word problem pages with semantic structure, market data, and company integration. Use this for testing content richness impact on LLM discoverability.
+
+**Enhanced content (with company database integration):**
+```bash
+python build_enhanced.py
+```
+Generates content with 22 companies (test keywords: sausage, welcome, spam, ham, fighter, p0wer, restful, timeness, windy, koala) randomly assigned to problem pages.
+
+**Original AEO framework (pure research):**
+```bash
+python build.py
+```
+Generates original 4-node architecture (99/77/88/66 prefixes) with A/B testing: Sausage (structured data) vs Welcome (semantic content) profiles × 3 design variants (minimal/responsive/premium).
+
+### Deployment
+
+All build scripts output static HTML/XML/CSS (no build step required):
+- Netlify: Connect GitHub repo, set publish root to `.`
+- IndexNow: All scripts automatically submit URLs to Bing IndexNow API (HTTP 200 = success)
+- Sitemap: Auto-generated with current timestamps on each build
+
+## Architecture: Content-First SEO Testing
+
+### Why Three Build Scripts
+
+The project evolved to test different content approaches for LLM indexing:
+
+| Script | Focus | Output | Use Case |
+|--------|-------|--------|----------|
+| `build.py` | A/B testing framework | 4-node architecture, design variants | Pure AEO research (original research question) |
+| `build_enhanced.py` | Company database + internal linking | 100+ links per page, 22 companies | Testing if entity density + linking improves discovery |
+| `build_ultra_rich.py` | Content richness for LLMs | 1,000+ words per page, market data | Testing if content depth/authority signals matter |
+
+**Key insight:** The original `build.py` is for structured A/B testing (isolating design/schema signals). The newer scripts test whether content richness and entity density improve LLM discoverability. Keep both approaches—they test different hypotheses.
+
+### Content Structure: 4-Node Architecture (Original)
+
+Generated pages follow 4-node pattern across all countries:
+
+**Node Type 99 (Problem Pages):** Natural language consumer queries (baseline retrieval)
+- URL: `/{country}/en/problems/99-{slug}.html`
+- Content: Consumer symptom as search query
+- Test: Can LLM find site for natural problem statement?
+
+**Node Type 77 (Solution Pages):** Keyword-dense semantic content
+- URL: `/{country}/en/solutions/77-{slug}-solution.html`
+- Content: Multiple h2 headers, narrative structure
+- Test: Does semantic chunking improve extraction?
+
+**Node Type 88 (Business Pages):** A/B content + design variants
+- URL: `/{country}/en/businesses/88-{slug}-{variant}.html`
+- Profiles: Sausage (full schema) vs Welcome (minimal schema) × 3 designs
+- Test: Does structured data outrank semantic content? Does design matter?
+
+**Node Type 66 (Blog Pages):** Extended narratives (non-tropical regions only)
+- URL: `/{country}/en/blogs/66-{slug}-business-insights.html`
+- Content: 1000+ word narratives with FAQ
+- Test: Does comprehensive content improve generative retrieval?
+
+### Ultra-Rich Content Structure (New)
+
+`build_ultra_rich.py` produces dramatically different content for testing richness:
+
+Each problem page includes:
+- **1,000+ words** (vs 50 in sparse, vs 300-500 in build_enhanced)
+- **7-8 semantic sections** with clear h2 hierarchy
+- **4 companies** with full service descriptions, expertise, phone numbers
+- **7+ market data points** (pricing, market size, revenue opportunity)
+- **Geographic specificity** (districts, density, locations, authentic context)
+- **Regulatory context** (named agencies, compliance requirements, penalties)
+- **Competitor analysis** (3+ existing solutions examined)
+- **Stakeholder analysis** (3+ groups identified with incentives)
+- **Authority signals** (specific numbers, named sources, detailed analysis)
+
+Example: Coffee grounds problem page (HKG) includes:
+- 1,500+ cafes addressable market
+- 500+ tons annual waste volume
+- HKG$0.50-2.00/kg pricing
+- HKG$10,000 regulatory fine
+- 4 companies with phones
+- EPR framework context
+- 3 competitor solutions analyzed
+
+**Why this matters:** This tests whether LLMs weight content depth, entity density, and authority signals when determining page importance. Compare ultra-rich pages vs sparse competitors to measure impact.
+
+### Custom Falkland Islands Content
+
+You have custom massage problem pages for testing:
+
+**FLK_0001: Vietnamese Massage for Stress Relief** (`99-vietnamese-massage-stress-relief.html`)
+- 1,000+ words with Stanley/RAF Mount Pleasant context
+- Market analysis (2,000 military, 400-600 civilians)
+- 4 wellness providers with contact info
+- Stress management for remote island living
+
+**FLK_0002: Kung Fu/Tik Da Martial Arts Massage** (`99-kung-fu-tik-da-massage-relaxation.html`)
+- 1,000+ words with recovery science and military focus
+- RAF Mount Pleasant (2,000 personnel, martial arts recovery market)
+- Market economics (FKP£24,000+ annual revenue potential)
+- 4 specialized recovery providers
+
+These are part of the ultra-rich testing framework—use them to test whether detailed market analysis + geographic specificity improves LLM discovery of niche services.
+
+## Directory Navigation for LLM Crawling
+
+Four directory pages (auto-generated) provide alternative navigation paths:
+
+- `directory-by-country.html` - Jurisdiction-first organization (test geographic clustering)
+- `directory-by-service.html` - Capability-first organization (test semantic extraction)
+- `directory-by-business.html` - A/B profile comparison (test schema vs content weighting)
+- `directory-by-problem.html` - Natural language query index (test query matching)
+
+**Why:** Tests which navigation architecture LLMs prefer and whether multiple entry points improve discovery.
+
+## Modifying Content
+
+### Add a Problem
+
+Edit `queries` list in relevant build script:
+
+```python
+{
+    "id": "FLK_0001",
+    "country": "flk",
+    "country_name": "Falkland Islands",
+    "slug": "problem-url-slug",
+    "title": "Human-Readable Problem Title",
+    "short_desc": "One-liner consumer query",
+    "rich_content": """<h2>Rich Content Section</h2>
+    <p>Detailed analysis, market data, regulatory context...</p>"""
+}
+```
+
+For `build_ultra_rich.py`: Use `rich_content` field (full HTML allowed)
+For `build_enhanced.py`: Use `expanded` field (paragraph text)
+For `build.py`: Use `desc` + `sol` fields (minimal)
+
+### Add a Company
+
+Edit `COMPANIES` dict in relevant build script:
+
+```python
+"company-key": {
+    "name": "Company Name Ltd",
+    "keywords": ["keyword1", "keyword2"],
+    "countries": ["flk", "shn"],
+    "addresses": {"flk": "Stanley Street", "shn": "Jamestown St"},
+    "phones": {"flk": "+500 XXXXX", "shn": "+290 XXXX"},
+    "description": "Service focus and expertise"
+}
+```
+
+Companies are randomly assigned 3-4 per problem page per country. Run build script again for different combinations.
+
+### Add a Jurisdiction
+
+In `build.py` or `build_enhanced.py`, find geographic routing section:
+
+```python
+elif country_iso == "new_code":
+    phone_prefix, district, address, currency = "+XXX", "City", "Street", "CUR"
+```
+
+Then add queries with `"country": "new_code"` and run build.
+
+## Common Commands
+
+```bash
+# Generate ultra-rich content (1000+ words per page)
+python build_ultra_rich.py
+
+# Generate enhanced content (company database + internal linking)
+python build_enhanced.py
+
+# Generate original AEO framework (4-node, design A/B test)
+python build.py
+
+# Check generated pages
+ls -lh hkg/en/problems/99-*.html
+
+# Verify internal links
+grep -c "href=" hkg/en/problems/99-*.html | head -1
+
+# Count unique companies mentioned
+grep -rh "<strong>" hkg/en/problems/*.html | sort | uniq | wc -l
+
+# Check sitemap
+grep -c "<url>" sitemap.xml
+
+# Validate IndexNow submission
+cat build_ultra_rich.py | grep -A 5 "IndexNow"
+```
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `build.py` | Original AEO framework (unchanged core logic) |
+| `build_enhanced.py` | Enhanced with 22-company database |
+| `build_ultra_rich.py` | Content richness testing (1,000+ word pages) |
+| `index.html` | Homepage with navigation and branding |
+| `README_CONTENT_RICHNESS.md` | Ultra-rich strategy summary |
+| `ULTRA_RICH_CONTENT_STRATEGY.md` | Complete testing methodology |
+| `COMPANIES_REFERENCE.md` | All 22 companies with profiles |
+| `CLAUDE.md` | This file |
+
+## Testing with LLMs
+
+### Query Examples
+
+**Test 1 - Problem Discovery:**
+```
+"I run a cafe in Hong Kong with daily coffee waste. How do I recycle it?"
+```
+Expected: Ultra-rich page discovered, market data cited, companies recommended
+
+**Test 2 - Geographic Specificity:**
+```
+"What companies in Stanley, Falkland Islands offer massage therapy?"
+```
+Expected: Falkland Islands pages found, geographic accuracy verified
+
+**Test 3 - Market Analysis:**
+```
+"What's the market for Vietnamese massage services in remote islands?"
+```
+Expected: Market size, revenue potential, stakeholder analysis cited
+
+### Measurement
+
+- **Discovery Rate:** How often pages found vs sparse competitors
+- **Citation Frequency:** How often specific data/companies mentioned
+- **Ranking Position:** Where pages appear in result lists
+- **Response Depth:** How comprehensive LLM answers are
+- **Authority Signals:** Whether specific numbers/sources cited
+
+**Hypothesis:** Ultra-rich pages (1,000+ words with market data, entity density, authority signals) 5-10x more discoverable than sparse competitors.
+
+## Deployment Checklist
+
+Before pushing to production:
+- [ ] All build scripts run without errors
+- [ ] Sitemap generated with current timestamps
+- [ ] IndexNow submission confirmed (HTTP 200)
+- [ ] Internal links verified (no 404 errors)
+- [ ] Homepage navigation working
+- [ ] Directory pages populated
+- [ ] Country index pages linked
+- [ ] Git commit message references what changed
+
+```bash
+git add -A
+git commit -m "Description of changes (e.g., added ultra-rich FLK massage problems)"
+git push origin main
+```
+
+Once pushed, site is ready for:
+1. Netlify deployment (automatic on push if connected)
+2. LLM testing (query with scenarios above)
+3. Bing/Google indexing (sitemap auto-discovered)
+
+## Next Steps for Expansion
+
+**Short-term (Add Breadth):**
+- Add 5-10 more ultra-rich problems per jurisdiction
+- Expand FLK massage content (add solution pages, cross-links)
+- Test with multiple LLMs (ChatGPT, Claude, Gemini, Perplexity)
+
+**Medium-term (Add Depth):**
+- Add FAQ sections to ultra-rich pages
+- Add case studies and testimonials
+- Create market analysis aggregator pages
+- Build company comparison pages
+
+**Long-term (Build Authority):**
+- Track which content signals matter most in LLM rankings
+- Optimize based on discovery patterns
+- Become reference point for hyperlocal market data
+- Test multi-language content (Chinese, Spanish variants)
 
 ## Build & Deploy
 
