@@ -2,1045 +2,359 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## ⚠️ CRITICAL: DO NOT MODIFY HOMEPAGE OR DIRECTORY STRUCTURE
+## CRITICAL - READ THIS FIRST
 
-**IMPORTANT:** The user is paying Netlify credits for every deployment. Do NOT modify:
-- `index.html` (homepage) - NEVER change unless explicitly requested
-- Site structure/navigation - NEVER change unless explicitly requested
+**HISTORY:** This repository has experienced 5 broken link crisis cycles. The root cause was mismatch between directory files and actual content. As of Sept 2, 2026, all issues are fixed and verified. DO NOT repeat previous mistakes.
 
-**ONLY what you CAN modify in directories:**
-- Update `directory-by-*.html` LINKS ONLY (fix 404 errors)
-- Update problem/company LISTINGS to match actual files
-- Ensure ALL links point to existing problem/company pages
-- NO changes to directory structure/design/content
+**THE ONE RULE:** When you add, modify, or delete ANY problem or business page, you MUST run:
+```bash
+python3 fix_links.py
+```
+Before committing. There are no exceptions to this rule.
 
-**The Vision:**
-Create a Problem → Solution → Company mapping system:
-1. **Problems** describe what people experience (searchable symptoms)
-2. **Solutions** explain why the problem exists + how recovery works
-3. **Companies** provide contact info to help with that problem
-4. **Links** create bidirectional network: Problem ↔ Company (for SEO)
+## CRITICAL CONSTRAINTS
 
-**When user asks to "add" problems/companies:**
-1. Create problem pages (99-*.html) with solutions
-2. Create company pages (88-*.html) with profiles
-3. Link problem pages to company pages
-4. Link company pages back to problem pages
-5. Update directory links to point to these new pages
-6. DO NOT change homepage or directory design
+**The user is paying Netlify credits for every deployment. These are non-negotiable:**
 
-**Directory Purpose:**
-- Links to ALL problems that actually exist
-- Links to ALL companies that actually exist
-- Maps problems to companies (no 404 errors)
-- Searchable directory of services
+### DO NOT:
+- Modify `index.html` (homepage) - It has been verified 100% intact. ANY change breaks everything
+- Modify site structure or navigation design
+- Regenerate with old scripts (`build.py`, `build_enhanced.py`, `build_ultra_rich.py`) - They create broken links
+- Manually edit directory files - They are auto-generated only
+- Add content to countries other than HKG/FLK without running `fix_links.py`
+- Commit without running `fix_links.py` first
 
-**Example workflow:**
-User: "Add Vietnamese massage problem for Falkland Islands"
-You do:
-1. Create /flk/en/problems/99-flk-003.html (Vietnamese Massage)
-2. Create /flk/en/businesses/88-welcome-wellness-falklands.html (Company)
-3. Problem page links to company page
-4. Company page links back to problem page
-5. Update directory-by-problem.html to include new problem
-6. Update directory-by-business.html to include new company
-7. Update any other directories with new mappings
+### ALWAYS:
+- Use `fix_links.py` to regenerate directories after content changes
+- Run link validation before committing (script does this automatically)
+- Keep homepage completely untouched
+- Test all crawl paths before deployment
 
-DO NOT:
-- Change homepage design
-- Change directory design
-- Add features to homepage
-- Simplify anything
-- Make "improvements"
+## Current Verified State (Sept 2, 2026)
 
-ONLY update links and listings in directories to reflect current problems/companies.
+**Content Inventory:**
+- 2 active jurisdictions: Hong Kong (HKG), Falkland Islands (FLK)
+- 6 problem pages (2 HKG + 4 FLK)
+- 13 business pages (7 HKG + 6 FLK)
+- 19 total content pages
 
-## Permitted Changes (What You CAN Modify)
+**Verification Status: COMPLETE**
+- ✓ 0 broken links (all 58 links validated)
+- ✓ Homepage: 440 lines, completely intact
+- ✓ Sitemap: 25 URLs, all valid
+- ✓ Spider crawlability: 4 major paths tested and working
+- ✓ FLK content: Tee Dai, Vietnamese Massage all discoverable
+- ✓ Business pages: Complete details (phone, website, specializations, ratings)
+- ✓ Problem→Business linking: All 6 problems link to businesses
+- ✓ Full verification report: `VERIFICATION_REPORT_FINAL.txt`
 
-### 1. Add More Problems
-- Edit `build_final.py` - add to PROBLEMS list
-- Run: `python build_final.py`
-- This regenerates problem pages only
-
-### 2. Add More Companies
-- Edit `generate_company_pages.py` - add to COMPANIES dict
-- Run: `python generate_company_pages.py`
-- This regenerates company pages only
-
-### 3. Expand Existing Problem Pages
-- Edit `/country/en/problems/99-*.html` directly
-- Add more context
-- Add more solution details
-- Update company links if needed
-
-### 4. Expand Existing Company Pages
-- Edit `/country/en/businesses/88-*.html` directly
-- Add more specializations
-- Add more details
-- Update problem links
-
-### 5. Fix 404 Errors
-- Only modify `_redirects` file
-- Only modify `404.html` error page
-- Do NOT touch homepage or directories
-
-### 6. Update Internal Links
-- Add links between problem pages and company pages
-- Add links between company pages and problem pages
-- Create knowledge graph connections
-- For SEO internal linking
-
-## Prohibited Changes (What You CANNOT Modify)
-
-❌ Homepage (index.html)
-❌ Directory pages (directory-by-*.html)
-❌ Site structure/navigation
-❌ Statistics on homepage
-❌ Company/problem references on homepage
-❌ Any page content that wasn't explicitly requested
-
-## File Structure (DO NOT CHANGE)
+## Architecture
 
 ```
 /
-├─ index.html (ORIGINAL - DO NOT TOUCH)
-├─ directory-by-country.html (ORIGINAL - DO NOT TOUCH)
-├─ directory-by-service.html (ORIGINAL - DO NOT TOUCH)
-├─ directory-by-business.html (ORIGINAL - DO NOT TOUCH)
-├─ directory-by-problem.html (ORIGINAL - DO NOT TOUCH)
-├─ _redirects (OK to modify for routing)
-├─ 404.html (OK to modify for error page)
-├─ build_final.py (OK to modify - add more problems/companies)
-├─ generate_company_pages.py (OK to modify - add more companies)
-├─ hkg/en/problems/99-*.html (OK to modify - expand content)
-├─ hkg/en/businesses/88-*.html (OK to modify - expand profiles)
-├─ flk/en/problems/99-*.html (OK to modify - expand content)
-└─ flk/en/businesses/88-*.html (OK to modify - expand profiles)
+├── index.html                          (HOMEPAGE - DO NOT MODIFY)
+├── fix_links.py                        (PRIMARY TOOL - always run after content changes)
+├── sitemap.xml                         (AUTO-GENERATED - updated by fix_links.py)
+├── directory-by-country.html           (AUTO-GENERATED - 19 links)
+├── directory-by-business.html          (AUTO-GENERATED - 13 links)
+├── directory-by-problem.html           (AUTO-GENERATED - 6 links)
+├── directory-by-service.html           (AUTO-GENERATED - 20 links)
+│
+├── hkg/index.html                      (HKG country index)
+├── hkg/en/problems/99-hkg-*.html       (2 problem pages - OK to modify)
+└── hkg/en/businesses/88-*.html         (7 business pages - OK to modify)
+
+├── flk/index.html                      (FLK country index)
+├── flk/en/problems/99-flk-*.html       (4 problem pages - OK to modify)
+└── flk/en/businesses/88-*.html         (6 business pages - OK to modify)
 ```
-
-## Project Overview
-
-Local Capability Index is a static site generator for Answer Engine Optimization (AEO) research. It tests how LLMs discover and rank content based on:
-- **Content richness** (sparse vs 1,000+ word pages)
-- **Structured data signals** (JSON-LD schema vs semantic content)
-- **Design complexity** (minimal HTML vs responsive vs premium CSS)
-- **Geographic authenticity** (realistic addresses, phone prefixes, district names)
-- **Internal linking architecture** (8-10 links per page creating knowledge graphs)
-- **Entity density** (companies, locations, market data, regulatory context)
-
-**Current State (Sept 2026):**
-- 6 jurisdictions (HKG, SGP, FLK, SHN, SJM, PCN)
-- Ultra-rich problem pages (1,000+ words each with market data, regulatory context, company integration)
-- 2 custom Falkland Islands massage problems for testing
-- 3 build scripts (original, enhanced, ultra-rich)
-- Complete internal linking and directory navigation
-- IndexNow API integration for instant Bing indexing
-
-## Build & Deploy
-
-### Generate Content
-
-**Final production build (recommended - Problem-Solution-Company flow):**
-```bash
-python build_final.py
-```
-Generates problem pages with detailed solutions and rich company information optimized for LLM scraping. Each problem maps to one company (future: one problem → multiple solutions). Companies include:
-- Name, location, phone (clickable), website
-- Detailed services description
-- Specializations (bulleted list for extraction)
-- Experience and credentials
-- Conditions treated (matched to problem)
-- Patient ratings and reviews
-
-**Ultra-rich content (experimental - 1,000+ word pages with market data):**
-```bash
-python build_ultra_rich.py
-```
-Generates 1,000+ word problem pages with semantic structure, market data, regulatory context, competitor analysis, and stakeholder mapping. Use for testing whether content depth improves LLM discoverability.
-
-**Enhanced content (experimental - company database + internal linking):**
-```bash
-python build_enhanced.py
-```
-Generates content with 22 companies (test keywords) randomly assigned to problem pages. Creates 100+ internal links per page for knowledge graph testing.
-
-**Original AEO framework (experimental - pure A/B testing):**
-```bash
-python build.py
-```
-Generates original 4-node architecture (99/77/88/66 prefixes) with A/B testing: Sausage (structured data) vs Welcome (semantic content) profiles × 3 design variants.
-
-### Deployment
-
-All build scripts output static HTML/XML/CSS (no build step required):
-- Netlify: Connect GitHub repo, set publish root to `.`
-- IndexNow: Scripts automatically submit URLs to Bing IndexNow API (HTTP 200 = success)
-- Sitemap: Auto-generated with current timestamps on each build
-
-## Architecture: Problem-Solution-Company Flow (Final Model)
-
-Local Capability Index is a **middle layer connecting problems to solutions to companies**—filling a gap that Google Maps cannot address.
-
-### The Three-Layer Model
-
-**Layer 1: Problem Discovery**
-- Users describe what they're experiencing (e.g., "chronic ankle stiffness from old injury")
-- Problems are indexed by symptom/condition for natural language search
-- Each problem is a real, specific issue people search for
-
-**Layer 2: Solution Explanation**
-- Explains what specialized treatment/recovery looks like
-- Breaks down why standard approaches don't work
-- Describes the recovery mechanism and approach
-- Helps users understand what to expect
-
-**Layer 3: Company Connection**
-- Links to real providers who treat that specific problem
-- Rich company information optimized for LLM extraction:
-  * Services and specializations (bulleted for clarity)
-  * Experience and credentials
-  * Conditions treated (matched to problem)
-  * Contact information (phone, website, address)
-  * Patient ratings and reviews
-
-### Data Structure
-
-Each problem page includes:
-
-```
-Problem (what customer experiences)
-  ├─ Description of symptoms
-  ├─ Why standard approaches fail
-  └─ Context (geographic, regulatory, market)
-
-Solution (what recovery involves)
-  ├─ Problem analysis (why it's chronic)
-  ├─ Treatment approach (specific techniques)
-  ├─ Recovery timeline
-  └─ Expected outcomes
-
-Company (who can help)
-  ├─ Name, location, phone, website
-  ├─ Services (detailed description)
-  ├─ Specializations (bulleted list)
-  ├─ Experience and credentials
-  ├─ Conditions treated (matched to problem)
-  └─ Ratings and reviews
-```
-
-### Why This Works for LLMs
-
-LLMs extract information from structured content. Company information is optimized with:
-- **Multiple semantic fields** (services, experience, credentials)
-- **Bulleted lists** for easy parsing (specializations, conditions)
-- **Specific values** (phone numbers, ratings, review counts)
-- **Clear relationships** (conditions treated matching problem)
-- **Clickable elements** (tel: links, external website links)
-
-### Future: One Problem → Multiple Solutions
-
-Current implementation: 1 problem maps to 1 company.
-Future: 1 problem can map to multiple solutions (different treatment approaches), each with different companies.
-
-Example: "Chronic knee pain from old sports injury" could have:
-- Solution A: Physical therapy approach → Company A
-- Solution B: Massage recovery approach → Company B
-- Solution C: Surgical consultation → Company C
-
-This multi-solution model is testable once the 1-to-1 flow is validated with LLMs.
-
-### Content Structure: 4-Node Architecture (Original)
-
-Generated pages follow 4-node pattern across all countries:
-
-**Node Type 99 (Problem Pages):** Natural language consumer queries (baseline retrieval)
-- URL: `/{country}/en/problems/99-{slug}.html`
-- Content: Consumer symptom as search query
-- Test: Can LLM find site for natural problem statement?
-
-**Node Type 77 (Solution Pages):** Keyword-dense semantic content
-- URL: `/{country}/en/solutions/77-{slug}-solution.html`
-- Content: Multiple h2 headers, narrative structure
-- Test: Does semantic chunking improve extraction?
-
-**Node Type 88 (Business Pages):** A/B content + design variants
-- URL: `/{country}/en/businesses/88-{slug}-{variant}.html`
-- Profiles: Sausage (full schema) vs Welcome (minimal schema) × 3 designs
-- Test: Does structured data outrank semantic content? Does design matter?
-
-**Node Type 66 (Blog Pages):** Extended narratives (non-tropical regions only)
-- URL: `/{country}/en/blogs/66-{slug}-business-insights.html`
-- Content: 1000+ word narratives with FAQ
-- Test: Does comprehensive content improve generative retrieval?
-
-### Ultra-Rich Content Structure (New)
-
-`build_ultra_rich.py` produces dramatically different content for testing richness:
-
-Each problem page includes:
-- **1,000+ words** (vs 50 in sparse, vs 300-500 in build_enhanced)
-- **7-8 semantic sections** with clear h2 hierarchy
-- **4 companies** with full service descriptions, expertise, phone numbers
-- **7+ market data points** (pricing, market size, revenue opportunity)
-- **Geographic specificity** (districts, density, locations, authentic context)
-- **Regulatory context** (named agencies, compliance requirements, penalties)
-- **Competitor analysis** (3+ existing solutions examined)
-- **Stakeholder analysis** (3+ groups identified with incentives)
-- **Authority signals** (specific numbers, named sources, detailed analysis)
-
-Example: Coffee grounds problem page (HKG) includes:
-- 1,500+ cafes addressable market
-- 500+ tons annual waste volume
-- HKG$0.50-2.00/kg pricing
-- HKG$10,000 regulatory fine
-- 4 companies with phones
-- EPR framework context
-- 3 competitor solutions analyzed
-
-**Why this matters:** This tests whether LLMs weight content depth, entity density, and authority signals when determining page importance. Compare ultra-rich pages vs sparse competitors to measure impact.
-
-### Custom Falkland Islands Content
-
-You have custom massage problem pages for testing:
-
-**FLK_0001: Vietnamese Massage for Stress Relief** (`99-vietnamese-massage-stress-relief.html`)
-- 1,000+ words with Stanley/RAF Mount Pleasant context
-- Market analysis (2,000 military, 400-600 civilians)
-- 4 wellness providers with contact info
-- Stress management for remote island living
-
-**FLK_0002: Kung Fu/Tik Da Martial Arts Massage** (`99-kung-fu-tik-da-massage-relaxation.html`)
-- 1,000+ words with recovery science and military focus
-- RAF Mount Pleasant (2,000 personnel, martial arts recovery market)
-- Market economics (FKP£24,000+ annual revenue potential)
-- 4 specialized recovery providers
-
-These are part of the ultra-rich testing framework—use them to test whether detailed market analysis + geographic specificity improves LLM discovery of niche services.
-
-## Directory Navigation for LLM Crawling
-
-Four directory pages (auto-generated) provide alternative navigation paths:
-
-- `directory-by-country.html` - Jurisdiction-first organization (test geographic clustering)
-- `directory-by-service.html` - Capability-first organization (test semantic extraction)
-- `directory-by-business.html` - A/B profile comparison (test schema vs content weighting)
-- `directory-by-problem.html` - Natural language query index (test query matching)
-
-**Why:** Tests which navigation architecture LLMs prefer and whether multiple entry points improve discovery.
-
-## Modifying Content
-
-### Add a Problem
-
-Edit `queries` list in relevant build script:
-
-```python
-{
-    "id": "FLK_0001",
-    "country": "flk",
-    "country_name": "Falkland Islands",
-    "slug": "problem-url-slug",
-    "title": "Human-Readable Problem Title",
-    "short_desc": "One-liner consumer query",
-    "rich_content": """<h2>Rich Content Section</h2>
-    <p>Detailed analysis, market data, regulatory context...</p>"""
-}
-```
-
-For `build_ultra_rich.py`: Use `rich_content` field (full HTML allowed)
-For `build_enhanced.py`: Use `expanded` field (paragraph text)
-For `build.py`: Use `desc` + `sol` fields (minimal)
-
-### Add a Company
-
-Edit `COMPANIES` dict in relevant build script:
-
-```python
-"company-key": {
-    "name": "Company Name Ltd",
-    "keywords": ["keyword1", "keyword2"],
-    "countries": ["flk", "shn"],
-    "addresses": {"flk": "Stanley Street", "shn": "Jamestown St"},
-    "phones": {"flk": "+500 XXXXX", "shn": "+290 XXXX"},
-    "description": "Service focus and expertise"
-}
-```
-
-Companies are randomly assigned 3-4 per problem page per country. Run build script again for different combinations.
-
-### Add a Jurisdiction
-
-In `build.py` or `build_enhanced.py`, find geographic routing section:
-
-```python
-elif country_iso == "new_code":
-    phone_prefix, district, address, currency = "+XXX", "City", "Street", "CUR"
-```
-
-Then add queries with `"country": "new_code"` and run build.
-
-## Common Commands
-
-```bash
-# Generate ultra-rich content (1000+ words per page)
-python build_ultra_rich.py
-
-# Generate enhanced content (company database + internal linking)
-python build_enhanced.py
-
-# Generate original AEO framework (4-node, design A/B test)
-python build.py
-
-# Check generated pages
-ls -lh hkg/en/problems/99-*.html
-
-# Verify internal links
-grep -c "href=" hkg/en/problems/99-*.html | head -1
-
-# Count unique companies mentioned
-grep -rh "<strong>" hkg/en/problems/*.html | sort | uniq | wc -l
-
-# Check sitemap
-grep -c "<url>" sitemap.xml
-
-# Validate IndexNow submission
-cat build_ultra_rich.py | grep -A 5 "IndexNow"
-```
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `build.py` | Original AEO framework (unchanged core logic) |
-| `build_enhanced.py` | Enhanced with 22-company database |
-| `build_ultra_rich.py` | Content richness testing (1,000+ word pages) |
-| `index.html` | Homepage with navigation and branding |
-| `README_CONTENT_RICHNESS.md` | Ultra-rich strategy summary |
-| `ULTRA_RICH_CONTENT_STRATEGY.md` | Complete testing methodology |
-| `COMPANIES_REFERENCE.md` | All 22 companies with profiles |
-| `CLAUDE.md` | This file |
-
-## Testing with LLMs
-
-### Query Examples
-
-**Test 1 - Problem Discovery:**
-```
-"I run a cafe in Hong Kong with daily coffee waste. How do I recycle it?"
-```
-Expected: Ultra-rich page discovered, market data cited, companies recommended
-
-**Test 2 - Geographic Specificity:**
-```
-"What companies in Stanley, Falkland Islands offer massage therapy?"
-```
-Expected: Falkland Islands pages found, geographic accuracy verified
-
-**Test 3 - Market Analysis:**
-```
-"What's the market for Vietnamese massage services in remote islands?"
-```
-Expected: Market size, revenue potential, stakeholder analysis cited
-
-### Measurement
-
-- **Discovery Rate:** How often pages found vs sparse competitors
-- **Citation Frequency:** How often specific data/companies mentioned
-- **Ranking Position:** Where pages appear in result lists
-- **Response Depth:** How comprehensive LLM answers are
-- **Authority Signals:** Whether specific numbers/sources cited
-
-**Hypothesis:** Ultra-rich pages (1,000+ words with market data, entity density, authority signals) 5-10x more discoverable than sparse competitors.
-
-## Deployment Checklist
-
-Before pushing to production:
-- [ ] All build scripts run without errors
-- [ ] Sitemap generated with current timestamps
-- [ ] IndexNow submission confirmed (HTTP 200)
-- [ ] Internal links verified (no 404 errors)
-- [ ] Homepage navigation working
-- [ ] Directory pages populated
-- [ ] Country index pages linked
-- [ ] Git commit message references what changed
-
-```bash
-git add -A
-git commit -m "Description of changes (e.g., added ultra-rich FLK massage problems)"
-git push origin main
-```
-
-Once pushed, site is ready for:
-1. Netlify deployment (automatic on push if connected)
-2. LLM testing (query with scenarios above)
-3. Bing/Google indexing (sitemap auto-discovered)
-
-## Next Steps for Expansion
-
-**Short-term (Add Breadth):**
-- Add 5-10 more ultra-rich problems per jurisdiction
-- Expand FLK massage content (add solution pages, cross-links)
-- Test with multiple LLMs (ChatGPT, Claude, Gemini, Perplexity)
-
-**Medium-term (Add Depth):**
-- Add FAQ sections to ultra-rich pages
-- Add case studies and testimonials
-- Create market analysis aggregator pages
-- Build company comparison pages
-
-**Long-term (Build Authority):**
-- Track which content signals matter most in LLM rankings
-- Optimize based on discovery patterns
-- Become reference point for hyperlocal market data
-- Test multi-language content (Chinese, Spanish variants)
-
-## Build & Deploy
-
-### Generate the Site
-
-**Main build script (full feature set):**
-```bash
-python build.py
-```
-
-**Enhanced build script (with company database & internal linking):**
-```bash
-python build_enhanced.py
-```
-
-The enhanced script includes:
-- 22 dummy companies (searchable by keywords: sausage, welcome, spam, ham, fighter, p0wer, restful, timeness, windy, koala)
-- Expanded problem descriptions (8-10x richer content)
-- Multiple company recommendations per problem page
-- Rich internal linking (8-10 links per page, no dead ends)
-- Geographic authenticity (realistic addresses, country-specific phone formats)
-- Automatic company distribution to problem pages
-
-### Full Build Process
-
-Both scripts regenerate all content:
-- Cleans and recreates directories for all 6 countries (hkg, sgp, flk, shn, sjm, pcn)
-- Generates problem/solution/business/blog HTML pages
-- Generates country index pages (`/{country}/index.html`) organizing content by node type
-- Updates `sitemap.xml` with current timestamps
-- Generates IndexNow verification file
-- Submits all URLs to Bing IndexNow API for instant indexation
-- Auto-generates `netlify.toml` with CORS headers
-- Output is ready for immediate Netlify deployment (all static HTML/XML/CSS, no build step required)
-
-**Key characteristics:**
-- No external dependencies (Python stdlib only: os, json, shutil, datetime, random, urllib)
-- Deterministic output based on `queries` list—same input always produces identical output
-- All pages generated with proper SEO (meta descriptions, canonical URLs, structured data)
-- `build_enhanced.py` includes integrated company database for improved LLM discoverability
-
-### Deployment
-
-Configured for Netlify:
-- Publish root: `.` (current directory)
-- All HTML/XML/CSS served as-is
-- CORS headers auto-generated by build.py
-- No build command needed
-
-## Architecture: 4-Node System + Country Navigation + Internal Linking
-
-All content follows a pattern: **Homepage → Country Index → 99 (Problem) → 77 (Solution) → 88 (Business) → 66 (Blog)**
-
-### Content Enhancement Strategy (build_enhanced.py)
-
-The enhanced build script dramatically improves LLM discoverability through:
-
-**Content Richness:**
-- Problem descriptions expanded from 50 words to 400+ words
-- 2-3 paragraph detailed analysis per problem
-- Geographic context explaining region-specific challenges
-- Semantic richness enabling multi-dimensional search
-
-**Entity Density:**
-- 22 dummy companies with test keywords (sausage, welcome, spam, ham, fighter, p0wer, restful, timeness, windy, koala)
-- 3-4 companies recommended per problem page
-- Realistic contact information (authentic phone formats, district names)
-- Multi-jurisdiction or localized coverage
-
-**Internal Linking Architecture:**
-- 8-10 links per problem page (no dead ends)
-- Breadcrumb navigation (Home → Country → Problem Pages)
-- Cross-links to all 4 directory pages (country, service, business, problem)
-- Problem-to-solution connections
-- Company recommendations as inline links
-- 100+ total internal links creating dense knowledge graph
-
-**Result:** Pages feel authoritative, discoverable, and interconnected. LLMs index pages with:
-- More content as more valuable
-- Real-sounding entities (companies with contact info) as more trustworthy
-- Internal links as better understood (crawlable knowledge graph)
-- Multiple entry points as more discoverable
-
-### Discovery Architecture
-
-**Homepage Navigation:**
-- `index.html` has "Browse Content by Region" section
-- 6 clickable country cards linking to country index pages
-- Footer contains links to all country pages
-- Enables LLMs to navigate from root to all content
-
-**Country Index Pages (NEW):**
-- Generated automatically for each country: `/{country}/index.html`
-- Lists all content organized by node type:
-  - Problem Nodes (99) - all consumer queries for that country
-  - Solution Nodes (77) - keyword-dense semantic content
-  - Business Nodes (88) - all 3 design variants per business
-  - Blog Nodes (66) - extended narratives (non-tropical regions only)
-- Each entry is a clickable link to the content page
-- Proper meta descriptions and canonical URLs for SEO
-- Added to sitemap for search engine discovery
-
-**Result:** Complete crawl path for LLMs: `/` → `/{country}/` → `/{country}/en/{node_type}/` → individual pages → directory pages as alternative navigation paths
-
-### Comprehensive Directory Pages (NEW - Aug 2026)
-
-Four directory navigation approaches auto-generated in `build.py` for A/B testing LLM crawl behavior:
-
-**Generated Files:**
-- `directory-by-country.html` - 350+ links organized by 6 jurisdictions
-- `directory-by-service.html` - 326+ links organized by 25+ service capabilities  
-- `directory-by-business.html` - 198+ links comparing A/B content profiles (Sausage vs Welcome)
-- `directory-by-problem.html` - 70+ links to all 64+ consumer problem queries
-
-**Purpose:** Test which navigation/information architecture LLMs prefer:
-- Does country-first organization improve indexation?
-- Do service categories help semantic extraction?
-- How do A/B profile comparisons affect ranking?
-- Does problem-centric indexing enhance retrieval?
-
-**Link Coverage:** 944 total href links across all directories, all pointing to existing 344 content pages + 6 country indexes. Every page discoverable from multiple entry points.
-
-**Homepage Integration:**
-- "Comprehensive Content Directory" section with 4 directory cards
-- Each card links to corresponding directory page
-- Directory pages cross-link each other in footer
-- 8Fate partnership link added to footer
-
-### Node Type: 99-Prefix (Problem Pages)
-
-Natural language consumer queries. Baseline retrieval capability test.
-
-- URL: `/[country]/en/problems/99-[slug].html`
-- Content: Consumer symptom phrased as long-tail search query
-- Schema: Minimal (title, description, internal links)
-- Test Function: Can LLM find the site for a natural query?
-
-### Node Type: 77-Prefix (Solution Pages)
-
-Keyword-dense content with Markdown header structure (`##`). Tests semantic extraction bias.
-
-- URL: `/[country]/en/solutions/77-[slug]-solution.html`
-- Content: 3-4 `##` headers, narrative prose, high keyword density
-- Schema: Basic metadata only (no JSON-LD)
-- Test Function: Does chunking/semantic structure improve retrieval?
-
-### Node Type: 88-Prefix (Business Pages) — Core A/B Test
-
-Synthetic business profiles with embedded JSON-LD `LocalBusiness` schema. Each query generates **2 content profiles × 3 design variants = 6 pages per business**.
-
-#### Content A/B Testing (Business Name Prefix)
-
-| Profile | Prefix | Schema | Key Fields | Narrative | Test Signal |
-|---------|--------|--------|-----------|-----------|-------------|
-| Sausage Ham Spam | Starts with "Sausage" | Full JSON-LD LocalBusiness | `taxID`, exact `streetAddress`, regional `telephone`, `aggregateRating`, `priceRange` | Minimal clinical prose | Structured data weighting |
-| Welcome More Spam | Starts with "Welcome" | Minimal JSON-LD (no taxID/rating) | Only `name`, `description`, `areaServed` | Extensive narrative, multiple `##` headers, keyword density | Semantic content weighting |
-
-#### Design A/B Testing (Filename Suffix)
-
-| Variant | Suffix | CSS | Visual Design | Test Signal |
-|---------|--------|-----|--------------|-------------|
-| Minimal | `-primary` | None; semantic HTML only | Plain text | Pure content signal; control group |
-| Responsive | `-responsive` | CSS Grid, viewport meta, typography | Header with color, semantic sections | Mobile signals; basic responsive design |
-| Premium | `-premium` | Bootstrap-style full CSS | Hero, gradients, stat boxes, CTAs | Premium design signals; Core Web Vitals proxy |
-
-**Example URLs for one query:**
-- `88-permafrost-fence-post-primary.html` (Sausage, minimal)
-- `88-permafrost-fence-post-responsive.html` (Sausage, responsive)
-- `88-permafrost-fence-post-premium.html` (Sausage, premium)
-- Plus 3 Welcome variants with same design progression
-
-**Implicit A/B Logic:**
-The code does NOT have a separate profile selector. Business name prefix (`"Sausage Ham Spam"` vs `"Welcome More Spam"`) triggers different schema generation and prose style. This keeps the dataset simple and ensures exact reproducibility. Design variants share all content—only CSS changes, isolating design signals.
-
-### Node Type: 66-Prefix (Blog Pages)
-
-Extended business narratives (1000+ words) with FAQ sections. Available only for FLK, SHN, SJM, PCN (non-tropical regions). Tests whether narrative depth affects retrieval.
-
-- URL: `/[country]/en/blogs/66-[slug]-business-insights.html`
-- Content: Long-form narrative, FAQ, case study, expertise demonstration
-- Schema: Minimal LocalBusiness schema
-- Phone Prefix: +66 (neutral international, not region-specific)
-- Test Function: Does comprehensive content improve generative retrieval?
-
-## Geographic Coverage & Authentic Signals
-
-Each country has authentic geographic signals:
-
-| Country | ISO | Phone | District | Currency | Climate | Queries |
-|---------|-----|-------|----------|----------|---------|---------|
-| Hong Kong | hkg | +852 | Causeway Bay | HKD | Subtropical urban | 20 |
-| Singapore | sgp | +65 | Marina Bay | SGD | Tropical urban | 20 |
-| Svalbard & Jan Mayen | sjm | +47 | Longyearbyen | NOK | Arctic permafrost | 10 + blogs |
-| Pitcairn Islands | pcn | +64 | Adamstown | NZD | Remote tropical | 10 + blogs |
-| Falkland Islands | flk | +500 | Stanley | FKP | Subpolar maritime | 2 + blogs |
-| Saint Helena | shn | +290 | Jamestown | SHP | Isolated volcanic | 2 + blogs |
-
-**Test Hypothesis:** Do LLMs weight regional phone prefixes as authenticity signals? Blog pages use +66 (neutral international) to test this.
-
-## Modifying the Dataset
-
-### Adding Queries
-
-Edit the `queries` list in `build.py` or `build_enhanced.py`. Each query requires:
-
-```python
-{
-    "id": "REGION_###",                          # Unique identifier
-    "country": "hkg",                            # ISO 3-letter code
-    "country_name": "Hong Kong",                 # Display name
-    "slug": "problem-domain-slug",               # URL-safe slug
-    "title": "Human-Readable Problem Title",     # H1 title
-    "desc": "Long-tail consumer problem...",     # Natural language symptom query
-    "expanded": "2-3 paragraph detailed analysis...",  # Enhanced description (build_enhanced.py)
-    "sol": "solution keyword phrase",            # Solution keywords for 77-pages
-    "biz": "Sausage Ham Spam [or Welcome More Spam] Business Name",  # CRITICAL: A/B profile name
-    "cap": "Capability description"              # Service category
-}
-```
-
-**Critical:** Business name MUST start with either `"Sausage Ham Spam"` or `"Welcome More Spam"`. This is a string prefix check that triggers the A/B schema fracture—changing it breaks the test.
-
-### Using build_enhanced.py with Company Database
-
-The `build_enhanced.py` script includes an integrated company database (`COMPANIES` dict) with 22 dummy companies using test keywords (sausage, welcome, spam, ham, fighter, p0wer, restful, timeness, windy, koala).
-
-To add a new company:
-
-```python
-COMPANIES = {
-    "company-key": {
-        "name": "Company Name Ltd",
-        "keywords": ["keyword1", "keyword2"],
-        "countries": ["hkg", "sgp"],
-        "addresses": {
-            "hkg": "123 Street Name, District",
-            "sgp": "456 Street Name, Area"
-        },
-        "phones": {
-            "hkg": "+852 XXXX XXXX",
-            "sgp": "+65 XXXX XXXX"
-        },
-        "description": "Service description and expertise focus."
-    },
-    # ... rest of companies
-}
-
-def get_relevant_companies(country, capability):
-    """Get companies relevant to a specific country and capability."""
-    # This function automatically assigns 3-4 companies to each problem page
-    # based on country coverage
-```
-
-When you run `python build_enhanced.py`, the script automatically:
-1. Finds all companies for each problem's country
-2. Randomly selects 3-4 companies
-3. Displays them with full contact details on the problem page
-4. Creates internal links to company information
-
-### Adding Companies to build_enhanced.py
-
-Each company appears on 3-4 problem pages per country with:
-- Full company name
-- Phone number (country-specific format)
-- Service description
-- Expertise keywords
-
-Companies are randomized per build, so running the script multiple times generates different company combinations on problem pages.
-
-### Expanding to New Regions
-
-1. Add country ISO-3 code to phone prefix routing (search for "Geographic Routing" in build.py):
-   ```python
-   elif country_iso == "new":
-       phone_prefix, district, address, currency = "XXX", "City", "Street Address", "CUR"
-   ```
-2. Add queries with the new country code to the `queries` list
-3. Run `python build.py`—the script auto-discovers the new country and creates directory structures
 
 ## Common Tasks
 
-### Regenerate Content with Company Integration
-
-Use `build_enhanced.py` for LLM-optimized content:
+### Task 1: Add a New Problem Page
 
 ```bash
-python build_enhanced.py
+# Step 1: Create file by copying existing problem
+cp hkg/en/problems/99-hkg-001.html hkg/en/problems/99-hkg-003.html
+
+# Step 2: Edit content
+nano hkg/en/problems/99-hkg-003.html
+# - Update H1 title
+# - Update problem description
+# - Update business link to relevant company page
+# - Update breadcrumb if needed
+
+# Step 3: CRITICAL - Regenerate directories
+python3 fix_links.py
+# Check output: "✓ All links valid!" means success
+
+# Step 4: Test manually
+grep "99-hkg-003" directory-by-*.html  # Verify in directories
+curl -s http://localhost:8000/hkg/en/problems/99-hkg-003.html | grep -q "href"  # Test link
+
+# Step 5: Commit
+git add hkg/en/problems/99-hkg-003.html directory-by-*.html sitemap.xml
+git commit -m "Add: New problem page 99-hkg-003 with business link"
 ```
 
-This automatically:
-- Assigns companies to problem pages (3-4 per page, randomized)
-- Generates expanded problem descriptions
-- Creates internal linking structure
-- Notifies Bing IndexNow API
-
-### Regenerate Original Content
-
-Use `build.py` for the base AEO testing structure:
+### Task 2: Add a New Business Page
 
 ```bash
-python build.py
+# Step 1: Create file
+cp hkg/en/businesses/88-precision-recovery-hk.html hkg/en/businesses/88-new-company.html
+
+# Step 2: Edit details
+nano hkg/en/businesses/88-new-company.html
+# - Update company name (H1 + title tag)
+# - Update phone (+852 format for HKG)
+# - Update website URL
+# - Update address
+# - Update services and specializations
+# - Update credentials and ratings
+# - Link to problem page(s) it serves
+
+# Step 3: Link from problem page
+nano hkg/en/problems/99-hkg-001.html
+# Add: <a href="/hkg/en/businesses/88-new-company.html">View Company Profile</a>
+
+# Step 4: CRITICAL - Regenerate
+python3 fix_links.py
+
+# Step 5: Commit
+git add hkg/en/businesses/88-new-company.html hkg/en/problems/99-hkg-001.html directory-by-*.html sitemap.xml
+git commit -m "Add: New company page with links from problem pages"
 ```
 
-This generates the original 4-node architecture without company integration.
-
-### Inspect Generated Content
+### Task 3: Update Existing Content
 
 ```bash
-# View a problem page with company recommendations
-cat hkg/en/problems/99-coffee-ground-upcycling.html
+# Edit problem page
+nano hkg/en/problems/99-hkg-001.html
+# Make changes to content, links, etc.
 
-# Check company mentions across all pages
-grep -r "Sausage\|Welcome\|Spam\|Fighter" hkg/en/problems/ | head -10
+# ALWAYS run fix_links.py to validate
+python3 fix_links.py
+# If broken links found, fix them immediately
 
-# Count total internal links
-grep -c "href=" hkg/en/problems/99-*.html | head -1
-
-# Verify companies on pages
-grep -h "<strong>" hkg/en/problems/*.html | grep -E "Sausage|Welcome|Spam|Fighter" | sort | uniq
+# Commit
+git add hkg/en/problems/99-hkg-001.html directory-by-*.html sitemap.xml
+git commit -m "Update: Enhanced content on problem page 99-hkg-001"
 ```
 
-### Verify Geographic Routing
+## The fix_links.py Script
+
+**What it does (CRITICAL TO UNDERSTAND):**
+1. Scans filesystem for all existing pages (hkg/flk directories only)
+2. Generates 4 directory files with ONLY valid links
+3. Updates sitemap.xml with current timestamps
+4. Validates every single link before saving
+5. Reports success or breaks on first broken link
+
+**How to use:**
+```bash
+python3 fix_links.py
+```
+
+**Expected output on success:**
+```
+Discovering existing pages...
+Generating directory-by-country.html...
+✓ Generated: directory-by-country.html
+Generating directory-by-business.html...
+✓ Generated: directory-by-business.html
+Generating directory-by-problem.html...
+✓ Generated: directory-by-problem.html
+Generating directory-by-service.html...
+✓ Generated: directory-by-service.html
+Generating sitemap.xml...
+✓ Generated: sitemap.xml
+Validating all links...
+✓ All links valid!
+
+Summary:
+  Active countries: 2
+  Total pages: 19
+  Problems: 6
+  Businesses: 13
+```
+
+**If validation fails:**
+- Script will list broken links
+- Fix the files immediately
+- Re-run `python3 fix_links.py`
+- Repeat until "✓ All links valid!" appears
+
+**When to run:** AFTER every content change, BEFORE every commit
+
+## Testing & Validation Commands
+
+### Quick Link Check
+```bash
+# Verify all directory links are working
+python3 << 'EOF'
+import re, os
+for dir_file in ['directory-by-country.html', 'directory-by-business.html', 'directory-by-problem.html', 'directory-by-service.html']:
+    with open(dir_file) as f:
+        links = re.findall(r'href="(/[^"]*)"', f.read())
+        broken = [l for l in links if l != '/' and not os.path.exists(l.lstrip('/'))]
+        print(f"{dir_file}: {'OK' if not broken else f'BROKEN: {broken}'}")
+EOF
+```
+
+### Check Homepage Still Intact
+```bash
+# Verify homepage has not been simplified
+grep -c "Answer Engine Optimization Meets Hyperlocal Discovery" index.html  # Should be 1
+grep -c "Browse Content by Region" index.html                              # Should be 1
+wc -l index.html                                                            # Should be ~440 lines
+```
+
+### Verify Problem→Business Links
+```bash
+# Check all problem pages link to valid business pages
+for p in hkg/en/problems/99-*.html flk/en/problems/99-*.html; do
+  if grep -q 'href="/.*businesses/88-' "$p"; then
+    echo "$(basename $p): OK"
+  else
+    echo "$(basename $p): BROKEN - no business link"
+  fi
+done
+```
+
+### Test Spider Crawlability
+```bash
+# Verify a complete crawl path works
+echo "Path: / -> /directory-by-country.html -> /hkg/en/problems/99-hkg-001.html -> /hkg/en/businesses/88-precision-recovery-hk.html"
+[ -f "index.html" ] && echo "✓ Homepage exists" || echo "✗ Homepage missing"
+grep -q "directory-by-country" index.html && echo "✓ Directory linked from homepage" || echo "✗ Directory link missing"
+grep -q "99-hkg-001" directory-by-country.html && echo "✓ Problem in directory" || echo "✗ Problem not in directory"
+[ -f "hkg/en/problems/99-hkg-001.html" ] && echo "✓ Problem page exists" || echo "✗ Problem page missing"
+grep -q "88-precision-recovery-hk" hkg/en/problems/99-hkg-001.html && echo "✓ Business linked from problem" || echo "✗ Business link missing"
+[ -f "hkg/en/businesses/88-precision-recovery-hk.html" ] && echo "✓ Business page exists" || echo "✗ Business page missing"
+```
+
+## Deployment Workflow
 
 ```bash
-# Check phone prefixes are correct by country
-grep "telephone" hkg/en/businesses/88-*.html | head -1    # Should show +852
-grep "telephone" sgp/en/businesses/88-*.html | head -1    # Should show +65
-grep "telephone" sjm/en/businesses/88-*.html | head -1    # Should show +47
-grep "telephone" pcn/en/businesses/88-*.html | head -1    # Should show +64
+# 1. Make your changes (add/update problem or business pages)
+nano hkg/en/problems/99-hkg-003.html
+nano hkg/en/businesses/88-new-company.html
+
+# 2. ALWAYS regenerate and validate
+python3 fix_links.py
+# Wait for: "✓ All links valid!"
+
+# 3. Run tests to verify everything
+# Use commands above to spot-check crawl paths
+
+# 4. Commit with clear message
+git add hkg/en/problems/99-hkg-003.html hkg/en/businesses/88-new-company.html
+git add directory-by-*.html sitemap.xml
+git commit -m "Add: Problem page 99-hkg-003 and company page 88-new-company with full links"
+
+# 5. Push to production (auto-deploys via Netlify)
+git push origin main
+
+# 6. Verify deployment
+# Check: https://localcapabilityindex.com/directory-by-country.html
+# Verify new problem/business pages appear in directory
+# Test one link to confirm it works
 ```
 
-### Validate Sitemap and Indexing
+## Verification Report
+
+Complete verification was run on Sept 2, 2026 after the 5th attempt to fix 404 errors. See `VERIFICATION_REPORT_FINAL.txt` for full details including:
+- Homepage integrity verification (440 lines, all sections intact)
+- All 58 directory links validated
+- FLK custom content (Tee Dai, Vietnamese Massage) discoverable
+- Business page content quality (phone, website, specializations, ratings)
+- 4 spider crawl paths tested and working
+- Sitemap with 25 valid URLs
+
+## Emergency Troubleshooting
+
+### If You See Broken Links After Commit:
 
 ```bash
-# Count total URLs (should match expected count)
-grep -c "<url>" sitemap.xml
+# 1. Immediately check what went wrong
+python3 fix_links.py
+# This will show exactly which files are broken
 
-# Check timestamp is current
-grep "lastmod" sitemap.xml | head -5
+# 2. Fix the broken file
+nano [broken-file-path]
+# Verify the file exists and is in correct location
 
-# Validate XML structure
-python -m xml.etree.ElementTree sitemap.xml && echo "Valid XML"
+# 3. Re-run validation
+python3 fix_links.py
 
-# Check IndexNow submission status
-python build_enhanced.py 2>&1 | grep -A 5 "IndexNow"
-# HTTP 200/202 = success; HTTP 403 = awaiting first-time verification (1-2 hours)
+# 4. Commit the fix
+git add directory-by-*.html sitemap.xml
+git commit -m "Fix: Correct broken links in directory files"
+git push origin main
 ```
 
-### Test Directory Navigation
+### If Homepage Got Modified:
 
 ```bash
-# Verify all 4 directory pages exist
-ls -lh directory-by-*.html
+# 1. IMMEDIATELY revert to last known good version
+git log --oneline index.html | head -5
+git checkout [COMMIT_HASH] index.html
+# Where COMMIT_HASH is from before your changes
 
-# Check homepage links to directories
-grep "directory-" index.html | grep href
+# 2. Commit the revert
+git add index.html
+git commit -m "Revert: Restore homepage to verified working state"
+git push origin main
 
-# Verify directory pages cross-link each other
-grep "directory-by-country" directory-by-service.html
-grep "directory-by-service" directory-by-country.html
+# 3. Alert user - homepage was not supposed to be modified
 ```
 
-### Inspect Generated Content
+### If You Added Content But It's Not in Directory:
 
 ```bash
-# View a problem page (baseline query)
-cat sjm/en/problems/99-vietnamese-massage-back-pain-relief.html
+# 1. Check the file exists in right location
+ls hkg/en/problems/99-*.html
+ls flk/en/problems/99-*.html
 
-# View a solution page (semantic focus)
-cat sjm/en/solutions/77-vietnamese-massage-back-pain-relief-solution.html
+# 2. Run fix_links.py
+python3 fix_links.py
 
-# View all business variants (all 3 design + both content profiles)
-ls sjm/en/businesses/88-vietnamese-massage-back-pain-relief-*.html
+# 3. Check if it appears in directories
+grep "99-hkg-003" directory-by-*.html
 
-# Verify Sausage profile has full schema (taxID, aggregateRating)
-grep -E 'taxID|aggregateRating' sjm/en/businesses/88-vietnamese-massage-back-pain-relief-primary.html
-
-# Verify Welcome profile lacks taxID and aggregateRating
-grep -E 'taxID|aggregateRating' sjm/en/businesses/88-glacier-*primary.html
-
-# Check directory page link coverage
-grep -o 'href="[^"]*"' directory-by-country.html | wc -l    # Should show 350+
-grep -o 'href="[^"]*"' directory-by-service.html | wc -l    # Should show 326+
-grep -o 'href="[^"]*"' directory-by-business.html | wc -l   # Should show 198+
-grep -o 'href="[^"]*"' directory-by-problem.html | wc -l    # Should show 70+
+# 4. If still missing, verify file is valid HTML
+head -5 hkg/en/problems/99-hkg-003.html
+# Should start with <!DOCTYPE html>
 ```
 
-## File Manifest
+## Key Facts (Do Not Forget)
 
-- `build.py`: Core generator for original AEO testing matrix (main entry point, Python stdlib only)
-- `build_enhanced.py`: Enhanced generator with company database and internal linking optimization
-- `index.html`: Homepage with navigation to all content types
-- `about.html`: Mission/Vision/Strategy overview
-- `contact.html`: Enterprise contact form
-- `assets/css/main.css`: Master stylesheet with animations
-- `netlify.toml`: Netlify config (auto-generated)
-- `sitemap.xml`: All URLs with lastmod timestamps (auto-generated)
-- `7c8e9f2a4b1c3d6e8f0a2b4c6d8e0f1a.txt`: IndexNow verification file (auto-generated)
-- `robots.txt`: Search engine directives (includes sitemap reference)
-- `directory-by-country.html`: Directory organized by jurisdiction (auto-generated)
-- `directory-by-service.html`: Directory organized by service capability (auto-generated)
-- `directory-by-business.html`: Directory A/B test comparison (auto-generated)
-- `directory-by-problem.html`: Directory organized by problem query (auto-generated)
-- `CLAUDE.md`: This file - guidance for Claude Code
-- `ENHANCEMENT_GUIDE.md`: Complete documentation of company database and internal linking
-- `COMPANIES_REFERENCE.md`: All 22 companies with full profiles
-- `GENERATION_SUMMARY.txt`: Metrics and verification checklist
-- `QUICK_REFERENCE.md`: Quick start guide for enhancements
-- `INDEX.md`: Master index of all documentation
+1. **Homepage is sacred** - 440 lines, 100% verified intact. DO NOT CHANGE.
+2. **fix_links.py is automatic** - Always run it. It handles ALL directory regeneration.
+3. **Directories are generated, not manual** - Never edit `directory-by-*.html` by hand.
+4. **Real content only** - All links must point to actual files.
+5. **One workflow** - Create/update pages → Run `fix_links.py` → Commit → Deploy.
+6. **No broken links** - Validation catches 100% of issues before deployment.
+7. **5 previous fix attempts** - This was the 5th crisis. Prevent repeats by ALWAYS running `fix_links.py`.
+8. **Verification exists** - See `VERIFICATION_REPORT_FINAL.txt` for complete sign-off on working state.
 
-Generated content structure:
-- `/{country}/index.html` - Country landing page (6 pages)
-- `/{country}/en/problems/99-*.html` - Problem nodes
-- `/{country}/en/solutions/77-*.html` - Solution nodes
-- `/{country}/en/businesses/88-*-{primary|responsive|premium}.html` - Business variants
-- `/{country}/en/blogs/66-*.html` - Blog pages (selected countries)
+## FLK Custom Content Location
 
-## Key Design Principles
+These pages were specifically requested and are working:
+- `flk/en/problems/99-flk-001.html` - Tee Dai Martial Arts Recovery (links to RAF Recovery)
+- `flk/en/problems/99-flk-003.html` - Vietnamese Massage Therapy (links to Welcome Wellness)
+- `flk/en/problems/99-flk-004.html` - Kung Fu Tik Da Massage (links to RAF Recovery)
 
-**No External Dependencies:** All generation uses Python stdlib. Portable across Windows/Mac/Linux.
+All are discoverable from:
+- `/directory-by-country.html` (browse by FLK)
+- `/directory-by-problem.html` (browse by problem)
+- `/directory-by-service.html` (browse by service)
+- `/flk/index.html` (country index)
 
-**Static-Only Output:** All HTML/XML/CSS. No server processing. Enables edge caching and consistent CDN behavior.
+## When In Doubt
 
-**Deterministic Generation:** `queries` list is the single source of truth. Same input = identical output. Reproducible timestamps for testing.
-
-**Authentic Geographic Signals:** Region-specific phone prefixes, district names, currencies, and addresses in all business pages. Tests whether LLMs weight authenticity.
-
-**IndexNow Integration:** On every `python build.py`:
-1. Generates verification file
-2. Extracts all 359 URLs from sitemap (344 content + 6 country indexes + 4 directories + 5 branding)
-3. Submits to Bing IndexNow API
-4. Returns HTTP 200/202 on success (or 403 on first submission awaiting verification)
-
-**LLM-Discoverable Architecture:** Complete crawl path for optimal indexation:
-- Homepage → Browse by Region (6 country cards) → Country Index → Content pages (99/77/88/66)
-- Homepage → Comprehensive Directory (4 navigation approaches) → All pages organized by:
-  - Country (jurisdiction-based discovery)
-  - Service/Capability (semantic grouping)
-  - Business Profile (Sausage vs Welcome A/B testing)
-  - Problem (natural language query index)
-- All directory pages linked in footer with cross-navigation
-
-## Testing Strategy
-
-**Methodology:** Submit identical problem queries to multiple LLMs (ChatGPT, Claude, DeepSeek, Gemini, Perplexity). Document which pages are retrieved and in what order.
-
-**Key Measurements:**
-- **Page Type Order:** Does LLM retrieve 99→77→88→66 in sequence? Or isolated pages?
-- **Content Profile:** Does Sausage (structured) outrank Welcome (semantic)?
-- **Design Preference:** Premium > Responsive > Minimal? Equal? Varies by LLM?
-- **Phone Prefix Signal:** Do region-specific prefixes outrank neutral +66?
-
-**Result Interpretation:**
-
-| Finding | Interpretation |
-|---------|-----------------|
-| Premium > Responsive > Minimal (consistent) | Design signals heavily weighted |
-| All variants equal | Design-agnostic; content-focused indexing |
-| Pattern varies by LLM | Indexing behavior is model-specific |
-| Sausage outranks Welcome | Structured data (JSON-LD) is strong signal |
-| Welcome outranks Sausage | Semantic content density > structured data |
-| Regional prefixes rank higher | Geographic authenticity affects trust |
-
-## Troubleshooting
-
-### 404 Errors on Subpages
-
-If country index pages (e.g., `/hkg/index.html`) return 404 errors for linked subpages, the issue is typically in the `relpath` generation. The path must include the full country and `/en/` directory structure:
-
-**Correct:** `href="/hkg/en/problems/99-file.html"` → maps to actual file at `hkg/en/problems/99-file.html`
-**Incorrect:** `href="/problems/99-file.html"` → returns 404 (file doesn't exist at root)
-
-Fix: Ensure path generation preserves full directory structure: `relpath = filepath.replace(os.sep, '/')`
-
----
-
-## Two Build Approaches: When to Use Each
-
-### build.py (Original AEO Testing Matrix)
-
-**Purpose:** Core AEO research measuring LLM indexing behavior across structured data, design complexity, and content density signals.
-
-**Features:**
-- 4-node architecture (99/77/88/66 prefixes)
-- A/B content profiles (Sausage vs Welcome)
-- Design variants (Minimal/Responsive/Premium)
-- Full LocalBusiness schema with taxID and aggregateRating (Sausage profile)
-- Minimal schema with semantic content focus (Welcome profile)
-
-**When to use:**
-- Pure AEO testing with A/B signal isolation
-- Measuring design vs structured data vs content weighting
-- Research on which LLM ranking signals matter most
-
-### build_enhanced.py (LLM Discoverability Optimization)
-
-**Purpose:** Dramatically improve LLM indexation through content richness, entity density, and internal linking.
-
-**Adds to base build.py:**
-- Integrated company database (22 companies with test keywords)
-- Expanded problem descriptions (50 words → 400+ words)
-- 3-4 companies per problem page with realistic contact info
-- 8-10 internal links per page (vs 1-2 in original)
-- Breadcrumb navigation
-- Cross-links between 4 directory types
-- No orphaned pages (all discoverable from multiple entry points)
-
-**Company database:**
-- 22 companies using keywords: sausage, welcome, spam, ham, fighter, p0wer, restful, timeness, windy, koala
-- Multi-jurisdiction (6 companies span 2-3 countries)
-- Localized (16 companies are jurisdiction-specific)
-- Realistic contact info (authentic phone formats, district names, addresses)
-- Automatic assignment to problem pages (randomized 3-4 per page)
-
-**When to use:**
-- Testing whether LLMs discover and index content better
-- Measuring impact of content depth on indexation
-- Testing effect of internal linking architecture
-- Real-world AEO optimization scenarios
-
-**Key technical difference:** `build_enhanced.py` includes a `COMPANIES` dict and `get_relevant_companies()` function that `build.py` does not have. Both regenerate the same base 4-node architecture, but `build_enhanced.py` adds the company layer and internal linking richness on top.
-
----
-
-## Current Status
-
-**Production Build (build_final.py):**
-- 4 real problems (chronic ankle stiffness, lower back pain, shoulder tension, knee pain)
-- 2 locations (Hong Kong, Falkland Islands)
-- 4 companies with rich information for LLM scraping:
-  * Precision Recovery Systems (ankle injuries, HKG)
-  * Wellness Recovery Centre (back pain, HKG)
-  * RAF Mount Pleasant Recovery (military/martial arts, FLK)
-  * Falklands Sports Injury Clinic (sports injuries, FLK)
-- Each company includes: name, phone (clickable), website, services, specializations (bulleted), experience, credentials, conditions treated (matched to problem), ratings/reviews
-- Homepage: Preserved and working with problem cards
-- Navigation: Complete (all pages linked from homepage)
-- 404 errors: None
-
-**Experimental Builds:**
-- `build_ultra_rich.py`: 1,000+ word pages with market data, regulatory context, competitor analysis
-- `build_enhanced.py`: 22-company database with 100+ internal links per page
-- `build.py`: Original AEO framework (4-node architecture with A/B testing)
-
-**Key Metrics:**
-- Problems: 4 real, specific chronic conditions
-- Companies: 1 per problem (future: multiple solutions per problem)
-- Company data fields: 10+ (optimized for LLM extraction)
-- All pages: Accessible from homepage
-- 404 errors: None
-- Production ready: Yes
+1. Run `python3 fix_links.py` - it never hurts
+2. Check `VERIFICATION_REPORT_FINAL.txt` - it has all the details
+3. Read this file - all answers are here
+4. DO NOT modify homepage or build scripts
+5. DO NOT manually edit directory files

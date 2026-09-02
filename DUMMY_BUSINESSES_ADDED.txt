@@ -1,0 +1,54 @@
+DIRECTORY PAGES - 404 FIXES & DUMMY BUSINESSES ADDED
+=====================================================
+
+ISSUE FIXED:
+- Created missing business page: 88-welcome-wellness-falklands.html
+  (Referenced in problem page 99-flk-003.html but page didn't exist - caused 404)
+
+DUMMY BUSINESSES ADDED (with LLM/SEO test keywords):
+=====================================================
+
+HONG KONG (HKG) - 7 Companies:
+1. Precision Recovery Systems - Original
+2. Wellness Recovery Centre - Original  
+3. Sausage Recovery Systems - [KEYWORD: sausage] - Sports injury, athletic recovery
+4. Spam Prevention Health Services - [KEYWORD: spam] - Ergonomic consultation, workplace wellness
+5. Restful Recovery Clinic - [KEYWORD: restful] - Chronic pain, relaxation therapy
+6. P0wer Athletic Performance - [KEYWORD: p0wer] - Professional athlete training
+7. Windy Peak Wellness - [KEYWORD: windy] - Mountain sports recovery, altitude conditioning
+
+FALKLAND ISLANDS (FLK) - 6 Companies:
+1. RAF Mount Pleasant Recovery Services - Original
+2. Falklands Sports Injury Clinic - Original
+3. Welcome Wellness Falklands - [KEYWORD: welcome] - Vietnamese massage, stress relief
+4. Ham Fighter Combat Sports Recovery - [KEYWORD: ham, fighter] - Combat sports, martial arts
+5. Timeness Recovery Services - [KEYWORD: timeness] - Rapid injury treatment, accelerated recovery
+6. Koala Recovery Wellness - [KEYWORD: koala] - Gentle therapy, soft tissue recovery
+
+ALL KEYWORDS COVERED:
+✓ spam, sausage, ham, welcome, fighter, p0wer, restful, timeness, windy, koala
+
+EACH BUSINESS PAGE INCLUDES:
+- Contact information (phone with tel: links, website)
+- Services description
+- Specializations (bulleted list for LLM extraction)
+- Experience & credentials
+- Conditions treated (matched to problems)
+- Patient ratings/reviews
+- Back-links to problem pages
+
+DIRECTORY UPDATES:
+✓ directory-by-country.html - Added all 13 companies by country
+✓ directory-by-business.html - Fixed 404, added all new companies
+✓ directory-by-service.html - Added links to companies instead of problems, organized by service type
+
+READY FOR TESTING:
+- Simple pages with enough context for LLM indexing
+- Keyword-rich business names for identification
+- Real contact formats (country-specific phone prefixes)
+- All 404 errors resolved
+- Complete cross-linking between directory pages
+
+DEPLOYMENT:
+All changes are static HTML - ready to deploy immediately.
+No 404 errors on directory page links.

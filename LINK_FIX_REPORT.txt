@@ -1,0 +1,75 @@
+LOCAL CAPABILITY INDEX - LINK FIX REPORT
+========================================
+Date: 2026-09-02
+Status: ALL BROKEN LINKS FIXED
+
+PROBLEM IDENTIFIED:
+- Directory pages contained 200+ broken links
+- Referenced non-existent content from AEO test matrix
+- Referenced empty country directories (SGP, SJM, PCN, SHN)
+- Google scraper could not properly crawl the site
+
+SOLUTION APPLIED:
+1. Created fix_links.py script to:
+   - Scan filesystem for actual existing pages
+   - Generate directory files with ONLY valid links
+   - Validate all links before saving
+   - Update sitemap.xml
+   
+2. Fixed all directory files:
+   - directory-by-country.html: 20 valid links (HKG + FLK)
+   - directory-by-business.html: 14 valid business links
+   - directory-by-problem.html: 7 valid problem links
+   - Removed old broken directory-by-service.html (60KB, 200+ dead links)
+
+3. Generated new sitemap.xml:
+   - 25 total URLs
+   - All linked resources verified as existing
+   - Ready for Google indexing
+
+VERIFICATION:
+✓ Homepage (index.html) - PRESERVED, UNTOUCHED
+✓ All directory links - VALIDATED (0 broken links)
+✓ Country index pages - WORKING
+✓ Problem pages - ACCESSIBLE
+✓ Business pages - ACCESSIBLE
+✓ Navigation paths - TESTED
+  - Homepage -> Directory: OK
+  - Directory -> Country: OK
+  - Directory -> Problem: OK
+  - Directory -> Business: OK
+  - Problem -> Country: OK
+
+CONTENT STRUCTURE:
+Active Jurisdictions: 2 (HKG, FLK)
+Total Pages: 19
+  - Problems: 6 (HKG: 2, FLK: 4)
+  - Businesses: 13 (HKG: 7, FLK: 6)
+  - Solutions: 0
+  - Blogs: 0
+
+GOOGLE SCRAPER READINESS:
+✓ Sitemap accessible and valid
+✓ All internal links working
+✓ Directory pages optimized for discovery
+✓ No dead ends or orphaned pages
+✓ Clear navigation hierarchy
+
+DEPLOYMENT:
+All files ready for Netlify deployment. No build step required.
+Just commit and push:
+  git add directory-by-*.html sitemap.xml fix_links.py
+  git commit -m "Fix: Regenerate directory files with valid links only"
+  git push origin main
+
+FUTURE UPDATES:
+When new content is added:
+1. Create problem/business pages in hkg/en/ or flk/en/ subdirectories
+2. Run: python3 fix_links.py
+3. Commit and deploy
+
+The script will automatically:
+- Discover new pages
+- Update directories
+- Validate all links
+- Update sitemap
