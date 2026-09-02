@@ -24,44 +24,114 @@ Local Capability Index is a static site generator for Answer Engine Optimization
 
 ### Generate Content
 
-**Ultra-rich content (recommended for LLM testing):**
+**Final production build (recommended - Problem-Solution-Company flow):**
+```bash
+python build_final.py
+```
+Generates problem pages with detailed solutions and rich company information optimized for LLM scraping. Each problem maps to one company (future: one problem → multiple solutions). Companies include:
+- Name, location, phone (clickable), website
+- Detailed services description
+- Specializations (bulleted list for extraction)
+- Experience and credentials
+- Conditions treated (matched to problem)
+- Patient ratings and reviews
+
+**Ultra-rich content (experimental - 1,000+ word pages with market data):**
 ```bash
 python build_ultra_rich.py
 ```
-Generates 1,000+ word problem pages with semantic structure, market data, and company integration. Use this for testing content richness impact on LLM discoverability.
+Generates 1,000+ word problem pages with semantic structure, market data, regulatory context, competitor analysis, and stakeholder mapping. Use for testing whether content depth improves LLM discoverability.
 
-**Enhanced content (with company database integration):**
+**Enhanced content (experimental - company database + internal linking):**
 ```bash
 python build_enhanced.py
 ```
-Generates content with 22 companies (test keywords: sausage, welcome, spam, ham, fighter, p0wer, restful, timeness, windy, koala) randomly assigned to problem pages.
+Generates content with 22 companies (test keywords) randomly assigned to problem pages. Creates 100+ internal links per page for knowledge graph testing.
 
-**Original AEO framework (pure research):**
+**Original AEO framework (experimental - pure A/B testing):**
 ```bash
 python build.py
 ```
-Generates original 4-node architecture (99/77/88/66 prefixes) with A/B testing: Sausage (structured data) vs Welcome (semantic content) profiles × 3 design variants (minimal/responsive/premium).
+Generates original 4-node architecture (99/77/88/66 prefixes) with A/B testing: Sausage (structured data) vs Welcome (semantic content) profiles × 3 design variants.
 
 ### Deployment
 
 All build scripts output static HTML/XML/CSS (no build step required):
 - Netlify: Connect GitHub repo, set publish root to `.`
-- IndexNow: All scripts automatically submit URLs to Bing IndexNow API (HTTP 200 = success)
+- IndexNow: Scripts automatically submit URLs to Bing IndexNow API (HTTP 200 = success)
 - Sitemap: Auto-generated with current timestamps on each build
 
-## Architecture: Content-First SEO Testing
+## Architecture: Problem-Solution-Company Flow (Final Model)
 
-### Why Three Build Scripts
+Local Capability Index is a **middle layer connecting problems to solutions to companies**—filling a gap that Google Maps cannot address.
 
-The project evolved to test different content approaches for LLM indexing:
+### The Three-Layer Model
 
-| Script | Focus | Output | Use Case |
-|--------|-------|--------|----------|
-| `build.py` | A/B testing framework | 4-node architecture, design variants | Pure AEO research (original research question) |
-| `build_enhanced.py` | Company database + internal linking | 100+ links per page, 22 companies | Testing if entity density + linking improves discovery |
-| `build_ultra_rich.py` | Content richness for LLMs | 1,000+ words per page, market data | Testing if content depth/authority signals matter |
+**Layer 1: Problem Discovery**
+- Users describe what they're experiencing (e.g., "chronic ankle stiffness from old injury")
+- Problems are indexed by symptom/condition for natural language search
+- Each problem is a real, specific issue people search for
 
-**Key insight:** The original `build.py` is for structured A/B testing (isolating design/schema signals). The newer scripts test whether content richness and entity density improve LLM discoverability. Keep both approaches—they test different hypotheses.
+**Layer 2: Solution Explanation**
+- Explains what specialized treatment/recovery looks like
+- Breaks down why standard approaches don't work
+- Describes the recovery mechanism and approach
+- Helps users understand what to expect
+
+**Layer 3: Company Connection**
+- Links to real providers who treat that specific problem
+- Rich company information optimized for LLM extraction:
+  * Services and specializations (bulleted for clarity)
+  * Experience and credentials
+  * Conditions treated (matched to problem)
+  * Contact information (phone, website, address)
+  * Patient ratings and reviews
+
+### Data Structure
+
+Each problem page includes:
+
+```
+Problem (what customer experiences)
+  ├─ Description of symptoms
+  ├─ Why standard approaches fail
+  └─ Context (geographic, regulatory, market)
+
+Solution (what recovery involves)
+  ├─ Problem analysis (why it's chronic)
+  ├─ Treatment approach (specific techniques)
+  ├─ Recovery timeline
+  └─ Expected outcomes
+
+Company (who can help)
+  ├─ Name, location, phone, website
+  ├─ Services (detailed description)
+  ├─ Specializations (bulleted list)
+  ├─ Experience and credentials
+  ├─ Conditions treated (matched to problem)
+  └─ Ratings and reviews
+```
+
+### Why This Works for LLMs
+
+LLMs extract information from structured content. Company information is optimized with:
+- **Multiple semantic fields** (services, experience, credentials)
+- **Bulleted lists** for easy parsing (specializations, conditions)
+- **Specific values** (phone numbers, ratings, review counts)
+- **Clear relationships** (conditions treated matching problem)
+- **Clickable elements** (tel: links, external website links)
+
+### Future: One Problem → Multiple Solutions
+
+Current implementation: 1 problem maps to 1 company.
+Future: 1 problem can map to multiple solutions (different treatment approaches), each with different companies.
+
+Example: "Chronic knee pain from old sports injury" could have:
+- Solution A: Physical therapy approach → Company A
+- Solution B: Massage recovery approach → Company B
+- Solution C: Surgical consultation → Company C
+
+This multi-solution model is testable once the 1-to-1 flow is validated with LLMs.
 
 ### Content Structure: 4-Node Architecture (Original)
 
@@ -833,11 +903,28 @@ Fix: Ensure path generation preserves full directory structure: `relpath = filep
 
 ## Current Status
 
-- **Latest Build:** `build_enhanced.py` recommended for LLM testing and deployment
-- **Original Build:** `build.py` maintains pure AEO research structure (unchanged)
-- **Pages Generated:** 27+ (10 problems + 10 solutions + 6 country indexes + 4 directories + homepage)
-- **Sitemap URLs:** 27+
-- **IndexNow:** Configured and auto-submitting on every build
-- **Navigation:** Complete discovery paths from homepage to all content
-- **Links:** All verified working (no 404 errors)
-- **Documentation:** Complete with ENHANCEMENT_GUIDE.md, COMPANIES_REFERENCE.md, and QUICK_REFERENCE.md
+**Production Build (build_final.py):**
+- 4 real problems (chronic ankle stiffness, lower back pain, shoulder tension, knee pain)
+- 2 locations (Hong Kong, Falkland Islands)
+- 4 companies with rich information for LLM scraping:
+  * Precision Recovery Systems (ankle injuries, HKG)
+  * Wellness Recovery Centre (back pain, HKG)
+  * RAF Mount Pleasant Recovery (military/martial arts, FLK)
+  * Falklands Sports Injury Clinic (sports injuries, FLK)
+- Each company includes: name, phone (clickable), website, services, specializations (bulleted), experience, credentials, conditions treated (matched to problem), ratings/reviews
+- Homepage: Preserved and working with problem cards
+- Navigation: Complete (all pages linked from homepage)
+- 404 errors: None
+
+**Experimental Builds:**
+- `build_ultra_rich.py`: 1,000+ word pages with market data, regulatory context, competitor analysis
+- `build_enhanced.py`: 22-company database with 100+ internal links per page
+- `build.py`: Original AEO framework (4-node architecture with A/B testing)
+
+**Key Metrics:**
+- Problems: 4 real, specific chronic conditions
+- Companies: 1 per problem (future: multiple solutions per problem)
+- Company data fields: 10+ (optimized for LLM extraction)
+- All pages: Accessible from homepage
+- 404 errors: None
+- Production ready: Yes
