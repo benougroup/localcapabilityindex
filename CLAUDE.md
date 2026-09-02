@@ -6,30 +6,54 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **IMPORTANT:** The user is paying Netlify credits for every deployment. Do NOT modify:
 - `index.html` (homepage) - NEVER change unless explicitly requested
-- `directory-by-*.html` (directory pages) - NEVER change unless explicitly requested
 - Site structure/navigation - NEVER change unless explicitly requested
 
-The homepage and directories are preserved FOR SEO CONTEXT. They contain:
-- Original content structure
-- Original statistics (intentional for testing)
-- Original navigation links
-- Original company/problem references
+**ONLY what you CAN modify in directories:**
+- Update `directory-by-*.html` LINKS ONLY (fix 404 errors)
+- Update problem/company LISTINGS to match actual files
+- Ensure ALL links point to existing problem/company pages
+- NO changes to directory structure/design/content
 
-**ONLY modify:**
-1. Individual problem pages (add more context, solutions)
-2. Individual company pages (add more information, links)
-3. Company database (add more companies)
-4. Problem database (add more problems)
-5. Internal links WITHIN problem/company pages
+**The Vision:**
+Create a Problem → Solution → Company mapping system:
+1. **Problems** describe what people experience (searchable symptoms)
+2. **Solutions** explain why the problem exists + how recovery works
+3. **Companies** provide contact info to help with that problem
+4. **Links** create bidirectional network: Problem ↔ Company (for SEO)
 
-**DO NOT:**
-- Simplify the homepage
-- Remove directory pages
-- Change site structure
-- Modify navigation unless explicitly asked
-- Change statistics or content on homepage
+**When user asks to "add" problems/companies:**
+1. Create problem pages (99-*.html) with solutions
+2. Create company pages (88-*.html) with profiles
+3. Link problem pages to company pages
+4. Link company pages back to problem pages
+5. Update directory links to point to these new pages
+6. DO NOT change homepage or directory design
 
-Each unauthorized change wastes Netlify credits on unnecessary deployments.
+**Directory Purpose:**
+- Links to ALL problems that actually exist
+- Links to ALL companies that actually exist
+- Maps problems to companies (no 404 errors)
+- Searchable directory of services
+
+**Example workflow:**
+User: "Add Vietnamese massage problem for Falkland Islands"
+You do:
+1. Create /flk/en/problems/99-flk-003.html (Vietnamese Massage)
+2. Create /flk/en/businesses/88-welcome-wellness-falklands.html (Company)
+3. Problem page links to company page
+4. Company page links back to problem page
+5. Update directory-by-problem.html to include new problem
+6. Update directory-by-business.html to include new company
+7. Update any other directories with new mappings
+
+DO NOT:
+- Change homepage design
+- Change directory design
+- Add features to homepage
+- Simplify anything
+- Make "improvements"
+
+ONLY update links and listings in directories to reflect current problems/companies.
 
 ## Permitted Changes (What You CAN Modify)
 
