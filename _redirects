@@ -1,0 +1,19 @@
+# Netlify redirects configuration for Local Capability Index
+# This ensures all static HTML files are properly served
+
+# Serve all HTML files as-is (don't redirect to index.html)
+# The default behavior should work for static files, but this is explicit
+
+# Health check / root
+/                    /index.html         200
+
+# Problem pages
+/hkg/en/problems/*   :splat             200
+/flk/en/problems/*   :splat             200
+
+# Country indexes
+/hkg/                /hkg/index.html     200
+/flk/                /flk/index.html     200
+
+# Catch-all for any missing pages - serve 404 page
+/*                   /404.html           404
