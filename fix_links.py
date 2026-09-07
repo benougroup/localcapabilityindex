@@ -10,11 +10,63 @@ Fix all broken links by regenerating directory pages to match actual content.
 
 import os
 import glob
-from datetime import datetime
+import re
+from html import escape
+from html.parser import HTMLParser
+from urllib.parse import urljoin, urlsplit
+from collections import deque
 from pathlib import Path
 
 DOMAIN = "https://localcapabilityindex.com"
-DATE_SHORT = datetime.now().strftime("%Y-%m-%d")
+COUNTRY_NAMES = {'hkg': 'Hong Kong', 'flk': 'Falkland Islands', 'sgp': 'Singapore',
+                 'shn': 'Saint Helena', 'sjm': 'Svalbard & Jan Mayen', 'pcn': 'Pitcairn Islands'}
+
+
+class PageInfo(HTMLParser):
+    def __init__(self, source):
+        super().__init__()
+        self.title = ''
+        self.description = ''
+        self.links = []
+        self.in_title = False
+        self.feed(source)
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == 'title':
+            self.in_title = True
+        if tag == 'meta' and attrs.get('name') == 'description':
+            self.description = attrs.get('content', '')
+        if tag == 'a' and attrs.get('href'):
+            self.links.append(attrs['href'])
+
+    def handle_endtag(self, tag):
+        if tag == 'title':
+            self.in_title = False
+
+    def handle_data(self, data):
+        if self.in_title:
+            self.title += data
+
+
+def page_title(filename, fallback):
+    return escape(PageInfo(Path(filename).read_text()).title.strip() or fallback)
+
+
+def write_if_changed(filename, content):
+    path = Path(filename)
+    if not path.exists() or path.read_text() != content:
+        path.write_text(content, encoding='utf-8')
+
+
+def link_list(items):
+    return '<ul>\n' + ''.join(f'<li><a href="{item["path"]}">{item["title"]}</a></li>\n' for item in items) + '</ul>\n'
+
+
+def local_target(url):
+    path = Path(urlsplit(url).path.lstrip('/') or '.')
+    return path / 'index.html' if path.is_dir() else path
+
 
 def discover_pages():
     """Scan filesystem and return all existing pages organized by country/type."""
@@ -41,7 +93,7 @@ def discover_pages():
             title = Path(f).stem.replace('99-', '').replace('-', ' ').title()
             pages[country]['problems'].append({
                 'path': '/' + rel_path,
-                'title': title
+                'title': page_title(f, title)
             })
 
         # Scan solutions
@@ -51,7 +103,7 @@ def discover_pages():
             title = Path(f).stem.replace('77-', '').replace('-solution', '').replace('-', ' ').title() + ' Solution'
             pages[country]['solutions'].append({
                 'path': '/' + rel_path,
-                'title': title
+                'title': page_title(f, title)
             })
 
         # Scan businesses
@@ -61,7 +113,7 @@ def discover_pages():
             title = Path(f).stem.replace('88-', '').replace('-', ' ').title()
             pages[country]['businesses'].append({
                 'path': '/' + rel_path,
-                'title': title
+                'title': page_title(f, title)
             })
 
         # Scan blogs
@@ -71,7 +123,7 @@ def discover_pages():
             title = Path(f).stem.replace('66-', '').replace('-business-insights', '').replace('-', ' ').title() + ' Insights'
             pages[country]['blogs'].append({
                 'path': '/' + rel_path,
-                'title': title
+                'title': page_title(f, title)
             })
 
     return pages
@@ -211,48 +263,47 @@ def generate_directory_by_country(pages):
     return html
 
 def generate_sitemap(pages):
-    """Generate sitemap.xml with all valid pages."""
-    urls = [
-        ('/', datetime.now().strftime("%Y-%m-%d")),
-        ('/about.html', datetime.now().strftime("%Y-%m-%d")),
-        ('/contact.html', datetime.now().strftime("%Y-%m-%d")),
-        ('/directory-by-country.html', datetime.now().strftime("%Y-%m-%d")),
-    ]
+    """Include all discovery hubs and content; omit untracked modification dates."""
+    paths = ['/', '/about.html', '/contact.html']
+    paths += [f'/directory-by-{kind}.html' for kind in ['country', 'business', 'problem', 'service']]
+    for country, data in pages.items():
+        if data['index'] and any(data[k] for k in ['problems', 'businesses', 'solutions', 'blogs']):
+            paths.append(f'/{country}/')
+        for kind in ['problems', 'solutions', 'businesses', 'blogs']:
+            paths.extend(item['path'] for item in data[kind])
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+            + ''.join(f'  <url><loc>{escape(DOMAIN + path)}</loc></url>\n' for path in paths)
+            + '</urlset>\n')
 
-    for country in pages:
-        country_data = pages[country]
-
-        if country_data['index']:
-            urls.append((f'/{country}/', datetime.now().strftime("%Y-%m-%d")))
-
-        for item in country_data['problems'] + country_data['solutions'] + country_data['businesses'] + country_data['blogs']:
-            urls.append((item['path'], datetime.now().strftime("%Y-%m-%d")))
-
-    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
-    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-
-    for url, date in urls:
-        xml += f'  <url>\n'
-        xml += f'    <loc>{DOMAIN}{url}</loc>\n'
-        xml += f'    <lastmod>{date}</lastmod>\n'
-        xml += f'  </url>\n'
-
-    xml += '</urlset>\n'
-    return xml
 
 def validate_links(pages):
-    """Check all referenced links actually exist."""
-    errors = []
-
-    for country in pages:
-        country_data = pages[country]
-        for item_list in [country_data['problems'], country_data['solutions'], country_data['businesses'], country_data['blogs']]:
-            for item in item_list:
-                filepath = item['path'].lstrip('/')
-                if not os.path.exists(filepath):
-                    errors.append(f"BROKEN: {item['path']} (file not found: {filepath})")
-
+    """Follow real HTML anchors from the homepage and validate local destinations."""
+    errors, seen, queue = [], set(), deque(['/'])
+    while queue:
+        url = queue.popleft()
+        target = local_target(url)
+        key = str(target)
+        if key in seen:
+            continue
+        seen.add(key)
+        if not target.is_file():
+            errors.append(f'BROKEN: {url}')
+            continue
+        if target.suffix != '.html':
+            continue
+        for href in PageInfo(target.read_text()).links:
+            resolved = urlsplit(urljoin(DOMAIN + url, href))
+            if resolved.scheme not in ['http', 'https'] or resolved.netloc != urlsplit(DOMAIN).netloc:
+                continue
+            queue.append(resolved.path or '/')
+    for data in pages.values():
+        for kind in ['problems', 'solutions', 'businesses', 'blogs']:
+            for item in data[kind]:
+                if str(local_target(item['path'])) not in seen:
+                    errors.append(f'UNREACHABLE from homepage: {item["path"]}')
     return errors
+
 
 def generate_directory_by_business(pages):
     """Generate directory organized by business."""
@@ -339,54 +390,93 @@ def generate_directory_by_problem(pages):
 """
     return html
 
+def refresh_country_and_content(pages):
+    """Maintain country lists, canonical URLs, and backlinks from existing relationships."""
+    for country, data in pages.items():
+        items = data['problems'] + data['businesses'] + data['solutions'] + data['blogs']
+        name = escape(COUNTRY_NAMES[country])
+        if not items:
+            # The unchanged homepage already links to these country routes.
+            path = Path(country) / 'index.html'
+            if not path.exists():
+                write_if_changed(path, f'''<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{name} - Local Capability Index</title>
+<meta name="robots" content="noindex, follow">
+</head><body><main>
+<h1>{name}</h1><p>No problem or business profiles are listed for this region yet.</p>
+<p><a href="/directory-by-country.html">Browse regions with listed profiles</a></p>
+<p><a href="/">Home</a></p>
+</main></body></html>
+''')
+            continue
+        if data['index']:
+            path = Path(data['index'])
+            source = path.read_text()
+            listing = '<h2>Available Problems</h2>\n' + link_list(data['problems'])
+            listing += '<h2>Business Profiles</h2>\n' + link_list(data['businesses'])
+            source = re.sub(r'<h2>Available Problems</h2>.*?</ul>(?:\s*<h2>Business Profiles</h2>.*?</ul>)?\s*', listing, source, count=1, flags=re.S)
+            if 'rel="canonical"' not in source:
+                source = source.replace('</head>', f'<link rel="canonical" href="{DOMAIN}/{country}/">\n</head>')
+            write_if_changed(path, '\n'.join(line.rstrip() for line in source.split('\n')))
+        reverse = {item['path']: [] for item in data['businesses']}
+        for problem in data['problems']:
+            source = Path(problem['path'].lstrip('/')).read_text()
+            # Exclude generated navigation: it must never create new service relationships.
+            source = re.sub(r'<!-- discovery:start -->.*?<!-- discovery:end -->', '', source, flags=re.S)
+            for href in PageInfo(source).links:
+                if href in reverse and problem not in reverse[href]:
+                    reverse[href].append(problem)
+        for item in items:
+            path = Path(item['path'].lstrip('/'))
+            source = path.read_text()
+            source = re.sub(r'\n?<!-- discovery:start -->.*?<!-- discovery:end -->\n?', '', source, flags=re.S)
+            if 'rel="canonical"' not in source:
+                source = source.replace('</head>', f'  <link rel="canonical" href="{DOMAIN}{item["path"]}">\n</head>')
+            related = reverse.get(item['path'], [])
+            # Replace stale hand-maintained reverse links with the source problem links.
+            source = re.sub(r'<div class="section">\s*<h2>Problems We Help With</h2>.*?</div>', '', source, flags=re.S)
+            block = '<!-- discovery:start -->\n<nav aria-label="Related pages" class="section">\n'
+            if related:
+                block += '<h2>Linked Problem Pages</h2>\n' + link_list(related)
+            block += f'<h2>Explore {name}</h2>\n<p><a href="/{country}/">All problems and businesses in {name}</a></p>\n'
+            if item in data['problems']:
+                block += link_list([p for p in data['problems'] if p != item])
+            block += '<p><a href="/directory-by-service.html">Browse services and linked problems</a> · <a href="/directory-by-problem.html">Browse all problems</a> · <a href="/directory-by-business.html">Browse all businesses</a></p>\n</nav>\n<!-- discovery:end -->\n'
+            source = source.replace('</body>', block + '</body>')
+            write_if_changed(path, '\n'.join(line.rstrip() for line in source.split('\n')))
+
+
+def generate_directory_by_service(pages):
+    # Use existing problem-to-business links; do not infer provider capabilities.
+    html = generate_directory_by_problem(pages)
+    html = html.replace('Browse by Problem', 'Browse by Service').replace('directory-by-problem.html', 'directory-by-service.html')
+    html = html.replace('Directory of all indexed pages organized by problem queries.', 'Services and enquiries linked to problem pages and business profiles.')
+    html = html.replace('All consumer problem queries', 'Explore service enquiries, the problems behind them, and linked business profiles')
+    sections = ''
+    for country, data in pages.items():
+        businesses = {item['path']: item for item in data['businesses']}
+        for problem in data['problems']:
+            source = Path(problem['path'].lstrip('/')).read_text()
+            source = re.sub(r'<!-- discovery:start -->.*?<!-- discovery:end -->', '', source, flags=re.S)
+            linked = list(dict.fromkeys(href for href in PageInfo(source).links if href in businesses))
+            sections += f'<section><h2>{problem["title"]} — {escape(COUNTRY_NAMES[country])}</h2>\n'
+            sections += link_list([problem] + [businesses[href] for href in linked]) + '</section>\n'
+    return re.sub(r'<ul style="list-style: none; padding: 0;">.*?</ul>', lambda _: sections, html, count=1, flags=re.S)
+
+
 if __name__ == '__main__':
-    print("Discovering existing pages...")
     pages = discover_pages()
-
-    print("Generating directory-by-country.html...")
-    directory_html = generate_directory_by_country(pages)
-    with open('directory-by-country.html', 'w', encoding='utf-8') as f:
-        f.write(directory_html)
-    print("✓ Generated: directory-by-country.html")
-
-    print("Generating directory-by-business.html...")
-    business_html = generate_directory_by_business(pages)
-    with open('directory-by-business.html', 'w', encoding='utf-8') as f:
-        f.write(business_html)
-    print("✓ Generated: directory-by-business.html")
-
-    print("Generating directory-by-problem.html...")
-    problem_html = generate_directory_by_problem(pages)
-    with open('directory-by-problem.html', 'w', encoding='utf-8') as f:
-        f.write(problem_html)
-    print("✓ Generated: directory-by-problem.html")
-
-    print("Generating sitemap.xml...")
-    sitemap = generate_sitemap(pages)
-    with open('sitemap.xml', 'w', encoding='utf-8') as f:
-        f.write(sitemap)
-    print("✓ Generated: sitemap.xml")
-
-    print("Validating all links...")
+    refresh_country_and_content(pages)
+    generators = {'country': generate_directory_by_country, 'business': generate_directory_by_business,
+                  'problem': generate_directory_by_problem, 'service': generate_directory_by_service}
+    for kind, generate in generators.items():
+        write_if_changed(f'directory-by-{kind}.html', generate(pages))
+        print(f'✓ Generated directory-by-{kind}.html')
+    write_if_changed('sitemap.xml', generate_sitemap(pages))
     errors = validate_links(pages)
-
     if errors:
-        print(f"\nWARNING: Found {len(errors)} broken links:")
-        for error in errors[:10]:
-            print(f"  {error}")
-        if len(errors) > 10:
-            print(f"  ... and {len(errors) - 10} more")
-    else:
-        print("✓ All links valid!")
-
-    # Summary
-    total_pages = sum(len(pages[c]['problems']) + len(pages[c]['solutions']) + len(pages[c]['businesses']) + len(pages[c]['blogs']) for c in pages)
-    active_countries = sum(1 for c in pages if pages[c]['problems'] or pages[c]['businesses'] or pages[c]['solutions'] or pages[c]['blogs'])
-
-    print(f"\nSummary:")
-    print(f"  Active countries: {active_countries}")
-    print(f"  Total pages: {total_pages}")
-    print(f"  Problems: {sum(len(pages[c]['problems']) for c in pages)}")
-    print(f"  Businesses: {sum(len(pages[c]['businesses']) for c in pages)}")
-    print(f"  Solutions: {sum(len(pages[c]['solutions']) for c in pages)}")
-    print(f"  Blogs: {sum(len(pages[c]['blogs']) for c in pages)}")
+        raise SystemExit('\n'.join(errors))
+    print('✓ All local crawl paths valid; every content page reachable from homepage.')
+    print(f'Content pages: {sum(len(d[k]) for d in pages.values() for k in ["problems", "businesses", "solutions", "blogs"])}')
