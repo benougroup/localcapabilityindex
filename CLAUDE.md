@@ -7,19 +7,39 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 The project tests a discovery data layer connecting **customer problem → solution/capability → business offering it**. The goal is to make specific capabilities discoverable through problem-based searches and LLM answers, beyond vague business categories.
 
 As of September 10, 2026, the project includes:
-- **Synthetic business directory**: Hong Kong (HKG) and Falkland Islands (FLK) with 6 problem pages and 13 business profiles.
-- **SEO/AEO experiment** (new): Controlled 2×2×2 factorial test with 16 experimental pages in Falkland Islands testing page characteristics (HTML richness, contextual depth, internal links) against search visibility outcomes.
+- **Synthetic business directory**: Hong Kong (HKG) and Falkland Islands (FLK) with 6 problem pages and 13 business profiles (19 pages total).
+- **SEO/AEO experiment** (deployed): Controlled 2×2×2 factorial test with 16 experimental pages in Falkland Islands testing page characteristics (HTML richness, contextual depth, internal links) against search visibility outcomes.
+- **Total indexable URLs**: 48 (20 experiment + 28 existing directory/hubs)
 
 All services and businesses are synthetic test data, as confirmed by the user. Do not invent further qualifications, reviews, treatment outcomes, or provider capabilities. Derive relationships from existing explicit links.
+
+## Deployment Status (September 10, 2026)
+
+**LIVE AND BRD-COMPLIANT:**
+- Homepage updated with accurate inventory (48 pages, 2 active jurisdictions)
+- 20 experiment infrastructure pages deployed and verified (all HTTP 200)
+- Prominent experiment link on homepage for discoverability
+- 48 URLs in XML sitemap (20 experiment + 28 existing)
+- All pages include research disclosure and synthetic status
+- No misleading health claims or false provider information
+- Ready for Google/Bing crawling and indexing
+
+**Commits:**
+- 057a94f: Core experiment infrastructure
+- 6950898: Sitemap integration
+- a28510f: BRD compliance (homepage fixes, URL consistency)
+- 2af341f: Topic hub path fix
+
+**Next steps:** Submit sitemap to Google Search Console and Bing Webmaster Tools, then begin D0-D28 observation schedule.
 
 The experiment is a research publication, not a provider directory or medical advice. Pages include disclosure of synthetic status, research tokens, and factor assignments. Real interviews with Hong Kong and Singapore businesses are a later phase managed by the user.
 
 ## Critical constraints
 
-- Preserve the root `index.html`. Do not change the homepage or navigation design unless the user explicitly requests it.
+- **Homepage is now BRD-compliant** (September 10, 2026): Shows accurate inventory (48 pages, 2 active jurisdictions), includes prominent experiment link, no false claims. Future edits must preserve this accuracy and experiment discovery.
 - Do not run legacy generators: `build.py`, `build_enhanced.py`, `build_ultra_rich.py`, `build_final.py`, or other historical content generators. They can overwrite current content and introduce broken links.
 - Never manually edit `directory-by-*.html` or `sitemap.xml`; use `fix_links.py`.
-- Experiment pages (`/experiments/`) are hand-authored and must not be overwritten by legacy generators.
+- Experiment pages (`/experiments/`) are research infrastructure and must not be overwritten by legacy generators. Frozen during D0–D28 observation window.
 - After every problem, business, or discovery change, run `python3 fix_links.py`. Run it again before committing.
 - After changes to discovery or experiment code, run `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests`.
 - Check `git diff --check`, preserve unrelated user edits, and inspect the resulting diff before deployment.
