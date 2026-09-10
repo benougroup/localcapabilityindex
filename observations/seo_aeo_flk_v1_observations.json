@@ -1,0 +1,24 @@
+[
+  {
+    "page_id": "EXP-T-000",
+    "canonical_url": "https://localcapabilityindex.com/experiments/falkland-islands/chinese-tui-na/tui-na-ankle-stiffness-enquiry/",
+    "h_level": 0,
+    "c_level": 0,
+    "l_level": 0,
+    "topic": "Chinese Tui Na",
+    "event_timestamp_utc": "2026-09-10T00:00:00Z",
+    "tester_timezone": "UTC",
+    "platform": "Desktop",
+    "engine_or_model": "Google Search",
+    "model_version": null,
+    "browsing_setting": "Incognito",
+    "query_id": "Q-TOKEN",
+    "exact_query": "LCI-EXP-T-000",
+    "stage_result": "Not tested",
+    "result_position_or_range": null,
+    "cited_url": null,
+    "response_evidence_reference": null,
+    "notes": "Template record - no observations yet",
+    "observer": null
+  }
+]

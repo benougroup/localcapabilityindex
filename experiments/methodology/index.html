@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Methodology - SEO/AEO Experiment</title>
+    <meta name="description" content="Detailed methodology for the SEO/AEO experiment: 2x2x2 factorial design, measurement protocol, observation schedule, and success criteria.">
+    <link rel="canonical" href="https://localcapabilityindex.com/experiments/methodology/">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="/assets/style.css">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Research Methodology - SEO/AEO Experiment",
+  "description": "Detailed methodology and measurement protocol for SEO/AEO controlled experiment",
+  "url": "https://localcapabilityindex.com/experiments/methodology/"
+}
+    </script>
+</head>
+<body>
+    <header class="site-header">
+        <a href="/" class="site-name">Local Capability Index</a>
+        <nav class="site-nav">
+            <a href="/">Home</a>
+            <a href="/experiments/">Experiments</a>
+            <a href="/about.html">About</a>
+            <a href="/contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/experiments/">Experiments</a></li>
+            <li aria-current="page">Methodology</li>
+        </ol>
+    </nav>
+
+    <article>
+        <header>
+            <h1>Research Methodology: SEO/AEO Experiment</h1>
+            <p>Detailed explanation of the 2×2×2 factorial design, measurement protocol, observation schedule, and data interpretation approach.</p>
+        </header>
+
+        <section class="overview">
+            <h2>Experiment Overview</h2>
+            <p>This is a controlled research study testing how page characteristics affect search engine discovery, indexing, ranking, and AI retrieval in a low-competition market (Falkland Islands service enquiries).</p>
+
+            <h3>Research Questions</h3>
+            <ul>
+                <li>Does stronger internal linking reduce time to discovery, crawl, or indexing?</li>
+                <li>Does richer contextual content improve ranking for natural-language queries after indexing?</li>
+                <li>Does richer semantic HTML improve machine interpretation or eligibility for rich results?</li>
+                <li>Do combinations of factors perform differently from individual factors?</li>
+                <li>Does a page need to be indexed by a search engine before an AI system reliably retrieves or cites it?</li>
+                <li>Do Google and Bing respond differently to the same controlled variants?</li>
+            </ul>
+        </section>
+
+        <section class="design">
+            <h2>Experimental Design: 2×2×2 Factorial</h2>
+            <p>We test three factors independently, each at two levels:</p>
+
+            <h3>Factor H: Semantic HTML Richness</h3>
+            <dl>
+                <dt>Low (H=0):</dt>
+                <dd>Valid HTML; unique title, meta description, H1, self-canonical, one main content region, ordinary headings and paragraphs; no page JSON-LD.</dd>
+                <dt>High (H=1):</dt>
+                <dd>All low-level controls plus article, header, nav, section, aside tags, breadcrumbs, definition/list/table/FAQ structures; valid WebPage or Article plus BreadcrumbList JSON-LD matching visible text.</dd>
+            </dl>
+
+            <h3>Factor C: Contextual Depth</h3>
+            <dl>
+                <dt>Low (C=0):</dt>
+                <dd>350-500 words; answer-first summary, service definition, Falkland Islands relevance, selection cautions, concise FAQ.</dd>
+                <dt>High (C=1):</dt>
+                <dd>900-1300 words; all low elements plus terminology variants, comparison with alternatives, local constraints, verification checklist, evidence/method notes, limitations, expanded FAQ.</dd>
+            </dl>
+
+            <h3>Factor L: Internal Link Strength</h3>
+            <dl>
+                <dt>Low (L=0):</dt>
+                <dd>Included in XML sitemap and linked once from its topic hub; no homepage or cross-content promotion.</dd>
+                <dt>High (L=1):</dt>
+                <dd>All low links plus descriptive links from experiment hub, FLK jurisdiction hub, one relevant service directory, one relevant editorial page, and reciprocal breadcrumb/topic navigation.</dd>
+            </dl>
+
+            <p><strong>Total combinations per topic:</strong> 2 × 2 × 2 = 8</p>
+            <p><strong>Total experimental pages:</strong> 8 (Tui Na) + 8 (Vietnamese massage) = 16</p>
+        </section>
+
+        <section class="content-requirements">
+            <h2>Content Requirements</h2>
+
+            <h3>Truthfulness and Safety</h3>
+            <ul>
+                <li>No page invents a provider, street address, phone number, review, rating, credential, opening hour, price, or testimonial.</li>
+                <li>No page diagnoses a condition, prescribes treatment, promises pain relief or recovery, or implies massage replaces qualified medical care.</li>
+                <li>Health-related language is framed as general information and service-selection guidance.</li>
+                <li>Red-flag symptoms direct readers to appropriately qualified healthcare professionals.</li>
+            </ul>
+
+            <h3>Research Disclosure</h3>
+            <p>Every page includes:</p>
+            <ul>
+                <li>Unique research token (e.g., LCI-EXP-T-000) for retrieval measurement</li>
+                <li>Statement that the page is part of a controlled research experiment</li>
+                <li>Disclosure that it is not a real provider listing</li>
+                <li>Page publication date and last-reviewed date</li>
+                <li>Link to this methodology page</li>
+                <li>Safety notice about health information</li>
+            </ul>
+
+            <h3>Uniqueness</h3>
+            <p>Every page has a unique scenario, title, meta description, H1, opening answer, examples, and FAQ questions. No paragraphs are copied unchanged between variants (except standardized disclosures).</p>
+        </section>
+
+        <section class="measurement-protocol">
+            <h2>Measurement Protocol</h2>
+
+            <h3>Observation Schedule</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Checkpoint</th>
+                        <th>Days After Publication</th>
+                        <th>Observations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>D0 (Publication)</td>
+                        <td>0</td>
+                        <td>HTTP status, canonical, robots directive, sitemap presence</td>
+                    </tr>
+                    <tr>
+                        <td>D1</td>
+                        <td>1</td>
+                        <td>Crawl evidence, Google URL Inspection, Bing URL Inspection</td>
+                    </tr>
+                    <tr>
+                        <td>D3</td>
+                        <td>3</td>
+                        <td>Index status, keyword queries, rank checks</td>
+                    </tr>
+                    <tr>
+                        <td>D7</td>
+                        <td>7</td>
+                        <td>Index rate, natural-query visibility, AI retrieval trials</td>
+                    </tr>
+                    <tr>
+                        <td>D14</td>
+                        <td>14</td>
+                        <td>Index rate, rank progression, AI citation checks</td>
+                    </tr>
+                    <tr>
+                        <td>D28</td>
+                        <td>28</td>
+                        <td>Final index rate, visibility summary, citation analysis</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p><strong>Important:</strong> If a page first becomes indexed after D28, we record the event and begin a separate 14-day post-index AI observation window. Pre-index AI trials are separated into a clearly labelled exploratory dataset.</p>
+
+            <h3>Query Classes</h3>
+            <p>Each page has stable query IDs in four classes:</p>
+            <dl>
+                <dt>Q-TOKEN:</dt>
+                <dd>Exact research token (e.g., "LCI-EXP-T-000") for unambiguous page detection</dd>
+                <dt>Q-TITLE:</dt>
+                <dd>Exact page title for index/retrieval confirmation</dd>
+                <dt>Q-NEAR:</dt>
+                <dd>Close topical wording without research token</dd>
+                <dt>Q-NATURAL:</dt>
+                <dd>Realistic conversational service discovery (e.g., "How could I look for Chinese Tui Na in the Falkland Islands?")</dd>
+            </dl>
+
+            <h3>Search Engine Protocol</h3>
+            <ul>
+                <li>Test Google and Bing separately</li>
+                <li>Record desktop/mobile mode</li>
+                <li>Record signed-in/incognito state and approximate tester location</li>
+                <li>For rank, record exact URL and position; if position unclear, use fixed ranges: 1-10, 11-20, 21-50, 51-100, not found</li>
+                <li>Save snippets when they demonstrate correct or incorrect page interpretation</li>
+            </ul>
+
+            <h3>AI Retrieval Protocol</h3>
+            <ul>
+                <li>Test selected versions of ChatGPT, Gemini, DeepSeek, and Bing/Copilot</li>
+                <li>Use a new conversation for every trial</li>
+                <li>Record whether live web search/browsing is enabled</li>
+                <li>Run three independent trials per page/query/model/checkpoint when practical</li>
+                <li>Score each trial: 0=absent, 1=domain mentioned only, 2=page-specific retrieval without citation, 3=exact canonical citation</li>
+                <li>Save complete prompt, answer, citations, model label, date, and settings</li>
+            </ul>
+
+            <p><strong>Note:</strong> AI testing begins only after confirmed page indexing. Pre-index trials are exploratory only.</p>
+        </section>
+
+        <section class="definitions">
+            <h2>Definitions and Outcome Funnel</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Stage</th>
+                        <th>Definition</th>
+                        <th>Evidence Required</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Accessible</strong></td>
+                        <td>Production URL returns HTTP 200 with usable HTML</td>
+                        <td>Timestamped status check and page render</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Discoverable</strong></td>
+                        <td>URL in approved sitemap or reachable from allowed entry point</td>
+                        <td>Sitemap record and link graph</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Submitted</strong></td>
+                        <td>URL submitted via Search Console, Webmaster Tools, or IndexNow</td>
+                        <td>Submission timestamp, method, response</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Crawled</strong></td>
+                        <td>Search engine reports or logs a crawl event</td>
+                        <td>Search Console inspection or verified crawler log</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Indexed</strong></td>
+                        <td>Engine explicitly reports indexed status or returns URL for controlled query</td>
+                        <td>Inspection evidence preferred; site: queries secondary</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ranked</strong></td>
+                        <td>Exact experimental URL appears for predefined query</td>
+                        <td>Position/range, evidence link or screenshot</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Retrieved</strong></td>
+                        <td>Search-enabled model uses page-specific facts in its answer</td>
+                        <td>Saved prompt and answer with evidence</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cited</strong></td>
+                        <td>Model presents clickable citation to exact experimental URL</td>
+                        <td>Exact citation URL and saved answer</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="success-thresholds">
+            <h2>Success Thresholds (by D28)</h2>
+            <dl>
+                <dt><strong>Minimum Viable:</strong></dt>
+                <dd>At least 12 of 16 pages indexed by Google or Bing; all pages technically valid; at least one non-brand impression or visible result per topic</dd>
+                <dt><strong>Useful:</strong></dt>
+                <dd>At least 12 pages indexed, at least 6 visible for natural/near query, and at least 2 exact page citations in post-index AI trials</dd>
+                <dt><strong>Strong:</strong></dt>
+                <dd>At least 14 pages indexed; high-C or high-L variants show consistent directional advantage in both topics; citations occur on at least two model families</dd>
+            </dl>
+            <p><strong>Important:</strong> Failure to meet a threshold is still a valid result if implementation and observation criteria are met. We report evidence, not claims of certainty beyond what data supports.</p>
+        </section>
+
+        <section class="limitations">
+            <h2>Known Limitations</h2>
+            <ul>
+                <li><strong>Small sample:</strong> Two topic blocks only. Results are directional evidence, not statistically robust population estimates.</li>
+                <li><strong>Low competition:</strong> Falkland Islands is a very small market. Results may not generalize to higher-competition locations.</li>
+                <li><strong>Synthetic content:</strong> Pages are research pages, not real business operations. Real provider visibility may differ.</li>
+                <li><strong>28-day window:</strong> Search engines may continue discovering and indexing beyond this period. We do not claim this is a definitive result.</li>
+                <li><strong>Model variability:</strong> AI systems change versions frequently. Results may not be replicable with future models.</li>
+                <li><strong>Tester location and settings:</strong> Observed results depend on tester location, signed-in state, safe-search settings, and search history.</li>
+            </ul>
+        </section>
+
+        <section class="ai-disclosure">
+            <h2>AI Assistance Disclosure</h2>
+            <p>Generative AI (Claude 3.5 Sonnet) assisted in drafting experimental page content. Each page was reviewed by the research team for factual accuracy, safety, uniqueness, and compliance with research requirements before publication. AI assistance does not constitute endorsement of the information as medical advice or professional guidance.</p>
+        </section>
+
+        <section class="contact">
+            <h2>Questions or Feedback</h2>
+            <p>If you have questions about this methodology or want to provide feedback, please <a href="/contact.html">contact us</a>.</p>
+        </section>
+
+        <nav class="section-nav">
+            <a href="/experiments/">Back to Experiments</a>
+            <a href="/experiments/falkland-islands/tuina/">Tui Na Pages</a>
+            <a href="/experiments/falkland-islands/vietnamese-massage/">Vietnamese Pages</a>
+        </nav>
+    </article>
+
+    <footer class="site-footer">
+        <p><a href="/">Home</a> | <a href="/about.html">About</a> | <a href="/contact.html">Contact</a></p>
+        <p>Local Capability Index - Research into service discovery and search visibility</p>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+</body>
+</html>

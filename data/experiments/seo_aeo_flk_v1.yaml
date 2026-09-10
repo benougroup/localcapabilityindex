@@ -1,0 +1,257 @@
+# SEO/AEO Experiment Manifest - Version 1.0
+# Local Capability Index: Controlled SEO/AEO testing for Falkland Islands services
+# Baseline commit SHA: (recorded at release)
+# Publication date: 2026-09-10
+
+metadata:
+  version: "1.0"
+  experiment_id: "seo_aeo_flk_v1"
+  topic_families:
+    - "Chinese Tui Na massage enquiries"
+    - "Vietnamese-style massage enquiries"
+  observation_window_days: 28
+  design: "2x2x2 factorial (HTML richness x contextual depth x internal links)"
+  country: "Falkland Islands"
+
+factors:
+  H:
+    description: "Semantic HTML richness"
+    low: "Valid static HTML; unique title, meta description, H1, self-canonical, one main content region, ordinary headings and paragraphs; no page JSON-LD"
+    high: "All low-level controls plus article, header, nav, section, aside, breadcrumbs, definition/list/table/FAQ structures; valid WebPage or Article plus BreadcrumbList JSON-LD matching visible text"
+  C:
+    description: "Contextual depth"
+    low: "350-500 words; answer-first summary, service definition, Falkland Islands relevance, selection cautions, concise FAQ"
+    high: "900-1300 words; all low elements plus terminology variants, comparison with alternatives, local constraints, verification checklist, evidence/method notes, limitations, expanded FAQ"
+  L:
+    description: "Internal link strength"
+    low: "Included in XML sitemap and linked once from its topic hub; no homepage or cross-content promotion"
+    high: "All low links plus descriptive links from experiment hub, FLK jurisdiction hub, one relevant service directory, one relevant editorial page, and reciprocal breadcrumb/topic navigation"
+
+pages:
+  # Chinese Tui Na block (Topic T)
+  - page_id: "EXP-T-000"
+    topic: "Chinese Tui Na"
+    scenario: "Old ankle stiffness; how to enquire safely"
+    h_level: 0
+    c_level: 0
+    l_level: 0
+    slug: "tui-na-ankle-stiffness-enquiry"
+    research_token: "LCI-EXP-T-000"
+    title: "Chinese Tui Na for old ankle stiffness Falkland Islands"
+    meta_description: "Learn about Tui Na massage for longstanding ankle stiffness in Falkland Islands. Service overview and enquiry guidance."
+    word_count_min: 350
+    word_count_max: 500
+    controlled_query: "Chinese Tui Na for old ankle stiffness Falkland Islands"
+
+  - page_id: "EXP-T-001"
+    topic: "Chinese Tui Na"
+    scenario: "Desk-related wrist and forearm tension"
+    h_level: 0
+    c_level: 0
+    l_level: 1
+    slug: "tui-na-wrist-tension-stanley"
+    research_token: "LCI-EXP-T-001"
+    title: "Tui Na wrist tension Stanley Falkland Islands"
+    meta_description: "Discover Tui Na massage for wrist and forearm tension in Stanley. Service options and practitioner guidance."
+    word_count_min: 350
+    word_count_max: 500
+    controlled_query: "Tui Na wrist tension Stanley Falkland Islands"
+
+  - page_id: "EXP-T-010"
+    topic: "Chinese Tui Na"
+    scenario: "Post-walking calf tightness; service comparison"
+    h_level: 0
+    c_level: 1
+    l_level: 0
+    slug: "chinese-massage-calf-tightness-falkland-islands"
+    research_token: "LCI-EXP-T-010"
+    title: "Chinese massage for calf tightness Falkland Islands"
+    meta_description: "Understand Tui Na and Chinese massage options for calf tension. Comparison with other styles and local availability guidance."
+    word_count_min: 900
+    word_count_max: 1300
+    controlled_query: "Chinese massage for calf tightness Falkland Islands"
+
+  - page_id: "EXP-T-011"
+    topic: "Chinese Tui Na"
+    scenario: "Shoulder tension; practitioner verification guide"
+    h_level: 0
+    c_level: 1
+    l_level: 1
+    slug: "find-tui-na-shoulder-massage-falkland-islands"
+    research_token: "LCI-EXP-T-011"
+    title: "Find Tui Na shoulder massage Falkland Islands"
+    meta_description: "Guide to finding qualified Tui Na practitioners for shoulder tension in Falkland Islands. Verification questions and service selection."
+    word_count_min: 900
+    word_count_max: 1300
+    controlled_query: "Find Tui Na shoulder massage Falkland Islands"
+
+  - page_id: "EXP-T-100"
+    topic: "Chinese Tui Na"
+    scenario: "General Tui Na terminology and local availability"
+    h_level: 1
+    c_level: 0
+    l_level: 0
+    slug: "tui-na-massage-falkland-islands-overview"
+    research_token: "LCI-EXP-T-100"
+    title: "Tui Na massage Falkland Islands"
+    meta_description: "Tui Na massage explained: technique, terminology, and local enquiry information for Falkland Islands residents."
+    word_count_min: 350
+    word_count_max: 500
+    controlled_query: "Tui Na massage Falkland Islands"
+
+  - page_id: "EXP-T-101"
+    topic: "Chinese Tui Na"
+    scenario: "Questions to ask before booking bodywork"
+    h_level: 1
+    c_level: 0
+    l_level: 1
+    slug: "tui-na-practitioner-questions-falkland-islands"
+    research_token: "LCI-EXP-T-101"
+    title: "Tui Na practitioner questions Falkland Islands"
+    meta_description: "Questions to ask Tui Na practitioners before booking in Falkland Islands. Verify experience, approach, and fit for your needs."
+    word_count_min: 350
+    word_count_max: 500
+    controlled_query: "Tui Na practitioner questions Falkland Islands"
+
+  - page_id: "EXP-T-110"
+    topic: "Chinese Tui Na"
+    scenario: "Tui Na versus relaxation massage"
+    h_level: 1
+    c_level: 1
+    l_level: 0
+    slug: "tui-na-vs-relaxation-massage-falkland-islands"
+    research_token: "LCI-EXP-T-110"
+    title: "Tui Na vs massage Falkland Islands"
+    meta_description: "Tui Na versus relaxation massage: styles, techniques, and choosing the right approach in Falkland Islands."
+    word_count_min: 900
+    word_count_max: 1300
+    controlled_query: "Tui Na vs massage Falkland Islands"
+
+  - page_id: "EXP-T-111"
+    topic: "Chinese Tui Na"
+    scenario: "Comprehensive local enquiry and alternatives guide"
+    h_level: 1
+    c_level: 1
+    l_level: 1
+    slug: "chinese-tui-na-enquiries-falkland-islands"
+    research_token: "LCI-EXP-T-111"
+    title: "Chinese Tui Na enquiries Falkland Islands"
+    meta_description: "Complete guide to finding Chinese Tui Na in Falkland Islands: styles, practitioners, alternatives, and how to start your enquiry."
+    word_count_min: 900
+    word_count_max: 1300
+    controlled_query: "Chinese Tui Na enquiries Falkland Islands"
+
+  # Vietnamese massage block (Topic V)
+  - page_id: "EXP-V-000"
+    topic: "Vietnamese massage"
+    scenario: "Back tension; understanding the style"
+    h_level: 0
+    c_level: 0
+    l_level: 0
+    slug: "vietnamese-massage-back-tension-falkland-islands"
+    research_token: "LCI-EXP-V-000"
+    title: "Vietnamese massage back tension Falkland Islands"
+    meta_description: "Learn about Vietnamese-style massage for back tension in Falkland Islands. Service overview and enquiry information."
+    word_count_min: 350
+    word_count_max: 500
+    controlled_query: "Vietnamese massage back tension Falkland Islands"
+
+  - page_id: "EXP-V-001"
+    topic: "Vietnamese massage"
+    scenario: "Neck and shoulder relaxation enquiries"
+    h_level: 0
+    c_level: 0
+    l_level: 1
+    slug: "vietnamese-massage-neck-shoulder-stanley"
+    research_token: "LCI-EXP-V-001"
+    title: "Vietnamese massage neck shoulder Stanley"
+    meta_description: "Vietnamese-style massage for neck and shoulder relaxation in Stanley, Falkland Islands. Service options and practitioner information."
+    word_count_min: 350
+    word_count_max: 500
+    controlled_query: "Vietnamese massage neck shoulder Stanley"
+
+  - page_id: "EXP-V-010"
+    topic: "Vietnamese massage"
+    scenario: "Stress-relief massage style comparison"
+    h_level: 0
+    c_level: 1
+    l_level: 0
+    slug: "vietnamese-style-massage-stress-relief-falkland-islands"
+    research_token: "LCI-EXP-V-010"
+    title: "Vietnamese style massage for stress Falkland Islands"
+    meta_description: "Vietnamese-style massage for stress relief: techniques, comparison with other styles, and local availability in Falkland Islands."
+    word_count_min: 900
+    word_count_max: 1300
+    controlled_query: "Vietnamese style massage for stress Falkland Islands"
+
+  - page_id: "EXP-V-011"
+    topic: "Vietnamese massage"
+    scenario: "Finding culturally specific massage services"
+    h_level: 0
+    c_level: 1
+    l_level: 1
+    slug: "find-vietnamese-massage-falkland-islands"
+    research_token: "LCI-EXP-V-011"
+    title: "Find Vietnamese massage Falkland Islands"
+    meta_description: "Guide to finding Vietnamese-style massage in Falkland Islands. Practitioner selection, what to expect, and enquiry steps."
+    word_count_min: 900
+    word_count_max: 1300
+    controlled_query: "Find Vietnamese massage Falkland Islands"
+
+  - page_id: "EXP-V-100"
+    topic: "Vietnamese massage"
+    scenario: "Technique vocabulary and expectations"
+    h_level: 1
+    c_level: 0
+    l_level: 0
+    slug: "vietnamese-massage-techniques-falkland-islands"
+    research_token: "LCI-EXP-V-100"
+    title: "Vietnamese massage techniques Falkland Islands"
+    meta_description: "Vietnamese massage techniques explained: terminology, what to expect, and how to communicate your needs to practitioners."
+    word_count_min: 350
+    word_count_max: 500
+    controlled_query: "Vietnamese massage techniques Falkland Islands"
+
+  - page_id: "EXP-V-101"
+    topic: "Vietnamese massage"
+    scenario: "Booking and consent questions"
+    h_level: 1
+    c_level: 0
+    l_level: 1
+    slug: "vietnamese-massage-booking-questions-falklands"
+    research_token: "LCI-EXP-V-101"
+    title: "Vietnamese massage booking questions Falklands"
+    meta_description: "Questions to ask when booking Vietnamese-style massage in Falkland Islands. Consent, preferences, and practitioner experience."
+    word_count_min: 350
+    word_count_max: 500
+    controlled_query: "Vietnamese massage booking questions Falklands"
+
+  - page_id: "EXP-V-110"
+    topic: "Vietnamese massage"
+    scenario: "Vietnamese style versus other massage styles"
+    h_level: 1
+    c_level: 1
+    l_level: 0
+    slug: "vietnamese-vs-other-massage-falkland-islands"
+    research_token: "LCI-EXP-V-110"
+    title: "Vietnamese vs other massage Falkland Islands"
+    meta_description: "Vietnamese-style massage compared to other massage approaches: differences, benefits, and choosing what suits you in Falkland Islands."
+    word_count_min: 900
+    word_count_max: 1300
+    controlled_query: "Vietnamese vs other massage Falkland Islands"
+
+  - page_id: "EXP-V-111"
+    topic: "Vietnamese massage"
+    scenario: "Comprehensive local enquiry and alternatives guide"
+    h_level: 1
+    c_level: 1
+    l_level: 1
+    slug: "vietnamese-style-massage-falkland-islands"
+    research_token: "LCI-EXP-V-111"
+    title: "Vietnamese style massage Falkland Islands"
+    meta_description: "Complete guide to Vietnamese-style massage in Falkland Islands: what it is, how to find practitioners, alternatives, and how to get started."
+    word_count_min: 900
+    word_count_max: 1300
+    controlled_query: "Vietnamese style massage Falkland Islands"
+
+# End of manifest
